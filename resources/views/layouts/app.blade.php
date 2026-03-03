@@ -15,6 +15,8 @@
     <!-- OpenLayers JS -->
     <script src="https://cdn.jsdelivr.net/npm/ol@latest/dist/ol.js"></script>
 
+    @stack('styles')
+
     @livewireStyles
 </head>
 
@@ -34,6 +36,8 @@
         </main>
 
         @livewireScripts
+        
+        @stack('scripts')
 </body>
 
 </html>
