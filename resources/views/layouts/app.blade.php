@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-    x-data="{ darkMode: localStorage.getItem('theme') === 'dark' }"
-    x-init="$watch('darkMode', val => localStorage.setItem('theme', val ? 'dark' : 'light'))"
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{ darkMode: localStorage.getItem('theme') === 'dark' }" x-init="$watch('darkMode', val => localStorage.setItem('theme', val ? 'dark' : 'light'))"
     :class="{ 'dark': darkMode }">
 
 <head>
@@ -15,9 +13,8 @@
         }
     </script>
     <link rel="stylesheet" href="/css/main.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet" />
-        
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
     <!-- OpenLayers CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@latest/ol.css">
 
@@ -36,8 +33,8 @@
         open: true,
         active: 'dashboard',
         sub: false,
-        setActive(k){ this.active = k; }
-        }" class="relative flex h-full w-full">
+        setActive(k) { this.active = k; }
+    }" class="relative flex h-full w-full">
 
         <livewire:sidebar />
         <!-- Main Content -->
@@ -46,8 +43,8 @@
         </main>
 
         @livewireScripts
-
         @stack('scripts')
+
 </body>
 
 </html>

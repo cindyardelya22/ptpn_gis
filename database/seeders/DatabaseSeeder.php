@@ -19,9 +19,9 @@ class DatabaseSeeder extends Seeder
             BlockSeeder::class,
         ]);
 
-        User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@ptpn.co.id',
-        ]);
+        // User::factory()->create([
+        //     'name' => 'Admin User',
+        //     'email' => 'admin@ptpn.co.id',
+        // ]);
     }
 }

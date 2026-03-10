@@ -66,9 +66,7 @@
         </div>
 
         <button
-            class="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500
-                   text-white font-semibold shadow-lg hover:scale-[1.02]
-                   transition-all duration-200">
+            class="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold shadow-lg hover:scale-[1.02] transition-all duration-200">
             Login
         </button>
     </form>
