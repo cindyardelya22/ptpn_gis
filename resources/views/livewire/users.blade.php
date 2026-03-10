@@ -6,43 +6,16 @@
         <!-- ══ PAGE HEADER ══ -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 fade-up">
             <div>
-                <div class="flex items-center gap-3 mb-1">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center"
-                        style="background:linear-gradient(135deg,#818cf8,#a78bfa)">
-                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                    </div>
-                    <span
-                        class="text-indigo-500 dark:text-indigo-400 text-xs font-semibold tracking-widest uppercase">Manajemen</span>
-                </div>
                 <h1 class="text-3xl font-bold text-slate-800 dark:text-white tracking-tight">User Management</h1>
                 <p class="text-slate-400 dark:text-indigo-300/50 text-sm mt-1">Kelola semua pengguna sistem di sini</p>
             </div>
 
             <!-- Actions -->
             <div class="flex items-center gap-2">
-                <!-- Dark Mode Toggle -->
-                <button @click="darkMode = !darkMode"
-                    class="w-10 h-10 rounded-xl flex items-center justify-center border transition-all duration-200 hover:scale-105 active:scale-95 bg-white dark:bg-slate-800 border-slate-200 dark:border-white/10"
-                    :title="darkMode ? 'Mode Terang' : 'Mode Gelap'">
-                    <svg x-show="!darkMode" class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
-                    <svg x-show="darkMode" class="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                </button>
-
                 <!-- Tambah User -->
                 <button @click="openCreate()"
                     class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg shadow-indigo-500/25"
-                    style="background:linear-gradient(135deg,#818cf8,#a78bfa)">
+                    style="background:linear-gradient(135deg,rgb(4, 120, 87),rgb(21, 216, 161))">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
                     </svg>
@@ -313,23 +286,14 @@
                 style="box-shadow:0 25px 60px rgba(0,0,0,.15),0 0 0 1px rgba(129,140,248,.1)">
 
                 <!-- Accent Bar -->
-                <div class="h-1 w-full" style="background:linear-gradient(90deg,#818cf8,#a78bfa,#c084fc)"></div>
+                <div class="h-1 w-full"
+                    style="background:linear-gradient(90deg,rgb(21, 216, 161),rgb(4, 120, 87),rgb(21, 216, 161))">
+                </div>
 
                 <!-- Header -->
                 <div
                     class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-slate-100 dark:border-white/5">
                     <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-xl flex items-center justify-center"
-                            style="background:linear-gradient(135deg,#818cf818,#a78bfa18)">
-                            <svg class="w-4.5 h-4.5" style="color:#818cf8" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    :d="editMode
-                                        ?
-                                        'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' :
-                                        'M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z'" />
-                            </svg>
-                        </div>
                         <div>
                             <h2 class="text-slate-800 dark:text-white font-bold text-base leading-tight"
                                 x-text="editMode ? 'Edit User' : 'Tambah User Baru'"></h2>
@@ -426,7 +390,7 @@
                     </button>
                     <button @click="save()"
                         class="px-5 py-2.5 rounded-xl text-white text-sm font-semibold shadow-lg shadow-indigo-500/20 transition-all duration-200 hover:scale-105 active:scale-95 flex items-center gap-2"
-                        style="background:linear-gradient(135deg,#818cf8,#a78bfa)">
+                        style="background:linear-gradient(90deg,rgb(4, 120, 87),rgb(21, 216, 161))">
                         <svg x-show="saving" class="w-4 h-4 spinner" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
                                 stroke-width="4" />
@@ -502,9 +466,6 @@
 
 </div>
 
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('css/users.css') }}">
-@endpush
 @push('scripts')
     <script src="{{ asset('js/users.js') }}"></script>
 @endpush

@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between mb-8">
         <div>
             <div class="flex items-center gap-3">
-                <a href="{{ route('dashboard') }}" wire:navigate
+                <a href="{{ url()->previous() }}" wire:navigate
                     class="p-2 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white transition bg-white dark:bg-slate-800">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -203,7 +203,8 @@
                         </div>
                         @if ($isDeficit)
                             <p class="text-[9px] font-bold text-red-500 dark:text-red-400 mt-2">Di bawah standar
-                                ({{ $nut['min'] }})</p>
+                                ({{ $nut['min'] }})
+                            </p>
                         @endif
                     </div>
                 @endforeach
