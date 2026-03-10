@@ -6,9 +6,11 @@ use Livewire\Component;
 use App\Models\Block;
 use App\Models\SoilNutrient;
 use App\Services\SoilAnalysisService;
+use Livewire\WithPagination;
 
 class NutrientsData extends Component
 {
+    use WithPagination;
     public $search = '';
     public $statusFilter = '';
 
@@ -65,7 +67,7 @@ class NutrientsData extends Component
         $this->name = $block->name;
         $this->area_ha = $block->area_ha;
         $this->planted_at = $block->planted_at ? $block->planted_at->format('Y-m-d') : '';
-        
+
         if ($block->polygon_coords && is_array($block->polygon_coords) && count($block->polygon_coords) >= 4) {
             $this->coord_1 = implode(', ', $block->polygon_coords[0]);
             $this->coord_2 = implode(', ', $block->polygon_coords[1]);
@@ -95,10 +97,10 @@ class NutrientsData extends Component
         foreach ([$this->coord_1, $this->coord_2, $this->coord_3, $this->coord_4] as $coordString) {
             if (!empty(trim($coordString))) {
                 // Split by comma, trim whitespace, and convert to float
-                $parts = array_map(function($val) {
+                $parts = array_map(function ($val) {
                     return (float) trim($val);
                 }, explode(',', $coordString));
-                
+
                 if (count($parts) >= 2) {
                     $coords[] = [$parts[0], $parts[1]];
                 }
@@ -163,9 +165,22 @@ class NutrientsData extends Component
     private function resetForm()
     {
         $this->reset([
-            'isEdit', 'blockId', 'name', 'area_ha', 'planted_at',
-            'coord_1', 'coord_2', 'coord_3', 'coord_4',
-            'nitrogen', 'phosphorus', 'potassium', 'ph', 'magnesium', 'organic_carbon', 'measured_at'
+            'isEdit',
+            'blockId',
+            'name',
+            'area_ha',
+            'planted_at',
+            'coord_1',
+            'coord_2',
+            'coord_3',
+            'coord_4',
+            'nitrogen',
+            'phosphorus',
+            'potassium',
+            'ph',
+            'magnesium',
+            'organic_carbon',
+            'measured_at'
         ]);
         $this->measured_at = now()->format('Y-m-d');
         $this->planted_at = now()->format('Y-m-d');
@@ -173,17 +188,26 @@ class NutrientsData extends Component
 
     public function render(SoilAnalysisService $analysisService)
     {
-        $blocksQuery = Block::with(['nutrients' => function($q) {
-            $q->latest('measured_at');
-        }]);
+        $blocksQuery = Block::with([
+            'nutrients' => function ($q) {
+                $q->latest('measured_at');
+            }
+        ]);
 
         if ($this->search) {
             $blocksQuery->where('name', 'like', '%' . $this->search . '%');
         }
 
-        $allBlocks = $blocksQuery->get()->map(function($block) use ($analysisService) {
+        $blocks = $blocksQuery->paginate(10);
+
+        // transform collection paginator
+        $blocks->getCollection()->transform(function ($block) use ($analysisService) {
+
             $latest = $block->nutrients->first();
-            $analysis = $latest ? $analysisService->analyzeFertility($latest) : null;
+
+            $analysis = $latest
+                ? $analysisService->analyzeFertility($latest)
+                : null;
 
             return [
                 'id' => $block->id,
@@ -191,6 +215,7 @@ class NutrientsData extends Component
                 'area_ha' => $block->area_ha,
                 'status' => $analysis['status'] ?? 'N/A',
                 'color' => $analysis['color'] ?? 'slate',
+
                 'nutrients' => [
                     'nitrogen' => $latest->nitrogen ?? 0,
                     'phosphorus' => $latest->phosphorus ?? 0,
@@ -199,19 +224,23 @@ class NutrientsData extends Component
                     'magnesium' => $latest->magnesium ?? 0,
                     'c_organic' => $latest->organic_carbon ?? 0,
                 ],
+
                 'raw_block' => $block
             ];
         });
 
+        // filter status setelah transform
         if ($this->statusFilter) {
-            $allBlocks = $allBlocks->filter(function($b) {
+
+            $filtered = $blocks->getCollection()->filter(function ($b) {
                 return $b['status'] === $this->statusFilter;
             });
+
+            $blocks->setCollection($filtered->values());
         }
 
         return view('livewire.nutrients-data', [
-            'blocks' => $allBlocks
+            'blocks' => $blocks
         ])->layout('layouts.app');
     }
 }
-

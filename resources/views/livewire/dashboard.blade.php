@@ -1,357 +1,545 @@
 <div x-data="{
     selectedBlock: null,
+    darkMode: false,
+    filterBlock: '',
+    filterDateFrom: '',
+    filterDateTo: '',
     closeDetail() { this.selectedBlock = null; }
-}" class="p-6 space-y-6 max-w-7xl mx-auto relative">
-    <!-- Header Section -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-            <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">Status Kesuburan Tanah</h1>
-            <p class="text-slate-500 text-sm">Ringkasan kondisi hara dan prediksi panen estate saat ini.</p>
-        </div>
-        <div class="flex items-center gap-3">
-            <span
-                class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-xs font-bold border border-emerald-100">
-                <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                Live Analytics
-            </span>
-            <button
-                class="p-2 md:px-4 md:py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-600 dark:text-slate-300 text-sm font-semibold hover:bg-slate-50 dark:bg-slate-700/50 transition-colors flex items-center gap-2 shadow-sm">
-                <svg class="w-4 h-4R" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                    </path>
-                </svg>
-                <span class="hidden md:inline">Export Report</span>
-            </button>
-        </div>
-    </div>
+}" :class="darkMode ? 'dark' : ''"
+    class="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
 
-    <!-- Summary Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div
-            class="bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow">
-            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Total Blok</p>
-            <div class="flex items-end justify-between">
-                <h3 class="text-2xl font-black text-slate-800 dark:text-slate-100">{{ $summary['total_blocks'] }}</h3>
-                <span class="text-[10px] px-2 py-0.5 bg-slate-100 text-slate-500 rounded-lg font-bold">128.5 Ha</span>
-            </div>
-        </div>
-        <div
-            class="bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow border-l-4 border-l-emerald-500">
-            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Avg Ton/Ha</p>
-            <div class="flex items-end justify-between">
-                <h3 class="text-2xl font-black text-slate-800 dark:text-slate-100">
-                    {{ number_format($summary['avg_ton_per_ha'], 1) }}</h3>
-                <div class="flex flex-col items-end">
-                    <span class="text-[10px] text-emerald-600 font-bold">+2.4% yield</span>
+    <div class="p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
+
+        <!-- ══ PAGE HEADER ══ -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span
+                        class="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-full text-[10px] font-bold border border-emerald-100 dark:border-emerald-800/40 uppercase tracking-wider">
+                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                        Live Analytics
+                    </span>
                 </div>
+                <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">Status Kesuburan Tanah
+                </h1>
+                <p class="text-slate-400 dark:text-slate-500 text-sm mt-0.5">Ringkasan kondisi hara dan prediksi panen
+                    estate saat ini.</p>
             </div>
-        </div>
-        <div
-            class="bg-white dark:bg-slate-800 p-5 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow border-l-4 border-l-amber-500">
-            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Best Yield</p>
-            <div class="flex items-end justify-between">
-                <h3 class="text-2xl font-black text-slate-800 dark:text-slate-100">{{ $summary['best_yield_block'] }}
-                </h3>
-                <span class="text-[10px] text-amber-600 font-bold">{{ $summary['best_yield_val'] ?? 0 }} Ton</span>
-            </div>
-        </div>
-        <div class="bg-slate-900 p-5 rounded-3xl shadow-xl shadow-slate-200 text-white border-l-4 border-l-emerald-400">
-            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Est. Total Panen (Year)</p>
-            <div class="flex items-end justify-between">
-                <h3 class="text-2xl font-black">{{ number_format($summary['estimated_total_yield']) }}</h3>
-                <span class="text-[10px] font-bold text-emerald-400">TON</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content Grid: Map & Trends -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Map View (Takes 2 columns) -->
-        <div class="lg:col-span-2 space-y-4">
-            <div class="bg-white dark:bg-slate-800 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden relative"
-                style="height: 500px;">
-                <div id="map" class="w-full h-full" wire:ignore></div>
-
-                <!-- Map Overlay Legend -->
-                <div
-                    class="absolute bottom-6 right-6 p-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 z-10">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Indikator Kesuburan
-                    </p>
-                    <div class="space-y-2">
-                        <div class="flex items-center gap-3">
-                            <span class="w-3 h-3 rounded-full bg-emerald-500 shadow-sm shadow-emerald-200"></span>
-                            <span class="text-[11px] font-bold text-slate-700 dark:text-slate-200">Subur</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="w-3 h-3 rounded-full bg-amber-500 shadow-sm shadow-amber-200"></span>
-                            <span class="text-[11px] font-bold text-slate-700 dark:text-slate-200">Cukup Subur</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="w-3 h-3 rounded-full bg-rose-500 shadow-sm shadow-rose-200"></span>
-                            <span class="text-[11px] font-bold text-slate-700 dark:text-slate-200">Kurang Subur</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Map Controls (Minimalist) -->
-
-            </div>
-        </div>
-
-        <!-- Charts & Side Info -->
-        <div class="space-y-6">
-            <!-- Harvest Trend Chart -->
-            <div
-                class="bg-white dark:bg-slate-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700">
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h4 class="text-sm font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight">Tren
-                            Panen 12 Bulan</h4>
-                        <p class="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Est. Produksi (Ton)</p>
-                    </div>
-                </div>
-
-                <div class="h-48 mb-4 w-full relative">
-                    <canvas id="harvestChart"></canvas>
-                </div>
-            </div>
-
-            <!-- Fertility Distribution -->
-            <div
-                class="bg-white dark:bg-slate-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700">
-                <h4 class="text-sm font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight mb-6">
-                    Distribusi Kesuburan</h4>
-                <div class="space-y-4">
-                    @foreach ($summary['distribution'] as $status => $count)
-                        @php
-                            $color = $status === 'Subur' ? 'emerald' : ($status === 'Cukup Subur' ? 'amber' : 'rose');
-                            $percentage = ($count / $summary['total_blocks']) * 100;
-                        @endphp
-                        <div class="space-y-1.5">
-                            <div class="flex justify-between text-[11px] font-bold">
-                                <span
-                                    class="text-slate-600 dark:text-slate-300 uppercase tracking-wider">{{ $status }}</span>
-                                <span class="text-slate-400">{{ $count }} Blok ({{ round($percentage) }}%)</span>
-                            </div>
-                            <div class="h-2 w-full bg-slate-50 dark:bg-slate-700/50 rounded-full overflow-hidden">
-                                <div class="h-full bg-{{ $color }}-500 rounded-full"
-                                    style="width: {{ $percentage }}%"></div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Estate Status Table -->
-    <div
-        class="bg-white dark:bg-slate-800 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
-        <div class="p-8 border-b border-slate-50 dark:border-slate-700 flex items-center justify-between">
-            <h4 class="text-sm font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight">Status
-                Operasional Per Blok</h4>
-            <div class="flex gap-2">
-                <input type="text" placeholder="Cari blok..."
-                    class="text-[11px] font-bold px-4 py-2 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
-            </div>
-        </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-slate-50/50 dark:bg-slate-800/50">
-                        <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Identitas
-                            Blok</th>
-                        <th
-                            class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">
-                            Umur Tanaman</th>
-                        <th
-                            class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">
-                            Status</th>
-                        <th
-                            class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">
-                            Ton/Ha</th>
-                        <th
-                            class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">
-                            Total Est. Year</th>
-                        <th
-                            class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-50">
-                    @foreach ($blocks as $block)
-                        <tr class="group hover:bg-slate-50 dark:bg-slate-700/50 transition-colors cursor-pointer"
-                            @click="selectedBlock = {{ json_encode($block) }}; setTimeout(() => window.initDetailChart(selectedBlock), 100);">
-                            <td class="px-8 py-5">
-                                <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold bg-{{ $block['color_name'] }}-500 shadow-lg shadow-{{ $block['color_name'] }}-100">
-                                        {{ explode(' ', $block['name'])[1] }}
-                                    </div>
-                                    <div>
-                                        <p class="text-[13px] font-bold text-slate-800 dark:text-slate-100">
-                                            {{ $block['name'] }}</p>
-                                        <p class="text-[10px] text-slate-400 font-bold">{{ $block['area_ha'] }} Ha</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-8 py-5 text-center">
-                                <span class="text-[11px] font-bold text-slate-600 dark:text-slate-300 italic">
-                                    {{ $block['prediction']['age_years'] }} Tahun
-                                    <span
-                                        class="ml-1 text-[9px] text-slate-400 uppercase">({{ substr($block['prediction']['status_label'], 0, 5) }}..)</span>
-                                </span>
-                            </td>
-                            <td class="px-8 py-5 text-center">
-                                <span
-                                    class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-{{ $block['color_name'] }}-50 text-{{ $block['color_name'] }}-700 border border-{{ $block['color_name'] }}-100">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-{{ $block['color_name'] }}-500"></span>
-                                    {{ $block['status'] }}
-                                </span>
-                            </td>
-                            <td class="px-8 py-5 text-right font-black text-[13px] text-slate-800 dark:text-slate-100">
-                                {{ $block['ton_per_ha'] }}</td>
-                            <td class="px-8 py-5 text-right">
-                                <div class="flex flex-col items-end">
-                                    <span
-                                        class="text-[13px] font-black text-slate-800 dark:text-slate-100">{{ number_format($block['yield']) }}</span>
-                                    <span
-                                        class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">TON</span>
-                                </div>
-                            </td>
-                            <td class="px-8 py-5 text-right">
-                                <div
-                                    class="w-8 h-8 rounded-full flex items-center justify-center bg-slate-100 text-slate-400 group-hover:bg-slate-900 group-hover:text-white transition-all">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                            d="M9 5l7 7-7 7"></path>
-                                    </svg>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- DETAIL PANEL (OVERLAY) -->
-    <template x-if="selectedBlock">
-        <div class="fixed inset-0 z-[100] flex items-center justify-end p-4 bg-slate-900/40 backdrop-blur-sm transition-all duration-300"
-            @click.self="closeDetail()">
-
-            <div x-show="selectedBlock" x-transition:enter="transition ease-out duration-300 transform"
-                x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
-                class="w-full max-w-md h-full bg-white dark:bg-slate-800 shadow-2xl rounded-3xl overflow-hidden flex flex-col relative">
-
-                <!-- Close Button -->
-                <button @click="closeDetail()"
-                    class="absolute top-6 right-6 p-2 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors z-20">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex items-center gap-2">
+                <!-- Dark Mode Toggle -->
+                <button @click="darkMode = !darkMode"
+                    class="w-9 h-9 rounded-xl flex items-center justify-center border transition-all duration-200 hover:scale-105 bg-white dark:bg-slate-800 border-slate-200 dark:border-white/10">
+                    <svg x-show="!darkMode" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12"></path>
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                    <svg x-show="darkMode" class="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </button>
+                <!-- Export -->
+                <button
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-xl text-slate-600 dark:text-slate-300 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span class="hidden md:inline">Export Report</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ══ FILTER BAR ══ -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm p-4">
+            <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500 shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z" />
+                    </svg>
+                    <span class="text-xs font-semibold uppercase tracking-wider">Filter</span>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 flex-1 w-full">
+                    <!-- Block Dropdown -->
+                    <div class="relative flex-1">
+                        <div class="absolute left-3 top-1/2 -translate-y-1/2">
+                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h8m-8 6h16" />
+                            </svg>
+                        </div>
+                        <select x-model="filterBlock"
+                            class="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-700/50 focus:outline-none focus:border-emerald-400 dark:focus:border-emerald-500/50 transition appearance-none font-medium">
+                            <option value="">Semua Blok Kebun</option>
+                            @foreach ($blocks as $block)
+                                <option value="{{ $block['name'] }}">{{ $block['name'] }}</option>
+                            @endforeach
+                        </select>
+                        <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Date From -->
+                    <div class="relative">
+                        <div class="absolute left-3 top-1/2 -translate-y-1/2">
+                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <input x-model="filterDateFrom" type="date"
+                            class="pl-9 pr-4 py-2.5 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-700/50 focus:outline-none focus:border-emerald-400 dark:focus:border-emerald-500/50 transition font-medium w-full sm:w-auto" />
+                    </div>
+
+                    <span
+                        class="hidden sm:flex items-center text-slate-300 dark:text-slate-600 text-sm font-medium">—</span>
+
+                    <!-- Date To -->
+                    <div class="relative">
+                        <div class="absolute left-3 top-1/2 -translate-y-1/2">
+                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <input x-model="filterDateTo" type="date"
+                            class="pl-9 pr-4 py-2.5 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-700/50 focus:outline-none focus:border-emerald-400 dark:focus:border-emerald-500/50 transition font-medium w-full sm:w-auto" />
+                    </div>
+
+                    <!-- Apply Button -->
+                    <button
+                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:scale-105 active:scale-95 shadow-sm shadow-emerald-500/20 shrink-0"
+                        style="background:linear-gradient(135deg,#10b981,#059669)">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        Terapkan
+                    </button>
+
+                    <!-- Reset -->
+                    <button @click="filterBlock=''; filterDateFrom=''; filterDateTo='';"
+                        class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-slate-500 dark:text-slate-400 text-sm font-medium border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition shrink-0">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ SUMMARY CARDS ══ -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Total Blok -->
+            <div
+                class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-start justify-between mb-3">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Blok</p>
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#818cf815">
+                        <svg class="w-4 h-4" style="color:#818cf8" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-3xl font-black text-slate-800 dark:text-white">{{ $summary['total_blocks'] }}</h3>
+                <p class="text-[10px] text-slate-400 font-medium mt-1">128.5 Ha total area</p>
+            </div>
+
+            <!-- Avg Ton/Ha -->
+            <div
+                class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow border-t-2 border-t-emerald-500">
+                <div class="flex items-start justify-between mb-3">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Avg Ton/Ha</p>
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#10b98115">
+                        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-3xl font-black text-slate-800 dark:text-white">
+                    {{ number_format($summary['avg_ton_per_ha'], 1) }}</h3>
+                <p class="text-[10px] text-emerald-500 font-bold mt-1">+2.4% yield dari bulan lalu</p>
+            </div>
+
+            <!-- Best Yield -->
+            <div
+                class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow border-t-2 border-t-amber-500">
+                <div class="flex items-start justify-between mb-3">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Best Yield</p>
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#f59e0b15">
+                        <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-3xl font-black text-slate-800 dark:text-white">{{ $summary['best_yield_block'] }}</h3>
+                <p class="text-[10px] text-amber-500 font-bold mt-1">{{ $summary['best_yield_val'] ?? 0 }} Ton produksi
+                </p>
+            </div>
+
+            <!-- Est. Total -->
+            <div class="p-5 rounded-2xl shadow-lg text-white border-t-2 border-t-emerald-400 relative overflow-hidden"
+                style="background:linear-gradient(135deg,#0f172a,#1e293b)">
+                <div class="flex items-start justify-between mb-3">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Est. Total Panen</p>
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center"
+                        style="background:rgba(16,185,129,.15)">
+                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-3xl font-black">{{ number_format($summary['estimated_total_yield']) }}</h3>
+                <p class="text-[10px] text-emerald-400 font-bold mt-1 uppercase tracking-wider">Ton / Tahun</p>
+            </div>
+        </div>
+
+        <!-- ══ MAP & CHARTS ══ -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Map -->
+            <div class="lg:col-span-2">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm overflow-hidden relative"
+                    style="height:480px">
+                    <div id="map" class="w-full h-full" wire:ignore></div>
+                    <!-- Legend -->
+                    <div
+                        class="absolute bottom-5 right-5 p-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-xl shadow-lg border border-white/50 dark:border-white/5 z-10">
+                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2.5">Indikator</p>
+                        <div class="space-y-1.5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                                <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Subur</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                                <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Cukup
+                                    Subur</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                                <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Kurang
+                                    Subur</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side Charts -->
+            <div class="space-y-5">
+                <!-- Harvest Trend -->
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm">
+                    <div class="mb-5">
+                        <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Tren Panen 12 Bulan</h4>
+                        <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Estimasi
+                            Produksi (Ton)</p>
+                    </div>
+                    <div class="h-44 w-full relative">
+                        <canvas id="harvestChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Fertility Distribution -->
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm">
+                    <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200 mb-5">Distribusi Kesuburan</h4>
+                    <div class="space-y-4">
+                        @foreach ($summary['distribution'] as $status => $count)
+                            @php
+                                $color =
+                                    $status === 'Subur' ? 'emerald' : ($status === 'Cukup Subur' ? 'amber' : 'rose');
+                                $hex =
+                                    $status === 'Subur'
+                                        ? '#10b981'
+                                        : ($status === 'Cukup Subur'
+                                            ? '#f59e0b'
+                                            : '#f43f5e');
+                                $percentage = ($count / $summary['total_blocks']) * 100;
+                            @endphp
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-2 h-2 rounded-full"
+                                            style="background:{{ $hex }}"></span>
+                                        <span
+                                            class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">{{ $status }}</span>
+                                    </div>
+                                    <span class="text-[10px] text-slate-400 font-bold">{{ $count }} Blok ·
+                                        {{ round($percentage) }}%</span>
+                                </div>
+                                <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full transition-all duration-500"
+                                        style="width:{{ $percentage }}%; background:{{ $hex }}"></div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ TABLE ══ -->
+        <div
+            class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm overflow-hidden">
+            <!-- Table Header -->
+            <div
+                class="px-6 py-5 border-b border-slate-100 dark:border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Status Operasional Per Blok</h4>
+                    <p class="text-[10px] text-slate-400 font-medium mt-0.5 uppercase tracking-wider">
+                        {{ count($blocks) }} blok terdaftar</p>
+                </div>
+                <div class="relative">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input type="text" placeholder="Cari blok..."
+                        class="pl-9 pr-4 py-2 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-700/50 focus:outline-none focus:border-emerald-400 transition font-medium placeholder-slate-300 dark:placeholder-slate-600 w-48" />
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-slate-50 dark:bg-slate-700/30">
+                            <th class="px-6 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Blok
+                            </th>
+                            <th
+                                class="px-6 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">
+                                Umur</th>
+                            <th
+                                class="px-6 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">
+                                Status</th>
+                            <th
+                                class="px-6 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">
+                                Ton/Ha</th>
+                            <th
+                                class="px-6 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">
+                                Est. Tahunan</th>
+                            <th class="px-6 py-3.5 w-12"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50 dark:divide-white/5">
+                        @foreach ($blocks as $block)
+                            <tr class="group hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors cursor-pointer"
+                                @click="selectedBlock = {{ json_encode($block) }}; setTimeout(() => window.initDetailChart(selectedBlock), 100);">
+                                <!-- Blok Identity -->
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black text-xs bg-{{ $block['color_name'] }}-500 shadow-sm">
+                                            {{ explode(' ', $block['name'])[1] }}
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-slate-800 dark:text-slate-100">
+                                                {{ $block['name'] }}</p>
+                                            <p class="text-[10px] text-slate-400 font-medium">{{ $block['area_ha'] }}
+                                                Ha</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <!-- Umur -->
+                                <td class="px-6 py-4 text-center">
+                                    <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                                        {{ $block['prediction']['age_years'] }} Thn
+                                    </span>
+                                </td>
+                                <!-- Status -->
+                                <td class="px-6 py-4 text-center">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-{{ $block['color_name'] }}-50 dark:bg-{{ $block['color_name'] }}-900/20 text-{{ $block['color_name'] }}-700 dark:text-{{ $block['color_name'] }}-400 border border-{{ $block['color_name'] }}-100 dark:border-{{ $block['color_name'] }}-800/30">
+                                        <span
+                                            class="w-1.5 h-1.5 rounded-full bg-{{ $block['color_name'] }}-500"></span>
+                                        {{ $block['status'] }}
+                                    </span>
+                                </td>
+                                <!-- Ton/Ha -->
+                                <td class="px-6 py-4 text-right">
+                                    <span
+                                        class="text-sm font-black text-slate-800 dark:text-slate-100">{{ $block['ton_per_ha'] }}</span>
+                                </td>
+                                <!-- Est. Yield -->
+                                <td class="px-6 py-4 text-right">
+                                    <p class="text-sm font-black text-slate-800 dark:text-slate-100">
+                                        {{ number_format($block['yield']) }}</p>
+                                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Ton</p>
+                                </td>
+                                <!-- Arrow -->
+                                <td class="px-6 py-4">
+                                    <div
+                                        class="w-7 h-7 rounded-lg flex items-center justify-center bg-slate-100 dark:bg-slate-700 text-slate-400 group-hover:bg-slate-800 dark:group-hover:bg-slate-600 group-hover:text-white transition-all duration-150 ml-auto">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                                d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div><!-- /container -->
+
+
+    <!-- ══════════════════════════
+            DETAIL PANEL
+        ══════════════════════════ -->
+    <template x-if="selectedBlock">
+        <div class="fixed inset-0 z-[100] flex items-center justify-end" @click.self="closeDetail()"
+            style="background:rgba(15,23,42,.5);backdrop-filter:blur(6px)">
+
+            <div x-show="selectedBlock" x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="translate-x-full opacity-0"
+                x-transition:enter-end="translate-x-0 opacity-100"
+                class="w-full max-w-sm h-full bg-white dark:bg-slate-900 shadow-2xl flex flex-col relative border-l border-slate-200 dark:border-white/5">
+
+                <!-- Accent top bar -->
+                <div class="h-1 w-full shrink-0" style="background:linear-gradient(90deg,#10b981,#059669,#047857)">
+                </div>
+
+                <!-- Close -->
+                <button @click="closeDetail()"
+                    class="absolute top-4 right-4 w-8 h-8 rounded-xl flex items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition z-20">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
 
                 <!-- Header -->
-                <div
-                    class="p-8 pb-6 bg-gradient-to-br from-slate-50 to-white border-b border-slate-100 dark:border-slate-700">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-bold"
-                            :class="'bg-' + selectedBlock.color_name + '-500 shadow-lg shadow-' + selectedBlock.color_name +
-                                '-100'">
+                <div class="p-6 pb-5 border-b border-slate-100 dark:border-white/5 shrink-0">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white font-black text-sm"
+                            :class="'bg-' + selectedBlock.color_name + '-500'">
                             <span x-text="selectedBlock.name.split(' ')[1]"></span>
                         </div>
                         <div>
-                            <h2 class="text-2xl font-extrabold text-slate-800 dark:text-slate-100"
+                            <h2 class="text-lg font-black text-slate-800 dark:text-slate-100"
                                 x-text="selectedBlock.name"></h2>
-                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"
-                                x-text="'Plant age ' + selectedBlock.prediction.age_years + ' Yrs | ' + selectedBlock.area_ha + ' Ha'">
+                            <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider"
+                                x-text="selectedBlock.prediction.age_years + ' Tahun · ' + selectedBlock.area_ha + ' Ha'">
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Stats Content -->
-                <div class="flex-1 overflow-y-auto p-8 space-y-8">
+                <!-- Scrollable Content -->
+                <div class="flex-1 overflow-y-auto p-6 space-y-5">
+
                     <!-- Prediction Card -->
-                    <div class="p-6 bg-slate-900 rounded-[2rem] text-white relative overflow-hidden">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Estimasi Hasil
-                            Panen Tahunan</p>
+                    <div class="p-5 rounded-2xl text-white relative overflow-hidden"
+                        style="background:linear-gradient(135deg,#0f172a,#1e293b)">
+                        <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2">Estimasi Panen
+                            Tahunan</p>
                         <div class="flex items-end gap-2">
-                            <h4 class="text-4xl font-extrabold"
-                                x-text="parseFloat(selectedBlock.yield).toLocaleString()"></h4>
-                            <span class="text-lg font-bold text-slate-400 mb-1">TON</span>
+                            <h4 class="text-3xl font-black" x-text="parseFloat(selectedBlock.yield).toLocaleString()">
+                            </h4>
+                            <span class="text-sm font-bold text-slate-400 mb-1">TON</span>
                         </div>
-                        <div class="mt-4 pt-4 border-t border-white/10 flex justify-between">
+                        <div class="mt-4 pt-4 border-t border-white/10 grid grid-cols-2 gap-4">
                             <div>
-                                <p class="text-[9px] text-slate-400 uppercase font-black">Efisiensi Lahan</p>
-                                <p class="text-sm font-bold" x-text="selectedBlock.ton_per_ha + ' Ton/Ha'"></p>
+                                <p class="text-[9px] text-slate-500 uppercase font-black tracking-wider">Efisiensi</p>
+                                <p class="text-sm font-bold mt-0.5" x-text="selectedBlock.ton_per_ha + ' Ton/Ha'"></p>
                             </div>
-                            <div class="text-right">
-                                <p class="text-[9px] text-slate-400 uppercase font-black">Status Umur</p>
-                                <p class="text-sm font-bold text-emerald-400"
+                            <div>
+                                <p class="text-[9px] text-slate-500 uppercase font-black tracking-wider">Status Umur
+                                </p>
+                                <p class="text-sm font-bold text-emerald-400 mt-0.5"
                                     x-text="selectedBlock.prediction.status_label"></p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Monthly Trend Small Bar Chart -->
-                    <div>
-                        <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">Prediksi Panen
+                    <!-- Monthly Chart -->
+                    <div
+                        class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-4 border border-slate-100 dark:border-white/5">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Prediksi Panen
                             Bulanan</p>
-                        <div class="h-32 mb-4 w-full relative">
+                        <div class="h-28 w-full">
                             <canvas id="detailHarvestChart"></canvas>
                         </div>
                     </div>
 
-                    <!-- Nutrients Grid -->
+                    <!-- Nutrients -->
                     <div>
-                        <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3">Kondisi Hara
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Kondisi Hara
                             Terakhir</p>
                         <div class="grid grid-cols-2 gap-2">
                             <div
-                                class="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 transition-all hover:bg-white dark:bg-slate-800 hover:shadow-md">
+                                class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-xl border border-slate-100 dark:border-white/5 hover:shadow-sm transition">
                                 <p class="text-[9px] font-bold text-slate-400 uppercase mb-1">Nitrogen (N)</p>
-                                <p class="text-base font-extrabold text-slate-800 dark:text-slate-100"
+                                <p class="text-base font-black text-slate-800 dark:text-slate-100"
                                     x-text="selectedBlock.raw_nutrients.nitrogen + '%'"></p>
                             </div>
                             <div
-                                class="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 transition-all hover:bg-white dark:bg-slate-800 hover:shadow-md">
+                                class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-xl border border-slate-100 dark:border-white/5 hover:shadow-sm transition">
                                 <p class="text-[9px] font-bold text-slate-400 uppercase mb-1">Fosfor (P)</p>
-                                <p class="text-base font-extrabold text-slate-800 dark:text-slate-100"
+                                <p class="text-base font-black text-slate-800 dark:text-slate-100"
                                     x-text="selectedBlock.raw_nutrients.phosphorus + ' ppm'"></p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Recommendation -->
-                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-100">
+                    <div
+                        class="p-4 bg-emerald-50 dark:bg-emerald-900/10 rounded-xl border border-emerald-100 dark:border-emerald-800/30">
                         <h5
-                            class="text-xs font-black text-emerald-800 uppercase tracking-widest mb-2 flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="text-[10px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             Rekomendasi Agronomi
                         </h5>
-                        <p class="text-xs text-emerald-700 leading-relaxed"
-                            x-text="selectedBlock.status === 'Subur' ? 'Pertahankan pemupukan standar. Monitor serangan hama pada daun.' : 'Segera lakukan pemupukan tambahan Nitrogen dan Fosfor. Perbaiki drainase di area rendah.'">
+                        <p class="text-xs text-emerald-700 dark:text-emerald-300/80 leading-relaxed"
+                            x-text="selectedBlock.status === 'Subur'
+                                ? 'Pertahankan pemupukan standar. Monitor serangan hama pada daun.'
+                                : 'Segera lakukan pemupukan tambahan Nitrogen dan Fosfor. Perbaiki drainase di area rendah.'">
                         </p>
                     </div>
                 </div>
 
-                <!-- Footer Action -->
-                <div class="p-8 border-t border-slate-50 dark:border-slate-700 bg-slate-50/30">
+                <!-- Footer -->
+                <div class="p-5 border-t border-slate-100 dark:border-white/5 shrink-0">
                     <button
-                        class="w-full bg-emerald-500 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-emerald-200 hover:bg-emerald-600 transition-all active:scale-[0.98]">
+                        class="w-full py-3 rounded-xl text-white text-xs font-black uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-emerald-500/20"
+                        style="background:linear-gradient(135deg,#10b981,#059669)">
                         Download Full Report
                     </button>
                 </div>
             </div>
         </div>
     </template>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -367,33 +555,20 @@
     function initChart() {
         const ctx = document.getElementById('harvestChart');
         if (!ctx) return;
-
-        if (window.harvestChartInstance) {
-            window.harvestChartInstance.destroy();
-        }
+        if (window.harvestChartInstance) window.harvestChartInstance.destroy();
 
         const rawData = @json($harvestTrend);
-
         const yields = rawData.map(item => item.yield);
         const maxYield = Math.max(...yields, 1);
-
-        const backgroundColors = yields.map(val => {
-            const ratio = val / maxYield;
-            const alpha = 0.2 + (ratio * 0.8);
-            return `rgba(16, 185, 129, ${alpha})`;
-        });
-
-        const hoverColors = yields.map(() => '#047857');
 
         window.harvestChartInstance = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: rawData.map(item => item.month.substring(0, 3).toUpperCase()),
                 datasets: [{
-                    label: 'Est. Produksi (Ton)',
                     data: yields,
-                    backgroundColor: backgroundColors,
-                    hoverBackgroundColor: hoverColors,
+                    backgroundColor: yields.map(val => `rgba(16,185,129,${0.2 + (val/maxYield)*0.75})`),
+                    hoverBackgroundColor: '#059669',
                     borderRadius: 4,
                     borderWidth: 0,
                     barPercentage: 0.7,
@@ -409,35 +584,29 @@
                     tooltip: {
                         backgroundColor: '#0f172a',
                         titleFont: {
-                            size: 10,
-                            family: 'sans-serif'
+                            size: 10
                         },
                         bodyFont: {
                             size: 11,
-                            weight: 'bold',
-                            family: 'sans-serif'
+                            weight: 'bold'
                         },
                         padding: 10,
                         cornerRadius: 8,
                         displayColors: false,
                         callbacks: {
-                            label: function(context) {
-                                return context.parsed.y + ' Ton';
-                            }
+                            label: ctx => ctx.parsed.y + ' Ton'
                         }
                     }
                 },
                 scales: {
                     x: {
                         grid: {
-                            display: false,
-                            drawBorder: false
+                            display: false
                         },
                         ticks: {
                             font: {
                                 size: 9,
-                                weight: 'bold',
-                                family: 'sans-serif'
+                                weight: 'bold'
                             },
                             color: '#94a3b8'
                         }
@@ -452,21 +621,18 @@
     }
 
     function initMap() {
-
         const mapContainer = document.getElementById('map');
         if (!mapContainer || mapContainer.innerHTML.trim() !== '') return;
 
         const map = new ol.Map({
             target: 'map',
-            layers: [
-                new ol.layer.Tile({
-                    source: new ol.source.XYZ({
-                        url: 'https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}' // Satellite
-                    })
+            layers: [new ol.layer.Tile({
+                source: new ol.source.XYZ({
+                    url: 'https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}'
                 })
-            ],
+            })],
             view: new ol.View({
-                center: ol.proj.fromLonLat([101.7068, 0.2933]), // Riau
+                center: ol.proj.fromLonLat([101.7068, 0.2933]),
                 zoom: 12
             })
         });
@@ -495,14 +661,14 @@
                     }),
                     fill: new ol.style.Fill({
                         color: block.color + '44'
-                    }) // 27% alpha
+                    })
                 }));
                 features.push(polygon);
             }
         });
 
         const vectorSource = new ol.source.Vector({
-            features: features
+            features
         });
         map.addLayer(new ol.layer.Vector({
             source: vectorSource
@@ -510,17 +676,16 @@
 
         const tooltip = document.createElement('div');
         tooltip.className =
-            "bg-slate-900 px-3 py-1.5 rounded-lg shadow-2xl text-[11px] font-bold text-white pointer-events-none z-50";
-        tooltip.style.position = "absolute";
-        tooltip.style.display = "none";
+            "bg-slate-900 px-3 py-1.5 rounded-lg shadow-xl text-[11px] font-bold text-white pointer-events-none z-50";
+        tooltip.style.cssText = "position:fixed;display:none";
         document.body.appendChild(tooltip);
 
-        map.on('pointermove', function(evt) {
+        map.on('pointermove', evt => {
             const feature = map.forEachFeatureAtPixel(evt.pixel, f => f);
             if (feature) {
                 tooltip.style.display = "block";
-                tooltip.style.left = evt.originalEvent.pageX + 15 + "px";
-                tooltip.style.top = evt.originalEvent.pageY + 15 + "px";
+                tooltip.style.left = evt.originalEvent.clientX + 15 + "px";
+                tooltip.style.top = evt.originalEvent.clientY + 15 + "px";
                 tooltip.innerHTML = feature.get("name");
                 map.getTargetElement().style.cursor = 'pointer';
             } else {
@@ -529,62 +694,44 @@
             }
         });
 
-        // CLICK INTERACTION
-        map.on('click', function(evt) {
+        map.on('click', evt => {
             const feature = map.forEachFeatureAtPixel(evt.pixel, f => f);
             if (feature) {
                 const data = feature.get("rawData");
-                // Access Alpine component
                 const component = document.querySelector('[x-data]');
-                if (component && component.__x) {
-                    component.__x.$data.selectedBlock = data;
-                } else {
-                    // Modern Alpine handling
-                    const alpineData = Alpine.$data(component);
-                    alpineData.selectedBlock = data;
+                try {
+                    Alpine.$data(component).selectedBlock = data;
+                } catch (e) {
+                    if (component?.__x) component.__x.$data.selectedBlock = data;
                 }
                 setTimeout(() => window.initDetailChart(data), 100);
             }
         });
 
-        // Center map on features directly without animation
         const extent = vectorSource.getExtent();
-        if (!ol.extent.isEmpty(extent)) {
-            map.getView().fit(extent, {
-                padding: [100, 100, 100, 100]
-            });
-        }
+        if (!ol.extent.isEmpty(extent)) map.getView().fit(extent, {
+            padding: [80, 80, 80, 80]
+        });
     }
 
     window.initDetailChart = function(data) {
         const ctx = document.getElementById('detailHarvestChart');
         if (!ctx) return;
-
-        if (window.detailChartInstance) {
-            window.detailChartInstance.destroy();
-        }
+        if (window.detailChartInstance) window.detailChartInstance.destroy();
 
         const rawData = data.prediction.monthly_trend;
         const yields = rawData.map(item => item.yield);
         const maxYield = Math.max(...yields, 1);
-
-        const backgroundColors = yields.map(val => {
-            const ratio = val / maxYield;
-            const alpha = 0.2 + (ratio * 0.8);
-            return `rgba(16, 185, 129, ${alpha})`;
-        });
-
-        const hoverColors = yields.map(() => '#047857');
 
         window.detailChartInstance = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: rawData.map(item => item.month.substring(0, 3).toUpperCase()),
                 datasets: [{
-                    label: 'Est. Produksi (Ton)',
                     data: yields,
-                    backgroundColor: backgroundColors,
-                    hoverBackgroundColor: hoverColors,
+                    backgroundColor: yields.map(val =>
+                        `rgba(16,185,129,${0.2 + (val/maxYield)*0.75})`),
+                    hoverBackgroundColor: '#059669',
                     borderRadius: 3,
                     borderWidth: 0,
                     barPercentage: 0.8,
@@ -599,36 +746,27 @@
                     },
                     tooltip: {
                         backgroundColor: '#0f172a',
-                        titleFont: {
-                            size: 9,
-                            family: 'sans-serif'
-                        },
                         bodyFont: {
                             size: 10,
-                            weight: 'bold',
-                            family: 'sans-serif'
+                            weight: 'bold'
                         },
                         padding: 8,
                         cornerRadius: 6,
                         displayColors: false,
                         callbacks: {
-                            label: function(context) {
-                                return context.parsed.y + ' Ton';
-                            }
+                            label: ctx => ctx.parsed.y + ' Ton'
                         }
                     }
                 },
                 scales: {
                     x: {
                         grid: {
-                            display: false,
-                            drawBorder: false
+                            display: false
                         },
                         ticks: {
                             font: {
                                 size: 8,
-                                weight: 'bold',
-                                family: 'sans-serif'
+                                weight: 'bold'
                             },
                             color: '#94a3b8'
                         }

@@ -21,7 +21,7 @@ function app() {
             id: 2,
             name: 'Budi Santoso',
             email: 'budi@mail.com',
-            role: 'editor',
+            role: 'manager',
             active: true,
             date: '15 Feb 2025'
         },
@@ -37,7 +37,7 @@ function app() {
             id: 4,
             name: 'Dian Pratama',
             email: 'dian@mail.com',
-            role: 'editor',
+            role: 'manager',
             active: true,
             date: '20 Mar 2025'
         },
@@ -77,7 +77,7 @@ function app() {
             id: 9,
             name: 'Indah Permata',
             email: 'indah@mail.com',
-            role: 'editor',
+            role: 'manager',
             active: true,
             date: '22 May 2025'
         },
@@ -101,7 +101,7 @@ function app() {
             id: 12,
             name: 'Lukman Hakim',
             email: 'lukman@mail.com',
-            role: 'editor',
+            role: 'manager',
             active: true,
             date: '25 Jun 2025'
         },
@@ -160,7 +160,7 @@ function app() {
         roleStyle(role) {
             return {
                 admin: 'background:rgba(244,114,182,.15);color:#f472b6;border:1px solid rgba(244,114,182,.3)',
-                editor: 'background:rgba(129,140,248,.15);color:#818cf8;border:1px solid rgba(129,140,248,.3)',
+                manager: 'background:rgba(129,140,248,.15);color:#818cf8;border:1px solid rgba(129,140,248,.3)',
                 user: 'background:rgba(99,102,241,.10);color:#a5b4fc;border:1px solid rgba(99,102,241,.2)',
             }[role] || '';
         },
