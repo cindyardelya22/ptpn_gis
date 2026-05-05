@@ -13,33 +13,13 @@
         <!-- ══ PAGE HEADER ══ -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-                <div class="flex items-center gap-2 mb-1">
-                    <span
-                        class="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-full text-[10px] font-bold border border-emerald-100 dark:border-emerald-800/40 uppercase tracking-wider">
-                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                        Live Analytics
-                    </span>
-                </div>
-                <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">Status Kesuburan Tanah
+
+                <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">Dashboard
                 </h1>
                 <p class="text-slate-400 dark:text-slate-500 text-sm mt-0.5">Ringkasan kondisi hara dan prediksi panen
                     estate saat ini.</p>
             </div>
             <div class="flex items-center gap-2">
-                <!-- Dark Mode Toggle -->
-                <button @click="darkMode = !darkMode"
-                    class="w-9 h-9 rounded-xl flex items-center justify-center border transition-all duration-200 hover:scale-105 bg-white dark:bg-slate-800 border-slate-200 dark:border-white/10">
-                    <svg x-show="!darkMode" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
-                    <svg x-show="darkMode" class="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                </button>
                 <!-- Export -->
                 <button
                     class="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-xl text-slate-600 dark:text-slate-300 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition shadow-sm">
@@ -77,7 +57,7 @@
                             class="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-700/50 focus:outline-none focus:border-emerald-400 dark:focus:border-emerald-500/50 transition appearance-none font-medium">
                             <option value="">Semua Blok Kebun</option>
                             @foreach ($blocks as $block)
-                                <option value="{{ $block['name'] }}">{{ $block['name'] }}</option>
+                            <option value="{{ $block['name'] }}">{{ $block['name'] }}</option>
                             @endforeach
                         </select>
                         <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
@@ -175,7 +155,8 @@
                     </div>
                 </div>
                 <h3 class="text-3xl font-black text-slate-800 dark:text-white">
-                    {{ number_format($summary['avg_ton_per_ha'], 1) }}</h3>
+                    {{ number_format($summary['avg_ton_per_ha'], 1) }}
+                </h3>
                 <p class="text-[10px] text-emerald-500 font-bold mt-1">+2.4% yield dari bulan lalu</p>
             </div>
 
@@ -220,31 +201,33 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Map -->
             <div class="lg:col-span-2">
-                <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm overflow-hidden relative"
-                    style="height:480px">
-                    <div id="map" class="w-full h-full" wire:ignore></div>
-                    <!-- Legend -->
-                    <div
-                        class="absolute bottom-5 right-5 p-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-xl shadow-lg border border-white/50 dark:border-white/5 z-10">
-                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2.5">Indikator</p>
-                        <div class="space-y-1.5">
-                            <div class="flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                                <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Subur</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                                <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Cukup
-                                    Subur</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                                <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Kurang
-                                    Subur</span>
+                <a href="/peta-blok" wire:navigate>
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm overflow-hidden relative"
+                        style="height:480px">
+                        <div id="map" class="w-full h-full" wire:ignore></div>
+                        <!-- Legend -->
+                        <div
+                            class="absolute bottom-5 right-5 p-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-xl shadow-lg border border-white/50 dark:border-white/5 z-10">
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2.5">Indikator</p>
+                            <div class="space-y-1.5">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                                    <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Subur</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                                    <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Cukup
+                                        Subur</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                                    <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Kurang
+                                        Subur</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
 
             <!-- Side Charts -->
@@ -268,33 +251,33 @@
                     <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200 mb-5">Distribusi Kesuburan</h4>
                     <div class="space-y-4">
                         @foreach ($summary['distribution'] as $status => $count)
-                            @php
-                                $color =
-                                    $status === 'Subur' ? 'emerald' : ($status === 'Cukup Subur' ? 'amber' : 'rose');
-                                $hex =
-                                    $status === 'Subur'
-                                        ? '#10b981'
-                                        : ($status === 'Cukup Subur'
-                                            ? '#f59e0b'
-                                            : '#f43f5e');
-                                $percentage = ($count / $summary['total_blocks']) * 100;
-                            @endphp
-                            <div class="space-y-1.5">
-                                <div class="flex justify-between items-center">
-                                    <div class="flex items-center gap-2">
-                                        <span class="w-2 h-2 rounded-full"
-                                            style="background:{{ $hex }}"></span>
-                                        <span
-                                            class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">{{ $status }}</span>
-                                    </div>
-                                    <span class="text-[10px] text-slate-400 font-bold">{{ $count }} Blok ·
-                                        {{ round($percentage) }}%</span>
+                        @php
+                        $color =
+                        $status === 'Subur' ? 'emerald' : ($status === 'Cukup Subur' ? 'amber' : 'rose');
+                        $hex =
+                        $status === 'Subur'
+                        ? '#10b981'
+                        : ($status === 'Cukup Subur'
+                        ? '#f59e0b'
+                        : '#f43f5e');
+                        $percentage = ($count / $summary['total_blocks']) * 100;
+                        @endphp
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full"
+                                        style="background:{{ $hex }}"></span>
+                                    <span
+                                        class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">{{ $status }}</span>
                                 </div>
-                                <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                                    <div class="h-full rounded-full transition-all duration-500"
-                                        style="width:{{ $percentage }}%; background:{{ $hex }}"></div>
-                                </div>
+                                <span class="text-[10px] text-slate-400 font-bold">{{ $count }} Blok ·
+                                    {{ round($percentage) }}%</span>
                             </div>
+                            <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                                <div class="h-full rounded-full transition-all duration-500"
+                                    style="width:{{ $percentage }}%; background:{{ $hex }}"></div>
+                            </div>
+                        </div>
                         @endforeach
                     </div>
                 </div>
@@ -310,7 +293,8 @@
                 <div>
                     <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Status Operasional Per Blok</h4>
                     <p class="text-[10px] text-slate-400 font-medium mt-0.5 uppercase tracking-wider">
-                        {{ count($blocks) }} blok terdaftar</p>
+                        {{ count($blocks) }} blok terdaftar
+                    </p>
                 </div>
                 <div class="relative">
                     <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" fill="none"
@@ -346,61 +330,63 @@
                     </thead>
                     <tbody class="divide-y divide-slate-50 dark:divide-white/5">
                         @foreach ($blocks as $block)
-                            <tr class="group hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors cursor-pointer"
-                                @click="selectedBlock = {{ json_encode($block) }}; setTimeout(() => window.initDetailChart(selectedBlock), 100);">
-                                <!-- Blok Identity -->
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black text-xs bg-{{ $block['color_name'] }}-500 shadow-sm">
-                                            {{ explode(' ', $block['name'])[1] }}
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-bold text-slate-800 dark:text-slate-100">
-                                                {{ $block['name'] }}</p>
-                                            <p class="text-[10px] text-slate-400 font-medium">{{ $block['area_ha'] }}
-                                                Ha</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <!-- Umur -->
-                                <td class="px-6 py-4 text-center">
-                                    <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">
-                                        {{ $block['prediction']['age_years'] }} Thn
-                                    </span>
-                                </td>
-                                <!-- Status -->
-                                <td class="px-6 py-4 text-center">
-                                    <span
-                                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-{{ $block['color_name'] }}-50 dark:bg-{{ $block['color_name'] }}-900/20 text-{{ $block['color_name'] }}-700 dark:text-{{ $block['color_name'] }}-400 border border-{{ $block['color_name'] }}-100 dark:border-{{ $block['color_name'] }}-800/30">
-                                        <span
-                                            class="w-1.5 h-1.5 rounded-full bg-{{ $block['color_name'] }}-500"></span>
-                                        {{ $block['status'] }}
-                                    </span>
-                                </td>
-                                <!-- Ton/Ha -->
-                                <td class="px-6 py-4 text-right">
-                                    <span
-                                        class="text-sm font-black text-slate-800 dark:text-slate-100">{{ $block['ton_per_ha'] }}</span>
-                                </td>
-                                <!-- Est. Yield -->
-                                <td class="px-6 py-4 text-right">
-                                    <p class="text-sm font-black text-slate-800 dark:text-slate-100">
-                                        {{ number_format($block['yield']) }}</p>
-                                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Ton</p>
-                                </td>
-                                <!-- Arrow -->
-                                <td class="px-6 py-4">
+                        <tr class="group hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors cursor-pointer"
+                            @click="selectedBlock = {{ json_encode($block) }}; setTimeout(() => window.initDetailChart(selectedBlock), 100);">
+                            <!-- Blok Identity -->
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
                                     <div
-                                        class="w-7 h-7 rounded-lg flex items-center justify-center bg-slate-100 dark:bg-slate-700 text-slate-400 group-hover:bg-slate-800 dark:group-hover:bg-slate-600 group-hover:text-white transition-all duration-150 ml-auto">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                d="M9 5l7 7-7 7" />
-                                        </svg>
+                                        class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black text-xs bg-{{ $block['color_name'] }}-500 shadow-sm">
+                                        {{ explode(' ', $block['name'])[1] }}
                                     </div>
-                                </td>
-                            </tr>
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-800 dark:text-slate-100">
+                                            {{ $block['name'] }}
+                                        </p>
+                                        <p class="text-[10px] text-slate-400 font-medium">{{ $block['area_ha'] }}
+                                            Ha</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <!-- Umur -->
+                            <td class="px-6 py-4 text-center">
+                                <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                                    {{ $block['prediction']['age_years'] }} Thn
+                                </span>
+                            </td>
+                            <!-- Status -->
+                            <td class="px-6 py-4 text-center">
+                                <span
+                                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-{{ $block['color_name'] }}-50 dark:bg-{{ $block['color_name'] }}-900/20 text-{{ $block['color_name'] }}-700 dark:text-{{ $block['color_name'] }}-400 border border-{{ $block['color_name'] }}-100 dark:border-{{ $block['color_name'] }}-800/30">
+                                    <span
+                                        class="w-1.5 h-1.5 rounded-full bg-{{ $block['color_name'] }}-500"></span>
+                                    {{ $block['status'] }}
+                                </span>
+                            </td>
+                            <!-- Ton/Ha -->
+                            <td class="px-6 py-4 text-right">
+                                <span
+                                    class="text-sm font-black text-slate-800 dark:text-slate-100">{{ $block['ton_per_ha'] }}</span>
+                            </td>
+                            <!-- Est. Yield -->
+                            <td class="px-6 py-4 text-right">
+                                <p class="text-sm font-black text-slate-800 dark:text-slate-100">
+                                    {{ number_format($block['yield']) }}
+                                </p>
+                                <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Ton</p>
+                            </td>
+                            <!-- Arrow -->
+                            <td class="px-6 py-4">
+                                <div
+                                    class="w-7 h-7 rounded-lg flex items-center justify-center bg-slate-100 dark:bg-slate-700 text-slate-400 group-hover:bg-slate-800 dark:group-hover:bg-slate-600 group-hover:text-white transition-all duration-150 ml-auto">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                            d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </div>
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
