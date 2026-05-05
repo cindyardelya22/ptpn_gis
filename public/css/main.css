@@ -62,3 +62,6 @@ body {
     border-color: rgba(16, 185, 129, 0.2);
 }
 
+.ol-zoom {
+    margin-left: 15px;
+}

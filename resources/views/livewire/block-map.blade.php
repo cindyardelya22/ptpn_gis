@@ -1,8 +1,7 @@
 <div class="h-full relative overflow-hidden flex flex-col">
     <!-- Overlay Header -->
-    <div class="absolute top-6 left-6 right-6 z-10 flex items-center justify-between gap-4 pointer-events-none">
-        <div
-            class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-4 rounded-3xl border border-white shadow-2xl shadow-slate-200 pointer-events-auto">
+    <div class="absolute top-2 left-16 right-6 z-10 flex items-center justify-between gap-4 pointer-events-none">
+        <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-5 rounded-3xl border border-white pointer-events-auto">
             <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">Peta Interaktif Blok</h1>
             <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mt-0.5">Estate Management GIS</p>
         </div>
