@@ -95,9 +95,9 @@
     </aside>
 
     <!-- Toggle Button -->
-    <button @click="open = !open" :class="open ? 'left-[244px]' : 'left-16'"
+    <button @click="open = !open" :class="open ? 'left-[244px]' : 'left-[67px]'"
         class="absolute z-50 top-10 w-8 h-8 rounded-full flex items-center justify-center 
-           shadow-xl  dark:shadow-slate-900 transition-all duration-300 focus:outline-none
+           shadow-xl dark:shadow-slate-900 transition-all duration-300 focus:outline-none
            bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-400 hover:text-emerald-500 dark:hover:text-emerald-400">
 
         <svg :class="open ? '' : 'rotate-180'" class="w-4 h-4 transition-transform duration-300" fill="none"
