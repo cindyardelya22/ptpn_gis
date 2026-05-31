@@ -19,17 +19,7 @@
                 <p class="text-slate-400 dark:text-slate-500 text-sm mt-0.5">Ringkasan kondisi hara dan prediksi panen
                     estate saat ini.</p>
             </div>
-            <div class="flex items-center gap-2">
-                <!-- Export -->
-                <button
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-xl text-slate-600 dark:text-slate-300 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition shadow-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <span class="hidden md:inline">Export Report</span>
-                </button>
-            </div>
+
         </div>
 
         <!-- ══ FILTER BAR ══ -->
@@ -126,7 +116,7 @@
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- Total Blok -->
             <div
-                class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow">
+                class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow border-t-2 border-t-purple-500">
                 <div class="flex items-start justify-between mb-3">
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Blok</p>
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#818cf815">
@@ -145,7 +135,7 @@
             <div
                 class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow border-t-2 border-t-emerald-500">
                 <div class="flex items-start justify-between mb-3">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Avg Ton/Ha</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Rata-rata Ton/Ha</p>
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#10b98115">
                         <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
@@ -164,7 +154,7 @@
             <div
                 class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow border-t-2 border-t-amber-500">
                 <div class="flex items-start justify-between mb-3">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Best Yield</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Blok Terbaik</p>
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#f59e0b15">
                         <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
@@ -179,21 +169,21 @@
             </div>
 
             <!-- Est. Total -->
-            <div class="p-5 rounded-2xl shadow-lg text-white border-t-2 border-t-emerald-400 relative overflow-hidden"
-                style="background:linear-gradient(135deg,#0f172a,#1e293b)">
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-white/5 
+            shadow-sm hover:shadow-md transition-shadow border-t-2 border-t-blue-500">
                 <div class="flex items-start justify-between mb-3">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Est. Total Panen</p>
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center"
-                        style="background:rgba(16,185,129,.15)">
-                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Perkiraan Panen</p>
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#3b82f615">
+                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-3xl font-black">{{ number_format($summary['estimated_total_yield']) }}</h3>
-                <p class="text-[10px] text-emerald-400 font-bold mt-1 uppercase tracking-wider">Ton / Tahun</p>
+                <h3 class="text-3xl font-black text-slate-800 dark:text-white">
+                    {{ number_format($summary['estimated_total_yield']) }}
+                </h3>
+                <p class="text-[10px] text-blue-500 font-bold mt-1 uppercase tracking-wider">Ton tahun ini</p>
             </div>
         </div>
 
