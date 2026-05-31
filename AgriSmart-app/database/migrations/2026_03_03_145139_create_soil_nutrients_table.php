@@ -20,6 +20,9 @@ return new class extends Migration
             $table->decimal('ph', 5, 2)->comment('Soil pH');
             $table->decimal('magnesium', 8, 3)->comment('MgO (cmol/kg)');
             $table->decimal('organic_carbon', 8, 3)->comment('C-Organic (%)');
+            $table->decimal('ec', 8, 2)->nullable();
+            $table->decimal('s', 8, 3)->nullable();
+            $table->decimal('boron', 8, 3)->nullable();
             $table->date('measured_at');
             $table->timestamps();
         });

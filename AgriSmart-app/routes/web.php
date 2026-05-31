@@ -9,6 +9,7 @@ use App\Livewire\NutrientsData;
 use App\Livewire\BlockMap;
 use App\Livewire\Reports;
 use App\Livewire\BlockDetail;
+use App\Http\Controllers\MLDebugController;
 
 Route::get('/login', Login::class)->name('login');
 Route::get('/users', Users::class)->name('user');
@@ -23,3 +24,14 @@ Route::get('/blok/{id}', BlockDetail::class)->name('block.detail');
 Route::get('/tes', function () {
     return view('welcome');
 });
+
+// ─── ML Debug Routes (only available in debug mode) ─────────────────
+if (config('app.debug')) {
+    Route::prefix('ml-debug')->group(function () {
+        Route::get('/test',              [MLDebugController::class, 'testConnection'])->name('ml.test');
+        Route::get('/model-info',        [MLDebugController::class, 'modelInfo'])->name('ml.model-info');
+        Route::get('/predict-sample',    [MLDebugController::class, 'predictSample'])->name('ml.predict-sample');
+        Route::get('/compare/{blockId}', [MLDebugController::class, 'compareBlock'])->name('ml.compare');
+        Route::get('/compare-all',       [MLDebugController::class, 'compareAll'])->name('ml.compare-all');
+    });
+}

@@ -3,87 +3,87 @@
 namespace App\Services;
 
 use App\Models\SoilNutrient;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class SoilAnalysisService
 {
-    /**
-     * Calculate fertility status based on nutrient levels.
-     * 
-     * Scoring Rules (Simplified for Palm Oil):
-     * 1. Nitrogen (N) %: >0.15 (3 pts), 0.12-0.15 (2 pts), <0.12 (1 pt)
-     * 2. Phosphorus (P) ppm: >20 (3 pts), 15-20 (2 pts), <15 (1 pt)
-     * 3. Potassium (K) cmol/kg: >0.20 (3 pts), 0.15-0.20 (2 pts), <0.15 (1 pt)
-     * 4. pH: 5.0 - 6.5 (3 pts), 4.5 - 5.0 or 6.5 - 7.0 (2 pts), else (1 pt)
-     * 5. Magnesium (Mg) cmol/kg: >0.25 (3 pts), 0.15-0.25 (2 pts), <0.15 (1 pt)
-     * 6. C-Organic %: >2.0 (3 pts), 1.2-2.0 (2 pts), <1.2 (1 pt)
-     * 
-     * Total Max Score: 18
-     */
+    private string $flaskUrl;
+
+    public function __construct()
+    {
+        // Set URL Flask di .env: FLASK_ML_URL=http://127.0.0.1:5000
+        $this->flaskUrl = config('services.flask_ml.url', 'http://127.0.0.1:5000');
+    }
+
     public function analyzeFertility(SoilNutrient $nutrient): array
     {
-        $scores = [
-            'nitrogen' => $this->scoreN($nutrient->nitrogen),
-            'phosphorus' => $this->scoreP($nutrient->phosphorus),
-            'potassium' => $this->scoreK($nutrient->potassium),
-            'ph' => $this->scorePH($nutrient->ph),
-            'magnesium' => $this->scoreMg($nutrient->magnesium),
-            'organic_carbon' => $this->scoreCOrg($nutrient->organic_carbon),
-        ];
+        // Kirim ke Flask ML API
+        try {
+            $payload = [
+                'N'  => (float) $nutrient->nitrogen,
+                'P'  => (float) $nutrient->phosphorus,
+                'K'  => (float) $nutrient->potassium,
+                'pH' => (float) $nutrient->ph,
+                'EC' => (float) $nutrient->ec,
+                'OC' => (float) $nutrient->organic_carbon,
+                'S'  => (float) $nutrient->s,
+                'Mg' => (float) $nutrient->magnesium,
+                'B'  => (float) $nutrient->boron,
+            ];
 
-        $totalScore = array_sum($scores);
-        
-        $status = 'Kurang Subur';
-        $color = 'rose';
+            $response = Http::timeout(5)->post("{$this->flaskUrl}/predict", $payload);
 
-        if ($totalScore >= 16) {
-            $status = 'Subur';
-            $color = 'emerald';
-        } elseif ($totalScore >= 12) {
-            $status = 'Cukup Subur';
-            $color = 'amber';
+            if ($response->successful()) {
+                $data     = $response->json();
+                $kategori = $data['kategori'] ?? 'Tidak Subur';
+                $probabilities = $data['probabilities'] ?? [];
+
+                return [
+                    'status'        => $kategori,
+                    'color'         => $this->categoryToColor($kategori),
+                    'probabilities' => $probabilities,
+                ];
+            }
+
+            Log::warning('Flask ML response error', ['status' => $response->status()]);
+
+        } catch (\Exception $e) {
+            Log::error('Flask ML connection failed: ' . $e->getMessage());
         }
 
-        return [
-            'total_score' => $totalScore,
-            'status' => $status,
-            'color' => $color,
-            'scores' => $scores
-        ];
+        // Fallback jika Flask tidak bisa diakses
+        return $this->fallbackAnalysis($nutrient);
     }
 
-    private function scoreN($val): int {
-        if ($val > 0.15) return 3;
-        if ($val >= 0.12) return 2;
-        return 1;
+    private function categoryToColor(string $kategori): string
+    {
+        return match ($kategori) {
+            'Subur'        => 'emerald',
+            'Kurang Subur' => 'amber',
+            default        => 'rose',
+        };
     }
 
-    private function scoreP($val): int {
-        if ($val > 20) return 3;
-        if ($val >= 15) return 2;
-        return 1;
-    }
+    /**
+     * Fallback sederhana jika Flask tidak jalan
+     */
+    private function fallbackAnalysis(SoilNutrient $nutrient): array
+    {
+        $score = 0;
 
-    private function scoreK($val): int {
-        if ($val > 0.20) return 3;
-        if ($val >= 0.15) return 2;
-        return 1;
-    }
+        if ($nutrient->ph >= 5.5 && $nutrient->ph <= 7.5) $score++;
+        if ($nutrient->nitrogen > 100)                     $score++;
+        if ($nutrient->phosphorus > 10)                    $score++;
+        if ($nutrient->potassium > 150)                    $score++;
+        if ($nutrient->organic_carbon > 1.0)               $score++;
 
-    private function scorePH($val): int {
-        if ($val >= 5.0 && $val <= 6.5) return 3;
-        if (($val >= 4.5 && $val < 5.0) || ($val > 6.5 && $val <= 7.0)) return 2;
-        return 1;
-    }
+        if ($score >= 4) {
+            return ['status' => 'Subur',        'color' => 'emerald', 'probabilities' => []];
+        } elseif ($score >= 2) {
+            return ['status' => 'Kurang Subur', 'color' => 'amber',   'probabilities' => []];
+        }
 
-    private function scoreMg($val): int {
-        if ($val > 0.25) return 3;
-        if ($val >= 0.15) return 2;
-        return 1;
-    }
-
-    private function scoreCOrg($val): int {
-        if ($val > 2.0) return 3;
-        if ($val >= 1.2) return 2;
-        return 1;
+        return ['status' => 'Tidak Subur', 'color' => 'rose', 'probabilities' => []];
     }
 }
