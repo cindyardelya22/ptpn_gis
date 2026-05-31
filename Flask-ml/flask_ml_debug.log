@@ -1743,3 +1743,982 @@
 2026-05-27 13:42:48,917 [INFO] PREDICTION PIPELINE END
 2026-05-27 13:42:48,917 [INFO] ============================================================
 2026-05-27 13:42:48,917 [INFO] 127.0.0.1 - - [27/May/2026 13:42:48] "POST /predict HTTP/1.1" 200 -
+2026-05-27 13:57:12,525 [INFO] Loading model from: model_kesuburan.pkl
+2026-05-27 13:57:13,844 [INFO] Model loaded successfully: RandomForestClassifier
+2026-05-27 13:57:13,857 [INFO] Model feature names: ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-27 13:57:13,857 [INFO] Model expects 9 features
+2026-05-27 13:57:13,858 [INFO] No scaler.pkl found — raw data will be used directly (OK for tree-based models)
+2026-05-27 13:57:13,860 [INFO] Starting AgriSmart ML API...
+2026-05-27 13:57:13,898 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.3:5000
+2026-05-27 13:57:13,898 [INFO] [33mPress CTRL+C to quit[0m
+2026-05-27 13:57:13,898 [INFO]  * Restarting with stat
+2026-05-27 13:57:15,147 [INFO] Loading model from: model_kesuburan.pkl
+2026-05-27 13:57:16,826 [INFO] Model loaded successfully: RandomForestClassifier
+2026-05-27 13:57:16,826 [INFO] Model feature names: ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-27 13:57:16,826 [INFO] Model expects 9 features
+2026-05-27 13:57:16,826 [INFO] No scaler.pkl found — raw data will be used directly (OK for tree-based models)
+2026-05-27 13:57:16,826 [INFO] Starting AgriSmart ML API...
+2026-05-27 13:57:16,850 [WARNING]  * Debugger is active!
+2026-05-27 13:57:16,858 [INFO]  * Debugger PIN: 154-381-162
+2026-05-27 13:57:18,234 [INFO] ============================================================
+2026-05-27 13:57:18,249 [INFO] PREDICTION PIPELINE START
+2026-05-27 13:57:18,249 [INFO] Raw input dict : {'N': 138, 'P': 8.6, 'K': 560, 'pH': 7.46, 'EC': 0.62, 'OC': 0.7, 'S': 5.9, 'Mg': 1.83, 'B': 0.11}
+2026-05-27 13:57:18,249 [INFO] DataFrame shape: (1, 9)
+2026-05-27 13:57:18,249 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-27 13:57:18,249 [INFO] DataFrame vals : [138.0, 8.6, 560.0, 7.46, 0.62, 0.7, 5.9, 1.83, 0.11]
+2026-05-27 13:57:18,249 [INFO] No scaler applied (using raw values)
+2026-05-27 13:57:18,275 [INFO] Prediction raw : [0]
+2026-05-27 13:57:18,275 [INFO] Prediction int : 0
+2026-05-27 13:57:18,275 [INFO] Category       : Tidak Subur
+2026-05-27 13:57:18,297 [INFO] Probabilities  : {'Tidak Subur': 0.97, 'Kurang Subur': 0.03, 'Subur': 0.0}
+2026-05-27 13:57:18,297 [INFO] PREDICTION PIPELINE END
+2026-05-27 13:57:18,297 [INFO] ============================================================
+2026-05-27 13:57:18,298 [INFO] 127.0.0.1 - - [27/May/2026 13:57:18] "GET /test HTTP/1.1" 200 -
+2026-05-27 13:57:38,520 [INFO] [/predict] Request received: {'N': 138, 'P': 4.5, 'K': 444, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4, 'Mg': 1.1, 'B': 0.08}
+2026-05-27 13:57:38,520 [INFO] ============================================================
+2026-05-27 13:57:38,520 [INFO] PREDICTION PIPELINE START
+2026-05-27 13:57:38,520 [INFO] Raw input dict : {'N': 138.0, 'P': 4.5, 'K': 444.0, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4.0, 'Mg': 1.1, 'B': 0.08}
+2026-05-27 13:57:38,520 [INFO] DataFrame shape: (1, 9)
+2026-05-27 13:57:38,520 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-27 13:57:38,520 [INFO] DataFrame vals : [138.0, 4.5, 444.0, 8.7, 0.25, 0.5, 4.0, 1.1, 0.08]
+2026-05-27 13:57:38,520 [INFO] No scaler applied (using raw values)
+2026-05-27 13:57:38,544 [INFO] Prediction raw : [0]
+2026-05-27 13:57:38,544 [INFO] Prediction int : 0
+2026-05-27 13:57:38,544 [INFO] Category       : Tidak Subur
+2026-05-27 13:57:38,563 [INFO] Probabilities  : {'Tidak Subur': 0.85, 'Kurang Subur': 0.1, 'Subur': 0.05}
+2026-05-27 13:57:38,563 [INFO] PREDICTION PIPELINE END
+2026-05-27 13:57:38,564 [INFO] ============================================================
+2026-05-27 13:57:38,564 [INFO] 127.0.0.1 - - [27/May/2026 13:57:38] "POST /predict HTTP/1.1" 200 -
+2026-05-27 13:57:38,580 [INFO] [/predict] Request received: {'N': 200, 'P': 12, 'K': 200, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10, 'Mg': 120, 'B': 0.4}
+2026-05-27 13:57:38,581 [INFO] ============================================================
+2026-05-27 13:57:38,581 [INFO] PREDICTION PIPELINE START
+2026-05-27 13:57:38,581 [INFO] Raw input dict : {'N': 200.0, 'P': 12.0, 'K': 200.0, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10.0, 'Mg': 120.0, 'B': 0.4}
+2026-05-27 13:57:38,582 [INFO] DataFrame shape: (1, 9)
+2026-05-27 13:57:38,582 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-27 13:57:38,582 [INFO] DataFrame vals : [200.0, 12.0, 200.0, 7.5, 1.9, 2.1, 10.0, 120.0, 0.4]
+2026-05-27 13:57:38,582 [INFO] No scaler applied (using raw values)
+2026-05-27 13:57:38,602 [INFO] Prediction raw : [0]
+2026-05-27 13:57:38,602 [INFO] Prediction int : 0
+2026-05-27 13:57:38,603 [INFO] Category       : Tidak Subur
+2026-05-27 13:57:38,625 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.33, 'Subur': 0.2}
+2026-05-27 13:57:38,625 [INFO] PREDICTION PIPELINE END
+2026-05-27 13:57:38,626 [INFO] ============================================================
+2026-05-27 13:57:38,626 [INFO] 127.0.0.1 - - [27/May/2026 13:57:38] "POST /predict HTTP/1.1" 200 -
+2026-05-27 13:57:38,634 [INFO] [/predict] Request received: {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0, 'OC': 1.8, 'S': 0, 'Mg': 0.22, 'B': 0}
+2026-05-27 13:57:38,635 [INFO] ============================================================
+2026-05-27 13:57:38,635 [INFO] PREDICTION PIPELINE START
+2026-05-27 13:57:38,635 [INFO] Raw input dict : {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0.0, 'OC': 1.8, 'S': 0.0, 'Mg': 0.22, 'B': 0.0}
+2026-05-27 13:57:38,636 [INFO] DataFrame shape: (1, 9)
+2026-05-27 13:57:38,636 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-27 13:57:38,636 [INFO] DataFrame vals : [0.14, 18.5, 0.19, 5.1, 0.0, 1.8, 0.0, 0.22, 0.0]
+2026-05-27 13:57:38,638 [INFO] No scaler applied (using raw values)
+2026-05-27 13:57:38,650 [INFO] Prediction raw : [0]
+2026-05-27 13:57:38,650 [INFO] Prediction int : 0
+2026-05-27 13:57:38,651 [INFO] Category       : Tidak Subur
+2026-05-27 13:57:38,696 [INFO] Probabilities  : {'Tidak Subur': 0.53, 'Kurang Subur': 0.33, 'Subur': 0.14}
+2026-05-27 13:57:38,734 [INFO] PREDICTION PIPELINE END
+2026-05-27 13:57:38,746 [INFO] ============================================================
+2026-05-27 13:57:38,759 [INFO] 127.0.0.1 - - [27/May/2026 13:57:38] "POST /predict HTTP/1.1" 200 -
+2026-05-27 13:57:38,768 [INFO] [/predict] Request received: {'N': 100, 'P': 0, 'K': 20, 'pH': 10, 'EC': 10, 'OC': 10, 'S': 10, 'Mg': 10, 'B': 10}
+2026-05-27 13:57:38,769 [INFO] ============================================================
+2026-05-27 13:57:38,769 [INFO] PREDICTION PIPELINE START
+2026-05-27 13:57:38,770 [INFO] Raw input dict : {'N': 100.0, 'P': 0.0, 'K': 20.0, 'pH': 10.0, 'EC': 10.0, 'OC': 10.0, 'S': 10.0, 'Mg': 10.0, 'B': 10.0}
+2026-05-27 13:57:38,771 [INFO] DataFrame shape: (1, 9)
+2026-05-27 13:57:38,779 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-27 13:57:38,779 [INFO] DataFrame vals : [100.0, 0.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+2026-05-27 13:57:38,780 [INFO] No scaler applied (using raw values)
+2026-05-27 13:57:38,796 [INFO] Prediction raw : [0]
+2026-05-27 13:57:38,796 [INFO] Prediction int : 0
+2026-05-27 13:57:38,797 [INFO] Category       : Tidak Subur
+2026-05-27 13:57:38,812 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.27, 'Subur': 0.26}
+2026-05-27 13:57:38,813 [INFO] PREDICTION PIPELINE END
+2026-05-27 13:57:38,813 [INFO] ============================================================
+2026-05-27 13:57:38,814 [INFO] 127.0.0.1 - - [27/May/2026 13:57:38] "POST /predict HTTP/1.1" 200 -
+2026-05-27 13:57:41,698 [INFO] [/predict] Request received: {'N': 138, 'P': 4.5, 'K': 444, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4, 'Mg': 1.1, 'B': 0.08}
+2026-05-27 13:57:41,699 [INFO] ============================================================
+2026-05-27 13:57:41,699 [INFO] PREDICTION PIPELINE START
+2026-05-27 13:57:41,700 [INFO] Raw input dict : {'N': 138.0, 'P': 4.5, 'K': 444.0, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4.0, 'Mg': 1.1, 'B': 0.08}
+2026-05-27 13:57:41,700 [INFO] DataFrame shape: (1, 9)
+2026-05-27 13:57:41,700 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-27 13:57:41,700 [INFO] DataFrame vals : [138.0, 4.5, 444.0, 8.7, 0.25, 0.5, 4.0, 1.1, 0.08]
+2026-05-27 13:57:41,701 [INFO] No scaler applied (using raw values)
+2026-05-27 13:57:41,715 [INFO] Prediction raw : [0]
+2026-05-27 13:57:41,715 [INFO] Prediction int : 0
+2026-05-27 13:57:41,717 [INFO] Category       : Tidak Subur
+2026-05-27 13:57:41,733 [INFO] Probabilities  : {'Tidak Subur': 0.85, 'Kurang Subur': 0.1, 'Subur': 0.05}
+2026-05-27 13:57:41,733 [INFO] PREDICTION PIPELINE END
+2026-05-27 13:57:41,733 [INFO] ============================================================
+2026-05-27 13:57:41,733 [INFO] 127.0.0.1 - - [27/May/2026 13:57:41] "POST /predict HTTP/1.1" 200 -
+2026-05-27 13:57:41,746 [INFO] [/predict] Request received: {'N': 200, 'P': 12, 'K': 200, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10, 'Mg': 120, 'B': 0.4}
+2026-05-27 13:57:41,747 [INFO] ============================================================
+2026-05-27 13:57:41,747 [INFO] PREDICTION PIPELINE START
+2026-05-27 13:57:41,748 [INFO] Raw input dict : {'N': 200.0, 'P': 12.0, 'K': 200.0, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10.0, 'Mg': 120.0, 'B': 0.4}
+2026-05-27 13:57:41,748 [INFO] DataFrame shape: (1, 9)
+2026-05-27 13:57:41,748 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-27 13:57:41,748 [INFO] DataFrame vals : [200.0, 12.0, 200.0, 7.5, 1.9, 2.1, 10.0, 120.0, 0.4]
+2026-05-27 13:57:41,749 [INFO] No scaler applied (using raw values)
+2026-05-27 13:57:41,764 [INFO] Prediction raw : [0]
+2026-05-27 13:57:41,764 [INFO] Prediction int : 0
+2026-05-27 13:57:41,764 [INFO] Category       : Tidak Subur
+2026-05-27 13:57:41,782 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.33, 'Subur': 0.2}
+2026-05-27 13:57:41,782 [INFO] PREDICTION PIPELINE END
+2026-05-27 13:57:41,782 [INFO] ============================================================
+2026-05-27 13:57:41,782 [INFO] 127.0.0.1 - - [27/May/2026 13:57:41] "POST /predict HTTP/1.1" 200 -
+2026-05-27 13:57:41,794 [INFO] [/predict] Request received: {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0, 'OC': 1.8, 'S': 0, 'Mg': 0.22, 'B': 0}
+2026-05-27 13:57:41,795 [INFO] ============================================================
+2026-05-27 13:57:41,795 [INFO] PREDICTION PIPELINE START
+2026-05-27 13:57:41,796 [INFO] Raw input dict : {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0.0, 'OC': 1.8, 'S': 0.0, 'Mg': 0.22, 'B': 0.0}
+2026-05-27 13:57:41,796 [INFO] DataFrame shape: (1, 9)
+2026-05-27 13:57:41,796 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-27 13:57:41,796 [INFO] DataFrame vals : [0.14, 18.5, 0.19, 5.1, 0.0, 1.8, 0.0, 0.22, 0.0]
+2026-05-27 13:57:41,796 [INFO] No scaler applied (using raw values)
+2026-05-27 13:57:41,809 [INFO] Prediction raw : [0]
+2026-05-27 13:57:41,810 [INFO] Prediction int : 0
+2026-05-27 13:57:41,810 [INFO] Category       : Tidak Subur
+2026-05-27 13:57:41,822 [INFO] Probabilities  : {'Tidak Subur': 0.53, 'Kurang Subur': 0.33, 'Subur': 0.14}
+2026-05-27 13:57:41,822 [INFO] PREDICTION PIPELINE END
+2026-05-27 13:57:41,823 [INFO] ============================================================
+2026-05-27 13:57:41,823 [INFO] 127.0.0.1 - - [27/May/2026 13:57:41] "POST /predict HTTP/1.1" 200 -
+2026-05-27 13:57:41,830 [INFO] [/predict] Request received: {'N': 100, 'P': 0, 'K': 20, 'pH': 10, 'EC': 10, 'OC': 10, 'S': 10, 'Mg': 10, 'B': 10}
+2026-05-27 13:57:41,831 [INFO] ============================================================
+2026-05-27 13:57:41,831 [INFO] PREDICTION PIPELINE START
+2026-05-27 13:57:41,831 [INFO] Raw input dict : {'N': 100.0, 'P': 0.0, 'K': 20.0, 'pH': 10.0, 'EC': 10.0, 'OC': 10.0, 'S': 10.0, 'Mg': 10.0, 'B': 10.0}
+2026-05-27 13:57:41,831 [INFO] DataFrame shape: (1, 9)
+2026-05-27 13:57:41,831 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-27 13:57:41,831 [INFO] DataFrame vals : [100.0, 0.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+2026-05-27 13:57:41,831 [INFO] No scaler applied (using raw values)
+2026-05-27 13:57:41,846 [INFO] Prediction raw : [0]
+2026-05-27 13:57:41,846 [INFO] Prediction int : 0
+2026-05-27 13:57:41,846 [INFO] Category       : Tidak Subur
+2026-05-27 13:57:41,859 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.27, 'Subur': 0.26}
+2026-05-27 13:57:41,859 [INFO] PREDICTION PIPELINE END
+2026-05-27 13:57:41,859 [INFO] ============================================================
+2026-05-27 13:57:41,860 [INFO] 127.0.0.1 - - [27/May/2026 13:57:41] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:20:26,503 [INFO] [/predict] Request received: {'N': 138, 'P': 4.5, 'K': 444, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4, 'Mg': 1.1, 'B': 0.08}
+2026-05-31 12:20:26,504 [INFO] ============================================================
+2026-05-31 12:20:26,504 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:20:26,504 [INFO] Raw input dict : {'N': 138.0, 'P': 4.5, 'K': 444.0, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4.0, 'Mg': 1.1, 'B': 0.08}
+2026-05-31 12:20:26,504 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:20:26,505 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:20:26,505 [INFO] DataFrame vals : [138.0, 4.5, 444.0, 8.7, 0.25, 0.5, 4.0, 1.1, 0.08]
+2026-05-31 12:20:26,505 [INFO] No scaler applied (using raw values)
+2026-05-31 12:20:26,522 [INFO] Prediction raw : [0]
+2026-05-31 12:20:26,523 [INFO] Prediction int : 0
+2026-05-31 12:20:26,523 [INFO] Category       : Tidak Subur
+2026-05-31 12:20:26,542 [INFO] Probabilities  : {'Tidak Subur': 0.85, 'Kurang Subur': 0.1, 'Subur': 0.05}
+2026-05-31 12:20:26,543 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:20:26,543 [INFO] ============================================================
+2026-05-31 12:20:26,543 [INFO] 127.0.0.1 - - [31/May/2026 12:20:26] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:20:26,698 [INFO] [/predict] Request received: {'N': 200, 'P': 12, 'K': 200, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10, 'Mg': 120, 'B': 0.4}
+2026-05-31 12:20:26,699 [INFO] ============================================================
+2026-05-31 12:20:26,700 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:20:26,700 [INFO] Raw input dict : {'N': 200.0, 'P': 12.0, 'K': 200.0, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10.0, 'Mg': 120.0, 'B': 0.4}
+2026-05-31 12:20:26,700 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:20:26,700 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:20:26,701 [INFO] DataFrame vals : [200.0, 12.0, 200.0, 7.5, 1.9, 2.1, 10.0, 120.0, 0.4]
+2026-05-31 12:20:26,701 [INFO] No scaler applied (using raw values)
+2026-05-31 12:20:26,713 [INFO] Prediction raw : [0]
+2026-05-31 12:20:26,713 [INFO] Prediction int : 0
+2026-05-31 12:20:26,714 [INFO] Category       : Tidak Subur
+2026-05-31 12:20:26,728 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.33, 'Subur': 0.2}
+2026-05-31 12:20:26,728 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:20:26,729 [INFO] ============================================================
+2026-05-31 12:20:26,729 [INFO] 127.0.0.1 - - [31/May/2026 12:20:26] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:20:26,738 [INFO] [/predict] Request received: {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0, 'OC': 1.8, 'S': 0, 'Mg': 0.22, 'B': 0}
+2026-05-31 12:20:26,739 [INFO] ============================================================
+2026-05-31 12:20:26,741 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:20:26,741 [INFO] Raw input dict : {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0.0, 'OC': 1.8, 'S': 0.0, 'Mg': 0.22, 'B': 0.0}
+2026-05-31 12:20:26,741 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:20:26,742 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:20:26,742 [INFO] DataFrame vals : [0.14, 18.5, 0.19, 5.1, 0.0, 1.8, 0.0, 0.22, 0.0]
+2026-05-31 12:20:26,742 [INFO] No scaler applied (using raw values)
+2026-05-31 12:20:26,759 [INFO] Prediction raw : [0]
+2026-05-31 12:20:26,759 [INFO] Prediction int : 0
+2026-05-31 12:20:26,759 [INFO] Category       : Tidak Subur
+2026-05-31 12:20:26,774 [INFO] Probabilities  : {'Tidak Subur': 0.53, 'Kurang Subur': 0.33, 'Subur': 0.14}
+2026-05-31 12:20:26,774 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:20:26,774 [INFO] ============================================================
+2026-05-31 12:20:26,775 [INFO] 127.0.0.1 - - [31/May/2026 12:20:26] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:20:26,782 [INFO] [/predict] Request received: {'N': 100, 'P': 0, 'K': 20, 'pH': 10, 'EC': 10, 'OC': 10, 'S': 10, 'Mg': 10, 'B': 10}
+2026-05-31 12:20:26,784 [INFO] ============================================================
+2026-05-31 12:20:26,785 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:20:26,785 [INFO] Raw input dict : {'N': 100.0, 'P': 0.0, 'K': 20.0, 'pH': 10.0, 'EC': 10.0, 'OC': 10.0, 'S': 10.0, 'Mg': 10.0, 'B': 10.0}
+2026-05-31 12:20:26,785 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:20:26,785 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:20:26,786 [INFO] DataFrame vals : [100.0, 0.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+2026-05-31 12:20:26,786 [INFO] No scaler applied (using raw values)
+2026-05-31 12:20:26,796 [INFO] Prediction raw : [0]
+2026-05-31 12:20:26,796 [INFO] Prediction int : 0
+2026-05-31 12:20:26,796 [INFO] Category       : Tidak Subur
+2026-05-31 12:20:26,811 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.27, 'Subur': 0.26}
+2026-05-31 12:20:26,812 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:20:26,812 [INFO] ============================================================
+2026-05-31 12:20:26,813 [INFO] 127.0.0.1 - - [31/May/2026 12:20:26] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:20:37,703 [INFO] [/predict] Request received: {'N': 138, 'P': 4.5, 'K': 444, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4, 'Mg': 1.1, 'B': 0.08}
+2026-05-31 12:20:37,704 [INFO] ============================================================
+2026-05-31 12:20:37,704 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:20:37,705 [INFO] Raw input dict : {'N': 138.0, 'P': 4.5, 'K': 444.0, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4.0, 'Mg': 1.1, 'B': 0.08}
+2026-05-31 12:20:37,705 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:20:37,705 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:20:37,705 [INFO] DataFrame vals : [138.0, 4.5, 444.0, 8.7, 0.25, 0.5, 4.0, 1.1, 0.08]
+2026-05-31 12:20:37,706 [INFO] No scaler applied (using raw values)
+2026-05-31 12:20:37,717 [INFO] Prediction raw : [0]
+2026-05-31 12:20:37,718 [INFO] Prediction int : 0
+2026-05-31 12:20:37,718 [INFO] Category       : Tidak Subur
+2026-05-31 12:20:37,727 [INFO] Probabilities  : {'Tidak Subur': 0.85, 'Kurang Subur': 0.1, 'Subur': 0.05}
+2026-05-31 12:20:37,728 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:20:37,728 [INFO] ============================================================
+2026-05-31 12:20:37,728 [INFO] 127.0.0.1 - - [31/May/2026 12:20:37] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:20:37,743 [INFO] [/predict] Request received: {'N': 200, 'P': 12, 'K': 200, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10, 'Mg': 120, 'B': 0.4}
+2026-05-31 12:20:37,744 [INFO] ============================================================
+2026-05-31 12:20:37,745 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:20:37,745 [INFO] Raw input dict : {'N': 200.0, 'P': 12.0, 'K': 200.0, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10.0, 'Mg': 120.0, 'B': 0.4}
+2026-05-31 12:20:37,745 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:20:37,746 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:20:37,746 [INFO] DataFrame vals : [200.0, 12.0, 200.0, 7.5, 1.9, 2.1, 10.0, 120.0, 0.4]
+2026-05-31 12:20:37,746 [INFO] No scaler applied (using raw values)
+2026-05-31 12:20:37,764 [INFO] Prediction raw : [0]
+2026-05-31 12:20:37,764 [INFO] Prediction int : 0
+2026-05-31 12:20:37,764 [INFO] Category       : Tidak Subur
+2026-05-31 12:20:37,778 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.33, 'Subur': 0.2}
+2026-05-31 12:20:37,778 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:20:37,779 [INFO] ============================================================
+2026-05-31 12:20:37,780 [INFO] 127.0.0.1 - - [31/May/2026 12:20:37] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:20:37,788 [INFO] [/predict] Request received: {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0, 'OC': 1.8, 'S': 0, 'Mg': 0.22, 'B': 0}
+2026-05-31 12:20:37,789 [INFO] ============================================================
+2026-05-31 12:20:37,789 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:20:37,789 [INFO] Raw input dict : {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0.0, 'OC': 1.8, 'S': 0.0, 'Mg': 0.22, 'B': 0.0}
+2026-05-31 12:20:37,790 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:20:37,790 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:20:37,790 [INFO] DataFrame vals : [0.14, 18.5, 0.19, 5.1, 0.0, 1.8, 0.0, 0.22, 0.0]
+2026-05-31 12:20:37,791 [INFO] No scaler applied (using raw values)
+2026-05-31 12:20:37,801 [INFO] Prediction raw : [0]
+2026-05-31 12:20:37,801 [INFO] Prediction int : 0
+2026-05-31 12:20:37,801 [INFO] Category       : Tidak Subur
+2026-05-31 12:20:37,814 [INFO] Probabilities  : {'Tidak Subur': 0.53, 'Kurang Subur': 0.33, 'Subur': 0.14}
+2026-05-31 12:20:37,815 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:20:37,815 [INFO] ============================================================
+2026-05-31 12:20:37,816 [INFO] 127.0.0.1 - - [31/May/2026 12:20:37] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:20:37,825 [INFO] [/predict] Request received: {'N': 100, 'P': 0, 'K': 20, 'pH': 10, 'EC': 10, 'OC': 10, 'S': 10, 'Mg': 10, 'B': 10}
+2026-05-31 12:20:37,826 [INFO] ============================================================
+2026-05-31 12:20:37,826 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:20:37,826 [INFO] Raw input dict : {'N': 100.0, 'P': 0.0, 'K': 20.0, 'pH': 10.0, 'EC': 10.0, 'OC': 10.0, 'S': 10.0, 'Mg': 10.0, 'B': 10.0}
+2026-05-31 12:20:37,827 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:20:37,827 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:20:37,828 [INFO] DataFrame vals : [100.0, 0.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+2026-05-31 12:20:37,828 [INFO] No scaler applied (using raw values)
+2026-05-31 12:20:37,848 [INFO] Prediction raw : [0]
+2026-05-31 12:20:37,848 [INFO] Prediction int : 0
+2026-05-31 12:20:37,848 [INFO] Category       : Tidak Subur
+2026-05-31 12:20:37,865 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.27, 'Subur': 0.26}
+2026-05-31 12:20:37,866 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:20:37,867 [INFO] ============================================================
+2026-05-31 12:20:37,867 [INFO] 127.0.0.1 - - [31/May/2026 12:20:37] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:25:05,902 [INFO] [/predict] Request received: {'N': 138, 'P': 4.5, 'K': 444, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4, 'Mg': 1.1, 'B': 0.08}
+2026-05-31 12:25:05,903 [INFO] ============================================================
+2026-05-31 12:25:05,904 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:25:05,904 [INFO] Raw input dict : {'N': 138.0, 'P': 4.5, 'K': 444.0, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4.0, 'Mg': 1.1, 'B': 0.08}
+2026-05-31 12:25:05,904 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:25:05,904 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:25:05,905 [INFO] DataFrame vals : [138.0, 4.5, 444.0, 8.7, 0.25, 0.5, 4.0, 1.1, 0.08]
+2026-05-31 12:25:05,905 [INFO] No scaler applied (using raw values)
+2026-05-31 12:25:05,916 [INFO] Prediction raw : [0]
+2026-05-31 12:25:05,916 [INFO] Prediction int : 0
+2026-05-31 12:25:05,916 [INFO] Category       : Tidak Subur
+2026-05-31 12:25:05,927 [INFO] Probabilities  : {'Tidak Subur': 0.85, 'Kurang Subur': 0.1, 'Subur': 0.05}
+2026-05-31 12:25:05,928 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:25:05,931 [INFO] ============================================================
+2026-05-31 12:25:05,932 [INFO] 127.0.0.1 - - [31/May/2026 12:25:05] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:25:05,953 [INFO] [/predict] Request received: {'N': 200, 'P': 12, 'K': 200, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10, 'Mg': 120, 'B': 0.4}
+2026-05-31 12:25:05,955 [INFO] ============================================================
+2026-05-31 12:25:05,955 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:25:05,955 [INFO] Raw input dict : {'N': 200.0, 'P': 12.0, 'K': 200.0, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10.0, 'Mg': 120.0, 'B': 0.4}
+2026-05-31 12:25:05,956 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:25:05,956 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:25:05,956 [INFO] DataFrame vals : [200.0, 12.0, 200.0, 7.5, 1.9, 2.1, 10.0, 120.0, 0.4]
+2026-05-31 12:25:05,956 [INFO] No scaler applied (using raw values)
+2026-05-31 12:25:05,974 [INFO] Prediction raw : [0]
+2026-05-31 12:25:05,975 [INFO] Prediction int : 0
+2026-05-31 12:25:05,975 [INFO] Category       : Tidak Subur
+2026-05-31 12:25:05,988 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.33, 'Subur': 0.2}
+2026-05-31 12:25:05,988 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:25:05,988 [INFO] ============================================================
+2026-05-31 12:25:05,989 [INFO] 127.0.0.1 - - [31/May/2026 12:25:05] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:25:06,003 [INFO] [/predict] Request received: {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0, 'OC': 1.8, 'S': 0, 'Mg': 0.22, 'B': 0}
+2026-05-31 12:25:06,003 [INFO] ============================================================
+2026-05-31 12:25:06,004 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:25:06,004 [INFO] Raw input dict : {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0.0, 'OC': 1.8, 'S': 0.0, 'Mg': 0.22, 'B': 0.0}
+2026-05-31 12:25:06,004 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:25:06,004 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:25:06,004 [INFO] DataFrame vals : [0.14, 18.5, 0.19, 5.1, 0.0, 1.8, 0.0, 0.22, 0.0]
+2026-05-31 12:25:06,005 [INFO] No scaler applied (using raw values)
+2026-05-31 12:25:06,022 [INFO] Prediction raw : [0]
+2026-05-31 12:25:06,022 [INFO] Prediction int : 0
+2026-05-31 12:25:06,022 [INFO] Category       : Tidak Subur
+2026-05-31 12:25:06,039 [INFO] Probabilities  : {'Tidak Subur': 0.53, 'Kurang Subur': 0.33, 'Subur': 0.14}
+2026-05-31 12:25:06,039 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:25:06,040 [INFO] ============================================================
+2026-05-31 12:25:06,040 [INFO] 127.0.0.1 - - [31/May/2026 12:25:06] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:25:06,051 [INFO] [/predict] Request received: {'N': 100, 'P': 0, 'K': 20, 'pH': 10, 'EC': 10, 'OC': 10, 'S': 10, 'Mg': 10, 'B': 10}
+2026-05-31 12:25:06,052 [INFO] ============================================================
+2026-05-31 12:25:06,052 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:25:06,053 [INFO] Raw input dict : {'N': 100.0, 'P': 0.0, 'K': 20.0, 'pH': 10.0, 'EC': 10.0, 'OC': 10.0, 'S': 10.0, 'Mg': 10.0, 'B': 10.0}
+2026-05-31 12:25:06,053 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:25:06,053 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:25:06,053 [INFO] DataFrame vals : [100.0, 0.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+2026-05-31 12:25:06,054 [INFO] No scaler applied (using raw values)
+2026-05-31 12:25:06,074 [INFO] Prediction raw : [0]
+2026-05-31 12:25:06,075 [INFO] Prediction int : 0
+2026-05-31 12:25:06,075 [INFO] Category       : Tidak Subur
+2026-05-31 12:25:06,093 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.27, 'Subur': 0.26}
+2026-05-31 12:25:06,094 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:25:06,094 [INFO] ============================================================
+2026-05-31 12:25:06,094 [INFO] 127.0.0.1 - - [31/May/2026 12:25:06] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:35:48,437 [INFO] [/predict] Request received: {'N': 138, 'P': 4.5, 'K': 444, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4, 'Mg': 1.1, 'B': 0.08}
+2026-05-31 12:35:48,438 [INFO] ============================================================
+2026-05-31 12:35:48,438 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:35:48,438 [INFO] Raw input dict : {'N': 138.0, 'P': 4.5, 'K': 444.0, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4.0, 'Mg': 1.1, 'B': 0.08}
+2026-05-31 12:35:48,438 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:35:48,438 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:35:48,438 [INFO] DataFrame vals : [138.0, 4.5, 444.0, 8.7, 0.25, 0.5, 4.0, 1.1, 0.08]
+2026-05-31 12:35:48,439 [INFO] No scaler applied (using raw values)
+2026-05-31 12:35:48,466 [INFO] Prediction raw : [0]
+2026-05-31 12:35:48,470 [INFO] Prediction int : 0
+2026-05-31 12:35:48,470 [INFO] Category       : Tidak Subur
+2026-05-31 12:35:48,542 [INFO] Probabilities  : {'Tidak Subur': 0.85, 'Kurang Subur': 0.1, 'Subur': 0.05}
+2026-05-31 12:35:48,586 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:35:48,638 [INFO] ============================================================
+2026-05-31 12:35:48,654 [INFO] 127.0.0.1 - - [31/May/2026 12:35:48] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:35:49,205 [INFO] [/predict] Request received: {'N': 200, 'P': 12, 'K': 200, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10, 'Mg': 120, 'B': 0.4}
+2026-05-31 12:35:49,206 [INFO] ============================================================
+2026-05-31 12:35:49,206 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:35:49,206 [INFO] Raw input dict : {'N': 200.0, 'P': 12.0, 'K': 200.0, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10.0, 'Mg': 120.0, 'B': 0.4}
+2026-05-31 12:35:49,206 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:35:49,207 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:35:49,207 [INFO] DataFrame vals : [200.0, 12.0, 200.0, 7.5, 1.9, 2.1, 10.0, 120.0, 0.4]
+2026-05-31 12:35:49,207 [INFO] No scaler applied (using raw values)
+2026-05-31 12:35:49,224 [INFO] Prediction raw : [0]
+2026-05-31 12:35:49,224 [INFO] Prediction int : 0
+2026-05-31 12:35:49,224 [INFO] Category       : Tidak Subur
+2026-05-31 12:35:49,260 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.33, 'Subur': 0.2}
+2026-05-31 12:35:49,260 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:35:49,263 [INFO] ============================================================
+2026-05-31 12:35:49,265 [INFO] 127.0.0.1 - - [31/May/2026 12:35:49] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:35:49,270 [INFO] [/predict] Request received: {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0, 'OC': 1.8, 'S': 0, 'Mg': 0.22, 'B': 0}
+2026-05-31 12:35:49,271 [INFO] ============================================================
+2026-05-31 12:35:49,271 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:35:49,272 [INFO] Raw input dict : {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0.0, 'OC': 1.8, 'S': 0.0, 'Mg': 0.22, 'B': 0.0}
+2026-05-31 12:35:49,272 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:35:49,272 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:35:49,272 [INFO] DataFrame vals : [0.14, 18.5, 0.19, 5.1, 0.0, 1.8, 0.0, 0.22, 0.0]
+2026-05-31 12:35:49,273 [INFO] No scaler applied (using raw values)
+2026-05-31 12:35:49,293 [INFO] Prediction raw : [0]
+2026-05-31 12:35:49,295 [INFO] Prediction int : 0
+2026-05-31 12:35:49,295 [INFO] Category       : Tidak Subur
+2026-05-31 12:35:49,319 [INFO] Probabilities  : {'Tidak Subur': 0.53, 'Kurang Subur': 0.33, 'Subur': 0.14}
+2026-05-31 12:35:49,319 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:35:49,319 [INFO] ============================================================
+2026-05-31 12:35:49,320 [INFO] 127.0.0.1 - - [31/May/2026 12:35:49] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:35:49,324 [INFO] [/predict] Request received: {'N': 100, 'P': 0, 'K': 20, 'pH': 10, 'EC': 10, 'OC': 10, 'S': 10, 'Mg': 10, 'B': 10}
+2026-05-31 12:35:49,326 [INFO] ============================================================
+2026-05-31 12:35:49,328 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:35:49,329 [INFO] Raw input dict : {'N': 100.0, 'P': 0.0, 'K': 20.0, 'pH': 10.0, 'EC': 10.0, 'OC': 10.0, 'S': 10.0, 'Mg': 10.0, 'B': 10.0}
+2026-05-31 12:35:49,330 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:35:49,335 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:35:49,337 [INFO] DataFrame vals : [100.0, 0.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+2026-05-31 12:35:49,340 [INFO] No scaler applied (using raw values)
+2026-05-31 12:35:49,371 [INFO] Prediction raw : [0]
+2026-05-31 12:35:49,371 [INFO] Prediction int : 0
+2026-05-31 12:35:49,372 [INFO] Category       : Tidak Subur
+2026-05-31 12:35:49,408 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.27, 'Subur': 0.26}
+2026-05-31 12:35:49,408 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:35:49,408 [INFO] ============================================================
+2026-05-31 12:35:49,409 [INFO] 127.0.0.1 - - [31/May/2026 12:35:49] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:47:59,993 [INFO] [/predict] Request received: {'N': 138, 'P': 4.5, 'K': 444, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4, 'Mg': 1.1, 'B': 0.08}
+2026-05-31 12:47:59,994 [INFO] ============================================================
+2026-05-31 12:47:59,994 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:47:59,994 [INFO] Raw input dict : {'N': 138.0, 'P': 4.5, 'K': 444.0, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4.0, 'Mg': 1.1, 'B': 0.08}
+2026-05-31 12:47:59,994 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:47:59,994 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:47:59,995 [INFO] DataFrame vals : [138.0, 4.5, 444.0, 8.7, 0.25, 0.5, 4.0, 1.1, 0.08]
+2026-05-31 12:47:59,995 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:00,005 [INFO] Prediction raw : [0]
+2026-05-31 12:48:00,005 [INFO] Prediction int : 0
+2026-05-31 12:48:00,005 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:00,034 [INFO] Probabilities  : {'Tidak Subur': 0.85, 'Kurang Subur': 0.1, 'Subur': 0.05}
+2026-05-31 12:48:00,035 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:00,037 [INFO] ============================================================
+2026-05-31 12:48:00,037 [INFO] 127.0.0.1 - - [31/May/2026 12:48:00] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:00,242 [INFO] [/predict] Request received: {'N': 200, 'P': 12, 'K': 200, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10, 'Mg': 120, 'B': 0.4}
+2026-05-31 12:48:00,243 [INFO] ============================================================
+2026-05-31 12:48:00,243 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:00,243 [INFO] Raw input dict : {'N': 200.0, 'P': 12.0, 'K': 200.0, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10.0, 'Mg': 120.0, 'B': 0.4}
+2026-05-31 12:48:00,243 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:00,243 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:00,244 [INFO] DataFrame vals : [200.0, 12.0, 200.0, 7.5, 1.9, 2.1, 10.0, 120.0, 0.4]
+2026-05-31 12:48:00,244 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:00,254 [INFO] Prediction raw : [0]
+2026-05-31 12:48:00,254 [INFO] Prediction int : 0
+2026-05-31 12:48:00,255 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:00,266 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.33, 'Subur': 0.2}
+2026-05-31 12:48:00,267 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:00,267 [INFO] ============================================================
+2026-05-31 12:48:00,268 [INFO] 127.0.0.1 - - [31/May/2026 12:48:00] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:00,272 [INFO] [/predict] Request received: {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0, 'OC': 1.8, 'S': 0, 'Mg': 0.22, 'B': 0}
+2026-05-31 12:48:00,273 [INFO] ============================================================
+2026-05-31 12:48:00,273 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:00,274 [INFO] Raw input dict : {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0.0, 'OC': 1.8, 'S': 0.0, 'Mg': 0.22, 'B': 0.0}
+2026-05-31 12:48:00,274 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:00,275 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:00,276 [INFO] DataFrame vals : [0.14, 18.5, 0.19, 5.1, 0.0, 1.8, 0.0, 0.22, 0.0]
+2026-05-31 12:48:00,276 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:00,290 [INFO] Prediction raw : [0]
+2026-05-31 12:48:00,290 [INFO] Prediction int : 0
+2026-05-31 12:48:00,290 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:00,302 [INFO] Probabilities  : {'Tidak Subur': 0.53, 'Kurang Subur': 0.33, 'Subur': 0.14}
+2026-05-31 12:48:00,303 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:00,303 [INFO] ============================================================
+2026-05-31 12:48:00,304 [INFO] 127.0.0.1 - - [31/May/2026 12:48:00] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:00,309 [INFO] [/predict] Request received: {'N': 100, 'P': 0, 'K': 20, 'pH': 10, 'EC': 10, 'OC': 10, 'S': 10, 'Mg': 10, 'B': 10}
+2026-05-31 12:48:00,310 [INFO] ============================================================
+2026-05-31 12:48:00,310 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:00,310 [INFO] Raw input dict : {'N': 100.0, 'P': 0.0, 'K': 20.0, 'pH': 10.0, 'EC': 10.0, 'OC': 10.0, 'S': 10.0, 'Mg': 10.0, 'B': 10.0}
+2026-05-31 12:48:00,311 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:00,311 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:00,311 [INFO] DataFrame vals : [100.0, 0.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+2026-05-31 12:48:00,311 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:00,327 [INFO] Prediction raw : [0]
+2026-05-31 12:48:00,327 [INFO] Prediction int : 0
+2026-05-31 12:48:00,328 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:00,340 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.27, 'Subur': 0.26}
+2026-05-31 12:48:00,340 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:00,340 [INFO] ============================================================
+2026-05-31 12:48:00,341 [INFO] 127.0.0.1 - - [31/May/2026 12:48:00] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:07,062 [INFO] [/predict] Request received: {'N': 138, 'P': 4.5, 'K': 444, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4, 'Mg': 1.1, 'B': 0.08}
+2026-05-31 12:48:07,064 [INFO] ============================================================
+2026-05-31 12:48:07,064 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:07,065 [INFO] Raw input dict : {'N': 138.0, 'P': 4.5, 'K': 444.0, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4.0, 'Mg': 1.1, 'B': 0.08}
+2026-05-31 12:48:07,065 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:07,065 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:07,065 [INFO] DataFrame vals : [138.0, 4.5, 444.0, 8.7, 0.25, 0.5, 4.0, 1.1, 0.08]
+2026-05-31 12:48:07,066 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:07,077 [INFO] Prediction raw : [0]
+2026-05-31 12:48:07,077 [INFO] Prediction int : 0
+2026-05-31 12:48:07,078 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:07,092 [INFO] Probabilities  : {'Tidak Subur': 0.85, 'Kurang Subur': 0.1, 'Subur': 0.05}
+2026-05-31 12:48:07,092 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:07,093 [INFO] ============================================================
+2026-05-31 12:48:07,093 [INFO] 127.0.0.1 - - [31/May/2026 12:48:07] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:07,127 [INFO] [/predict] Request received: {'N': 200, 'P': 12, 'K': 200, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10, 'Mg': 120, 'B': 0.4}
+2026-05-31 12:48:07,128 [INFO] ============================================================
+2026-05-31 12:48:07,128 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:07,128 [INFO] Raw input dict : {'N': 200.0, 'P': 12.0, 'K': 200.0, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10.0, 'Mg': 120.0, 'B': 0.4}
+2026-05-31 12:48:07,128 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:07,128 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:07,129 [INFO] DataFrame vals : [200.0, 12.0, 200.0, 7.5, 1.9, 2.1, 10.0, 120.0, 0.4]
+2026-05-31 12:48:07,129 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:07,140 [INFO] Prediction raw : [0]
+2026-05-31 12:48:07,141 [INFO] Prediction int : 0
+2026-05-31 12:48:07,141 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:07,162 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.33, 'Subur': 0.2}
+2026-05-31 12:48:07,162 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:07,162 [INFO] ============================================================
+2026-05-31 12:48:07,165 [INFO] 127.0.0.1 - - [31/May/2026 12:48:07] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:07,169 [INFO] [/predict] Request received: {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0, 'OC': 1.8, 'S': 0, 'Mg': 0.22, 'B': 0}
+2026-05-31 12:48:07,171 [INFO] ============================================================
+2026-05-31 12:48:07,171 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:07,172 [INFO] Raw input dict : {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0.0, 'OC': 1.8, 'S': 0.0, 'Mg': 0.22, 'B': 0.0}
+2026-05-31 12:48:07,172 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:07,172 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:07,172 [INFO] DataFrame vals : [0.14, 18.5, 0.19, 5.1, 0.0, 1.8, 0.0, 0.22, 0.0]
+2026-05-31 12:48:07,173 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:07,185 [INFO] Prediction raw : [0]
+2026-05-31 12:48:07,185 [INFO] Prediction int : 0
+2026-05-31 12:48:07,186 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:07,199 [INFO] Probabilities  : {'Tidak Subur': 0.53, 'Kurang Subur': 0.33, 'Subur': 0.14}
+2026-05-31 12:48:07,199 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:07,200 [INFO] ============================================================
+2026-05-31 12:48:07,200 [INFO] 127.0.0.1 - - [31/May/2026 12:48:07] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:07,205 [INFO] [/predict] Request received: {'N': 100, 'P': 0, 'K': 20, 'pH': 10, 'EC': 10, 'OC': 10, 'S': 10, 'Mg': 10, 'B': 10}
+2026-05-31 12:48:07,206 [INFO] ============================================================
+2026-05-31 12:48:07,206 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:07,206 [INFO] Raw input dict : {'N': 100.0, 'P': 0.0, 'K': 20.0, 'pH': 10.0, 'EC': 10.0, 'OC': 10.0, 'S': 10.0, 'Mg': 10.0, 'B': 10.0}
+2026-05-31 12:48:07,206 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:07,207 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:07,207 [INFO] DataFrame vals : [100.0, 0.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+2026-05-31 12:48:07,207 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:07,220 [INFO] Prediction raw : [0]
+2026-05-31 12:48:07,220 [INFO] Prediction int : 0
+2026-05-31 12:48:07,220 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:07,233 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.27, 'Subur': 0.26}
+2026-05-31 12:48:07,233 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:07,234 [INFO] ============================================================
+2026-05-31 12:48:07,234 [INFO] 127.0.0.1 - - [31/May/2026 12:48:07] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:08,801 [INFO] [/predict] Request received: {'N': 138, 'P': 4.5, 'K': 444, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4, 'Mg': 1.1, 'B': 0.08}
+2026-05-31 12:48:08,802 [INFO] ============================================================
+2026-05-31 12:48:08,802 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:08,802 [INFO] Raw input dict : {'N': 138.0, 'P': 4.5, 'K': 444.0, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4.0, 'Mg': 1.1, 'B': 0.08}
+2026-05-31 12:48:08,803 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:08,803 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:08,803 [INFO] DataFrame vals : [138.0, 4.5, 444.0, 8.7, 0.25, 0.5, 4.0, 1.1, 0.08]
+2026-05-31 12:48:08,803 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:08,812 [INFO] Prediction raw : [0]
+2026-05-31 12:48:08,812 [INFO] Prediction int : 0
+2026-05-31 12:48:08,812 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:08,827 [INFO] Probabilities  : {'Tidak Subur': 0.85, 'Kurang Subur': 0.1, 'Subur': 0.05}
+2026-05-31 12:48:08,827 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:08,828 [INFO] ============================================================
+2026-05-31 12:48:08,828 [INFO] 127.0.0.1 - - [31/May/2026 12:48:08] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:08,838 [INFO] [/predict] Request received: {'N': 200, 'P': 12, 'K': 200, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10, 'Mg': 120, 'B': 0.4}
+2026-05-31 12:48:08,839 [INFO] ============================================================
+2026-05-31 12:48:08,840 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:08,840 [INFO] Raw input dict : {'N': 200.0, 'P': 12.0, 'K': 200.0, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10.0, 'Mg': 120.0, 'B': 0.4}
+2026-05-31 12:48:08,840 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:08,841 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:08,841 [INFO] DataFrame vals : [200.0, 12.0, 200.0, 7.5, 1.9, 2.1, 10.0, 120.0, 0.4]
+2026-05-31 12:48:08,841 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:08,856 [INFO] Prediction raw : [0]
+2026-05-31 12:48:08,856 [INFO] Prediction int : 0
+2026-05-31 12:48:08,856 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:08,870 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.33, 'Subur': 0.2}
+2026-05-31 12:48:08,870 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:08,871 [INFO] ============================================================
+2026-05-31 12:48:08,871 [INFO] 127.0.0.1 - - [31/May/2026 12:48:08] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:08,875 [INFO] [/predict] Request received: {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0, 'OC': 1.8, 'S': 0, 'Mg': 0.22, 'B': 0}
+2026-05-31 12:48:08,876 [INFO] ============================================================
+2026-05-31 12:48:08,876 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:08,876 [INFO] Raw input dict : {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0.0, 'OC': 1.8, 'S': 0.0, 'Mg': 0.22, 'B': 0.0}
+2026-05-31 12:48:08,877 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:08,877 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:08,878 [INFO] DataFrame vals : [0.14, 18.5, 0.19, 5.1, 0.0, 1.8, 0.0, 0.22, 0.0]
+2026-05-31 12:48:08,878 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:08,893 [INFO] Prediction raw : [0]
+2026-05-31 12:48:08,893 [INFO] Prediction int : 0
+2026-05-31 12:48:08,893 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:08,920 [INFO] Probabilities  : {'Tidak Subur': 0.53, 'Kurang Subur': 0.33, 'Subur': 0.14}
+2026-05-31 12:48:08,921 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:08,921 [INFO] ============================================================
+2026-05-31 12:48:08,922 [INFO] 127.0.0.1 - - [31/May/2026 12:48:08] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:08,926 [INFO] [/predict] Request received: {'N': 100, 'P': 0, 'K': 20, 'pH': 10, 'EC': 10, 'OC': 10, 'S': 10, 'Mg': 10, 'B': 10}
+2026-05-31 12:48:08,927 [INFO] ============================================================
+2026-05-31 12:48:08,927 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:08,927 [INFO] Raw input dict : {'N': 100.0, 'P': 0.0, 'K': 20.0, 'pH': 10.0, 'EC': 10.0, 'OC': 10.0, 'S': 10.0, 'Mg': 10.0, 'B': 10.0}
+2026-05-31 12:48:08,927 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:08,928 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:08,928 [INFO] DataFrame vals : [100.0, 0.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+2026-05-31 12:48:08,928 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:08,944 [INFO] Prediction raw : [0]
+2026-05-31 12:48:08,945 [INFO] Prediction int : 0
+2026-05-31 12:48:08,945 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:08,957 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.27, 'Subur': 0.26}
+2026-05-31 12:48:08,957 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:08,957 [INFO] ============================================================
+2026-05-31 12:48:08,959 [INFO] 127.0.0.1 - - [31/May/2026 12:48:08] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:13,047 [INFO] [/predict] Request received: {'N': 138, 'P': 4.5, 'K': 444, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4, 'Mg': 1.1, 'B': 0.08}
+2026-05-31 12:48:13,048 [INFO] ============================================================
+2026-05-31 12:48:13,048 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:13,048 [INFO] Raw input dict : {'N': 138.0, 'P': 4.5, 'K': 444.0, 'pH': 8.7, 'EC': 0.25, 'OC': 0.5, 'S': 4.0, 'Mg': 1.1, 'B': 0.08}
+2026-05-31 12:48:13,049 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:13,049 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:13,049 [INFO] DataFrame vals : [138.0, 4.5, 444.0, 8.7, 0.25, 0.5, 4.0, 1.1, 0.08]
+2026-05-31 12:48:13,049 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:13,059 [INFO] Prediction raw : [0]
+2026-05-31 12:48:13,059 [INFO] Prediction int : 0
+2026-05-31 12:48:13,059 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:13,074 [INFO] Probabilities  : {'Tidak Subur': 0.85, 'Kurang Subur': 0.1, 'Subur': 0.05}
+2026-05-31 12:48:13,075 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:13,075 [INFO] ============================================================
+2026-05-31 12:48:13,076 [INFO] 127.0.0.1 - - [31/May/2026 12:48:13] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:13,084 [INFO] [/predict] Request received: {'N': 200, 'P': 12, 'K': 200, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10, 'Mg': 120, 'B': 0.4}
+2026-05-31 12:48:13,085 [INFO] ============================================================
+2026-05-31 12:48:13,085 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:13,086 [INFO] Raw input dict : {'N': 200.0, 'P': 12.0, 'K': 200.0, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10.0, 'Mg': 120.0, 'B': 0.4}
+2026-05-31 12:48:13,086 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:13,086 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:13,087 [INFO] DataFrame vals : [200.0, 12.0, 200.0, 7.5, 1.9, 2.1, 10.0, 120.0, 0.4]
+2026-05-31 12:48:13,087 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:13,104 [INFO] Prediction raw : [0]
+2026-05-31 12:48:13,104 [INFO] Prediction int : 0
+2026-05-31 12:48:13,104 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:13,119 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.33, 'Subur': 0.2}
+2026-05-31 12:48:13,120 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:13,120 [INFO] ============================================================
+2026-05-31 12:48:13,121 [INFO] 127.0.0.1 - - [31/May/2026 12:48:13] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:13,125 [INFO] [/predict] Request received: {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0, 'OC': 1.8, 'S': 0, 'Mg': 0.22, 'B': 0}
+2026-05-31 12:48:13,126 [INFO] ============================================================
+2026-05-31 12:48:13,126 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:13,126 [INFO] Raw input dict : {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0.0, 'OC': 1.8, 'S': 0.0, 'Mg': 0.22, 'B': 0.0}
+2026-05-31 12:48:13,127 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:13,127 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:13,127 [INFO] DataFrame vals : [0.14, 18.5, 0.19, 5.1, 0.0, 1.8, 0.0, 0.22, 0.0]
+2026-05-31 12:48:13,127 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:13,147 [INFO] Prediction raw : [0]
+2026-05-31 12:48:13,148 [INFO] Prediction int : 0
+2026-05-31 12:48:13,149 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:13,170 [INFO] Probabilities  : {'Tidak Subur': 0.53, 'Kurang Subur': 0.33, 'Subur': 0.14}
+2026-05-31 12:48:13,171 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:13,171 [INFO] ============================================================
+2026-05-31 12:48:13,171 [INFO] 127.0.0.1 - - [31/May/2026 12:48:13] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:13,175 [INFO] [/predict] Request received: {'N': 100, 'P': 0, 'K': 20, 'pH': 10, 'EC': 10, 'OC': 10, 'S': 10, 'Mg': 10, 'B': 10}
+2026-05-31 12:48:13,176 [INFO] ============================================================
+2026-05-31 12:48:13,176 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:13,177 [INFO] Raw input dict : {'N': 100.0, 'P': 0.0, 'K': 20.0, 'pH': 10.0, 'EC': 10.0, 'OC': 10.0, 'S': 10.0, 'Mg': 10.0, 'B': 10.0}
+2026-05-31 12:48:13,177 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:13,177 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:13,178 [INFO] DataFrame vals : [100.0, 0.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+2026-05-31 12:48:13,178 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:13,192 [INFO] Prediction raw : [0]
+2026-05-31 12:48:13,192 [INFO] Prediction int : 0
+2026-05-31 12:48:13,192 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:13,204 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.27, 'Subur': 0.26}
+2026-05-31 12:48:13,204 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:13,205 [INFO] ============================================================
+2026-05-31 12:48:13,206 [INFO] 127.0.0.1 - - [31/May/2026 12:48:13] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:32,270 [INFO] [/predict] Request received: {'N': 138, 'P': 8.5, 'K': 484, 'pH': 8.7, 'EC': 8.25, 'OC': 8.5, 'S': 4, 'Mg': 1.1, 'B': 8.08}
+2026-05-31 12:48:32,270 [INFO] ============================================================
+2026-05-31 12:48:32,270 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:32,271 [INFO] Raw input dict : {'N': 138.0, 'P': 8.5, 'K': 484.0, 'pH': 8.7, 'EC': 8.25, 'OC': 8.5, 'S': 4.0, 'Mg': 1.1, 'B': 8.08}
+2026-05-31 12:48:32,271 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:32,271 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:32,271 [INFO] DataFrame vals : [138.0, 8.5, 484.0, 8.7, 8.25, 8.5, 4.0, 1.1, 8.08]
+2026-05-31 12:48:32,272 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:32,284 [INFO] Prediction raw : [0]
+2026-05-31 12:48:32,285 [INFO] Prediction int : 0
+2026-05-31 12:48:32,285 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:32,297 [INFO] Probabilities  : {'Tidak Subur': 0.58, 'Kurang Subur': 0.23, 'Subur': 0.19}
+2026-05-31 12:48:32,297 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:32,297 [INFO] ============================================================
+2026-05-31 12:48:32,298 [INFO] 127.0.0.1 - - [31/May/2026 12:48:32] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:32,305 [INFO] [/predict] Request received: {'N': 200, 'P': 12, 'K': 200, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10, 'Mg': 120, 'B': 0.4}
+2026-05-31 12:48:32,306 [INFO] ============================================================
+2026-05-31 12:48:32,306 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:32,307 [INFO] Raw input dict : {'N': 200.0, 'P': 12.0, 'K': 200.0, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10.0, 'Mg': 120.0, 'B': 0.4}
+2026-05-31 12:48:32,307 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:32,307 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:32,308 [INFO] DataFrame vals : [200.0, 12.0, 200.0, 7.5, 1.9, 2.1, 10.0, 120.0, 0.4]
+2026-05-31 12:48:32,308 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:32,321 [INFO] Prediction raw : [0]
+2026-05-31 12:48:32,321 [INFO] Prediction int : 0
+2026-05-31 12:48:32,322 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:32,335 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.33, 'Subur': 0.2}
+2026-05-31 12:48:32,335 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:32,335 [INFO] ============================================================
+2026-05-31 12:48:32,336 [INFO] 127.0.0.1 - - [31/May/2026 12:48:32] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:32,340 [INFO] [/predict] Request received: {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0, 'OC': 1.8, 'S': 0, 'Mg': 0.22, 'B': 0}
+2026-05-31 12:48:32,340 [INFO] ============================================================
+2026-05-31 12:48:32,341 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:32,341 [INFO] Raw input dict : {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0.0, 'OC': 1.8, 'S': 0.0, 'Mg': 0.22, 'B': 0.0}
+2026-05-31 12:48:32,341 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:32,341 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:32,342 [INFO] DataFrame vals : [0.14, 18.5, 0.19, 5.1, 0.0, 1.8, 0.0, 0.22, 0.0]
+2026-05-31 12:48:32,342 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:32,354 [INFO] Prediction raw : [0]
+2026-05-31 12:48:32,354 [INFO] Prediction int : 0
+2026-05-31 12:48:32,355 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:32,371 [INFO] Probabilities  : {'Tidak Subur': 0.53, 'Kurang Subur': 0.33, 'Subur': 0.14}
+2026-05-31 12:48:32,371 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:32,371 [INFO] ============================================================
+2026-05-31 12:48:32,372 [INFO] 127.0.0.1 - - [31/May/2026 12:48:32] "POST /predict HTTP/1.1" 200 -
+2026-05-31 12:48:32,378 [INFO] [/predict] Request received: {'N': 100, 'P': 0, 'K': 20, 'pH': 10, 'EC': 10, 'OC': 10, 'S': 10, 'Mg': 10, 'B': 10}
+2026-05-31 12:48:32,380 [INFO] ============================================================
+2026-05-31 12:48:32,380 [INFO] PREDICTION PIPELINE START
+2026-05-31 12:48:32,380 [INFO] Raw input dict : {'N': 100.0, 'P': 0.0, 'K': 20.0, 'pH': 10.0, 'EC': 10.0, 'OC': 10.0, 'S': 10.0, 'Mg': 10.0, 'B': 10.0}
+2026-05-31 12:48:32,381 [INFO] DataFrame shape: (1, 9)
+2026-05-31 12:48:32,382 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 12:48:32,383 [INFO] DataFrame vals : [100.0, 0.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+2026-05-31 12:48:32,383 [INFO] No scaler applied (using raw values)
+2026-05-31 12:48:32,396 [INFO] Prediction raw : [0]
+2026-05-31 12:48:32,397 [INFO] Prediction int : 0
+2026-05-31 12:48:32,397 [INFO] Category       : Tidak Subur
+2026-05-31 12:48:32,420 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.27, 'Subur': 0.26}
+2026-05-31 12:48:32,420 [INFO] PREDICTION PIPELINE END
+2026-05-31 12:48:32,420 [INFO] ============================================================
+2026-05-31 12:48:32,421 [INFO] 127.0.0.1 - - [31/May/2026 12:48:32] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:04:22,014 [INFO] [/predict] Request received: {'N': 138, 'P': 8.5, 'K': 484, 'pH': 8.7, 'EC': 8.25, 'OC': 8.5, 'S': 4, 'Mg': 1.1, 'B': 8.08}
+2026-05-31 13:04:22,015 [INFO] ============================================================
+2026-05-31 13:04:22,015 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:04:22,015 [INFO] Raw input dict : {'N': 138.0, 'P': 8.5, 'K': 484.0, 'pH': 8.7, 'EC': 8.25, 'OC': 8.5, 'S': 4.0, 'Mg': 1.1, 'B': 8.08}
+2026-05-31 13:04:22,015 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:04:22,015 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:04:22,016 [INFO] DataFrame vals : [138.0, 8.5, 484.0, 8.7, 8.25, 8.5, 4.0, 1.1, 8.08]
+2026-05-31 13:04:22,016 [INFO] No scaler applied (using raw values)
+2026-05-31 13:04:22,025 [INFO] Prediction raw : [0]
+2026-05-31 13:04:22,026 [INFO] Prediction int : 0
+2026-05-31 13:04:22,026 [INFO] Category       : Tidak Subur
+2026-05-31 13:04:22,046 [INFO] Probabilities  : {'Tidak Subur': 0.58, 'Kurang Subur': 0.23, 'Subur': 0.19}
+2026-05-31 13:04:22,046 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:04:22,046 [INFO] ============================================================
+2026-05-31 13:04:22,047 [INFO] 127.0.0.1 - - [31/May/2026 13:04:22] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:04:22,057 [INFO] [/predict] Request received: {'N': 200, 'P': 12, 'K': 200, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10, 'Mg': 120, 'B': 0.4}
+2026-05-31 13:04:22,058 [INFO] ============================================================
+2026-05-31 13:04:22,058 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:04:22,059 [INFO] Raw input dict : {'N': 200.0, 'P': 12.0, 'K': 200.0, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10.0, 'Mg': 120.0, 'B': 0.4}
+2026-05-31 13:04:22,059 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:04:22,059 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:04:22,060 [INFO] DataFrame vals : [200.0, 12.0, 200.0, 7.5, 1.9, 2.1, 10.0, 120.0, 0.4]
+2026-05-31 13:04:22,060 [INFO] No scaler applied (using raw values)
+2026-05-31 13:04:22,072 [INFO] Prediction raw : [0]
+2026-05-31 13:04:22,074 [INFO] Prediction int : 0
+2026-05-31 13:04:22,075 [INFO] Category       : Tidak Subur
+2026-05-31 13:04:22,084 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.33, 'Subur': 0.2}
+2026-05-31 13:04:22,084 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:04:22,084 [INFO] ============================================================
+2026-05-31 13:04:22,086 [INFO] 127.0.0.1 - - [31/May/2026 13:04:22] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:04:22,091 [INFO] [/predict] Request received: {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0, 'OC': 1.8, 'S': 0, 'Mg': 0.22, 'B': 0}
+2026-05-31 13:04:22,093 [INFO] ============================================================
+2026-05-31 13:04:22,093 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:04:22,093 [INFO] Raw input dict : {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0.0, 'OC': 1.8, 'S': 0.0, 'Mg': 0.22, 'B': 0.0}
+2026-05-31 13:04:22,093 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:04:22,094 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:04:22,094 [INFO] DataFrame vals : [0.14, 18.5, 0.19, 5.1, 0.0, 1.8, 0.0, 0.22, 0.0]
+2026-05-31 13:04:22,094 [INFO] No scaler applied (using raw values)
+2026-05-31 13:04:22,112 [INFO] Prediction raw : [0]
+2026-05-31 13:04:22,113 [INFO] Prediction int : 0
+2026-05-31 13:04:22,113 [INFO] Category       : Tidak Subur
+2026-05-31 13:04:22,126 [INFO] Probabilities  : {'Tidak Subur': 0.53, 'Kurang Subur': 0.33, 'Subur': 0.14}
+2026-05-31 13:04:22,126 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:04:22,127 [INFO] ============================================================
+2026-05-31 13:04:22,127 [INFO] 127.0.0.1 - - [31/May/2026 13:04:22] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:04:22,131 [INFO] [/predict] Request received: {'N': 100, 'P': 0, 'K': 20, 'pH': 10, 'EC': 10, 'OC': 10, 'S': 10, 'Mg': 10, 'B': 10}
+2026-05-31 13:04:22,132 [INFO] ============================================================
+2026-05-31 13:04:22,132 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:04:22,132 [INFO] Raw input dict : {'N': 100.0, 'P': 0.0, 'K': 20.0, 'pH': 10.0, 'EC': 10.0, 'OC': 10.0, 'S': 10.0, 'Mg': 10.0, 'B': 10.0}
+2026-05-31 13:04:22,133 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:04:22,133 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:04:22,133 [INFO] DataFrame vals : [100.0, 0.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+2026-05-31 13:04:22,133 [INFO] No scaler applied (using raw values)
+2026-05-31 13:04:22,159 [INFO] Prediction raw : [0]
+2026-05-31 13:04:22,159 [INFO] Prediction int : 0
+2026-05-31 13:04:22,160 [INFO] Category       : Tidak Subur
+2026-05-31 13:04:22,177 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.27, 'Subur': 0.26}
+2026-05-31 13:04:22,178 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:04:22,178 [INFO] ============================================================
+2026-05-31 13:04:22,178 [INFO] 127.0.0.1 - - [31/May/2026 13:04:22] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:05:23,946 [INFO] [/predict] Request received: {'N': 138, 'P': 8.5, 'K': 484, 'pH': 8.7, 'EC': 8.25, 'OC': 8.5, 'S': 4, 'Mg': 1.1, 'B': 8.08}
+2026-05-31 13:05:23,947 [INFO] ============================================================
+2026-05-31 13:05:23,947 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:05:23,947 [INFO] Raw input dict : {'N': 138.0, 'P': 8.5, 'K': 484.0, 'pH': 8.7, 'EC': 8.25, 'OC': 8.5, 'S': 4.0, 'Mg': 1.1, 'B': 8.08}
+2026-05-31 13:05:23,947 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:05:23,948 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:05:23,948 [INFO] DataFrame vals : [138.0, 8.5, 484.0, 8.7, 8.25, 8.5, 4.0, 1.1, 8.08]
+2026-05-31 13:05:23,948 [INFO] No scaler applied (using raw values)
+2026-05-31 13:05:23,961 [INFO] Prediction raw : [0]
+2026-05-31 13:05:23,961 [INFO] Prediction int : 0
+2026-05-31 13:05:23,961 [INFO] Category       : Tidak Subur
+2026-05-31 13:05:23,973 [INFO] Probabilities  : {'Tidak Subur': 0.58, 'Kurang Subur': 0.23, 'Subur': 0.19}
+2026-05-31 13:05:23,974 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:05:23,974 [INFO] ============================================================
+2026-05-31 13:05:23,974 [INFO] 127.0.0.1 - - [31/May/2026 13:05:23] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:05:23,984 [INFO] [/predict] Request received: {'N': 200, 'P': 12, 'K': 200, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10, 'Mg': 120, 'B': 0.4}
+2026-05-31 13:05:23,985 [INFO] ============================================================
+2026-05-31 13:05:23,986 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:05:23,986 [INFO] Raw input dict : {'N': 200.0, 'P': 12.0, 'K': 200.0, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10.0, 'Mg': 120.0, 'B': 0.4}
+2026-05-31 13:05:23,987 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:05:23,987 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:05:23,987 [INFO] DataFrame vals : [200.0, 12.0, 200.0, 7.5, 1.9, 2.1, 10.0, 120.0, 0.4]
+2026-05-31 13:05:23,987 [INFO] No scaler applied (using raw values)
+2026-05-31 13:05:24,001 [INFO] Prediction raw : [0]
+2026-05-31 13:05:24,001 [INFO] Prediction int : 0
+2026-05-31 13:05:24,002 [INFO] Category       : Tidak Subur
+2026-05-31 13:05:24,014 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.33, 'Subur': 0.2}
+2026-05-31 13:05:24,014 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:05:24,014 [INFO] ============================================================
+2026-05-31 13:05:24,015 [INFO] 127.0.0.1 - - [31/May/2026 13:05:24] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:05:24,020 [INFO] [/predict] Request received: {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0, 'OC': 1.8, 'S': 0, 'Mg': 0.22, 'B': 0}
+2026-05-31 13:05:24,021 [INFO] ============================================================
+2026-05-31 13:05:24,022 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:05:24,022 [INFO] Raw input dict : {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0.0, 'OC': 1.8, 'S': 0.0, 'Mg': 0.22, 'B': 0.0}
+2026-05-31 13:05:24,022 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:05:24,023 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:05:24,024 [INFO] DataFrame vals : [0.14, 18.5, 0.19, 5.1, 0.0, 1.8, 0.0, 0.22, 0.0]
+2026-05-31 13:05:24,024 [INFO] No scaler applied (using raw values)
+2026-05-31 13:05:24,040 [INFO] Prediction raw : [0]
+2026-05-31 13:05:24,040 [INFO] Prediction int : 0
+2026-05-31 13:05:24,040 [INFO] Category       : Tidak Subur
+2026-05-31 13:05:24,053 [INFO] Probabilities  : {'Tidak Subur': 0.53, 'Kurang Subur': 0.33, 'Subur': 0.14}
+2026-05-31 13:05:24,053 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:05:24,053 [INFO] ============================================================
+2026-05-31 13:05:24,054 [INFO] 127.0.0.1 - - [31/May/2026 13:05:24] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:05:24,058 [INFO] [/predict] Request received: {'N': 100, 'P': 0, 'K': 20, 'pH': 10, 'EC': 10, 'OC': 10, 'S': 10, 'Mg': 10, 'B': 10}
+2026-05-31 13:05:24,059 [INFO] ============================================================
+2026-05-31 13:05:24,059 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:05:24,059 [INFO] Raw input dict : {'N': 100.0, 'P': 0.0, 'K': 20.0, 'pH': 10.0, 'EC': 10.0, 'OC': 10.0, 'S': 10.0, 'Mg': 10.0, 'B': 10.0}
+2026-05-31 13:05:24,060 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:05:24,060 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:05:24,060 [INFO] DataFrame vals : [100.0, 0.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+2026-05-31 13:05:24,060 [INFO] No scaler applied (using raw values)
+2026-05-31 13:05:24,075 [INFO] Prediction raw : [0]
+2026-05-31 13:05:24,075 [INFO] Prediction int : 0
+2026-05-31 13:05:24,076 [INFO] Category       : Tidak Subur
+2026-05-31 13:05:24,088 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.27, 'Subur': 0.26}
+2026-05-31 13:05:24,088 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:05:24,088 [INFO] ============================================================
+2026-05-31 13:05:24,089 [INFO] 127.0.0.1 - - [31/May/2026 13:05:24] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:05:24,092 [INFO] [/predict] Request received: {'N': 270, 'P': 9.9, 'K': 444, 'pH': 7.63, 'EC': 0.4, 'OC': 0.86, 'S': 11.8, 'Mg': 2.55, 'B': 2.259}
+2026-05-31 13:05:24,093 [INFO] ============================================================
+2026-05-31 13:05:24,094 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:05:24,094 [INFO] Raw input dict : {'N': 270.0, 'P': 9.9, 'K': 444.0, 'pH': 7.63, 'EC': 0.4, 'OC': 0.86, 'S': 11.8, 'Mg': 2.55, 'B': 2.259}
+2026-05-31 13:05:24,094 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:05:24,095 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:05:24,096 [INFO] DataFrame vals : [270.0, 9.9, 444.0, 7.63, 0.4, 0.86, 11.8, 2.55, 2.259]
+2026-05-31 13:05:24,096 [INFO] No scaler applied (using raw values)
+2026-05-31 13:05:24,106 [INFO] Prediction raw : [1]
+2026-05-31 13:05:24,106 [INFO] Prediction int : 1
+2026-05-31 13:05:24,107 [INFO] Category       : Kurang Subur
+2026-05-31 13:05:24,118 [INFO] Probabilities  : {'Tidak Subur': 0.02, 'Kurang Subur': 0.97, 'Subur': 0.01}
+2026-05-31 13:05:24,119 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:05:24,119 [INFO] ============================================================
+2026-05-31 13:05:24,120 [INFO] 127.0.0.1 - - [31/May/2026 13:05:24] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:10:32,216 [INFO] [/predict] Request received: {'N': 138, 'P': 8.5, 'K': 484, 'pH': 8.7, 'EC': 8.25, 'OC': 8.5, 'S': 4, 'Mg': 1.1, 'B': 8.08}
+2026-05-31 13:10:32,217 [INFO] ============================================================
+2026-05-31 13:10:32,217 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:10:32,218 [INFO] Raw input dict : {'N': 138.0, 'P': 8.5, 'K': 484.0, 'pH': 8.7, 'EC': 8.25, 'OC': 8.5, 'S': 4.0, 'Mg': 1.1, 'B': 8.08}
+2026-05-31 13:10:32,218 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:10:32,218 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:10:32,218 [INFO] DataFrame vals : [138.0, 8.5, 484.0, 8.7, 8.25, 8.5, 4.0, 1.1, 8.08]
+2026-05-31 13:10:32,219 [INFO] No scaler applied (using raw values)
+2026-05-31 13:10:32,231 [INFO] Prediction raw : [0]
+2026-05-31 13:10:32,232 [INFO] Prediction int : 0
+2026-05-31 13:10:32,232 [INFO] Category       : Tidak Subur
+2026-05-31 13:10:32,243 [INFO] Probabilities  : {'Tidak Subur': 0.58, 'Kurang Subur': 0.23, 'Subur': 0.19}
+2026-05-31 13:10:32,244 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:10:32,244 [INFO] ============================================================
+2026-05-31 13:10:32,245 [INFO] 127.0.0.1 - - [31/May/2026 13:10:32] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:10:32,260 [INFO] [/predict] Request received: {'N': 200, 'P': 12, 'K': 200, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10, 'Mg': 120, 'B': 0.4}
+2026-05-31 13:10:32,261 [INFO] ============================================================
+2026-05-31 13:10:32,261 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:10:32,262 [INFO] Raw input dict : {'N': 200.0, 'P': 12.0, 'K': 200.0, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10.0, 'Mg': 120.0, 'B': 0.4}
+2026-05-31 13:10:32,262 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:10:32,262 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:10:32,262 [INFO] DataFrame vals : [200.0, 12.0, 200.0, 7.5, 1.9, 2.1, 10.0, 120.0, 0.4]
+2026-05-31 13:10:32,263 [INFO] No scaler applied (using raw values)
+2026-05-31 13:10:32,274 [INFO] Prediction raw : [0]
+2026-05-31 13:10:32,274 [INFO] Prediction int : 0
+2026-05-31 13:10:32,274 [INFO] Category       : Tidak Subur
+2026-05-31 13:10:32,285 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.33, 'Subur': 0.2}
+2026-05-31 13:10:32,285 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:10:32,285 [INFO] ============================================================
+2026-05-31 13:10:32,286 [INFO] 127.0.0.1 - - [31/May/2026 13:10:32] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:10:32,294 [INFO] [/predict] Request received: {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0, 'OC': 1.8, 'S': 0, 'Mg': 0.22, 'B': 0}
+2026-05-31 13:10:32,295 [INFO] ============================================================
+2026-05-31 13:10:32,296 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:10:32,296 [INFO] Raw input dict : {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0.0, 'OC': 1.8, 'S': 0.0, 'Mg': 0.22, 'B': 0.0}
+2026-05-31 13:10:32,296 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:10:32,297 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:10:32,297 [INFO] DataFrame vals : [0.14, 18.5, 0.19, 5.1, 0.0, 1.8, 0.0, 0.22, 0.0]
+2026-05-31 13:10:32,297 [INFO] No scaler applied (using raw values)
+2026-05-31 13:10:32,315 [INFO] Prediction raw : [0]
+2026-05-31 13:10:32,315 [INFO] Prediction int : 0
+2026-05-31 13:10:32,315 [INFO] Category       : Tidak Subur
+2026-05-31 13:10:32,333 [INFO] Probabilities  : {'Tidak Subur': 0.53, 'Kurang Subur': 0.33, 'Subur': 0.14}
+2026-05-31 13:10:32,333 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:10:32,333 [INFO] ============================================================
+2026-05-31 13:10:32,334 [INFO] 127.0.0.1 - - [31/May/2026 13:10:32] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:10:32,340 [INFO] [/predict] Request received: {'N': 100, 'P': 0, 'K': 20, 'pH': 10, 'EC': 10, 'OC': 10, 'S': 10, 'Mg': 10, 'B': 10}
+2026-05-31 13:10:32,341 [INFO] ============================================================
+2026-05-31 13:10:32,341 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:10:32,341 [INFO] Raw input dict : {'N': 100.0, 'P': 0.0, 'K': 20.0, 'pH': 10.0, 'EC': 10.0, 'OC': 10.0, 'S': 10.0, 'Mg': 10.0, 'B': 10.0}
+2026-05-31 13:10:32,341 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:10:32,341 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:10:32,342 [INFO] DataFrame vals : [100.0, 0.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+2026-05-31 13:10:32,342 [INFO] No scaler applied (using raw values)
+2026-05-31 13:10:32,351 [INFO] Prediction raw : [0]
+2026-05-31 13:10:32,352 [INFO] Prediction int : 0
+2026-05-31 13:10:32,352 [INFO] Category       : Tidak Subur
+2026-05-31 13:10:32,368 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.27, 'Subur': 0.26}
+2026-05-31 13:10:32,368 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:10:32,368 [INFO] ============================================================
+2026-05-31 13:10:32,369 [INFO] 127.0.0.1 - - [31/May/2026 13:10:32] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:10:32,375 [INFO] [/predict] Request received: {'N': 270, 'P': 9.9, 'K': 444, 'pH': 7.63, 'EC': 0.4, 'OC': 0.86, 'S': 11.8, 'Mg': 2.55, 'B': 2.259}
+2026-05-31 13:10:32,376 [INFO] ============================================================
+2026-05-31 13:10:32,376 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:10:32,376 [INFO] Raw input dict : {'N': 270.0, 'P': 9.9, 'K': 444.0, 'pH': 7.63, 'EC': 0.4, 'OC': 0.86, 'S': 11.8, 'Mg': 2.55, 'B': 2.259}
+2026-05-31 13:10:32,377 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:10:32,377 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:10:32,377 [INFO] DataFrame vals : [270.0, 9.9, 444.0, 7.63, 0.4, 0.86, 11.8, 2.55, 2.259]
+2026-05-31 13:10:32,377 [INFO] No scaler applied (using raw values)
+2026-05-31 13:10:32,391 [INFO] Prediction raw : [1]
+2026-05-31 13:10:32,391 [INFO] Prediction int : 1
+2026-05-31 13:10:32,392 [INFO] Category       : Kurang Subur
+2026-05-31 13:10:32,402 [INFO] Probabilities  : {'Tidak Subur': 0.02, 'Kurang Subur': 0.97, 'Subur': 0.01}
+2026-05-31 13:10:32,402 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:10:32,402 [INFO] ============================================================
+2026-05-31 13:10:32,403 [INFO] 127.0.0.1 - - [31/May/2026 13:10:32] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:11:29,764 [INFO] [/predict] Request received: {'N': 138, 'P': 5.3, 'K': 444, 'pH': 7.68, 'EC': 0.6, 'OC': 0.78, 'S': 9.7, 'Mg': 2.6, 'B': 2.12}
+2026-05-31 13:11:29,765 [INFO] ============================================================
+2026-05-31 13:11:29,765 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:11:29,766 [INFO] Raw input dict : {'N': 138.0, 'P': 5.3, 'K': 444.0, 'pH': 7.68, 'EC': 0.6, 'OC': 0.78, 'S': 9.7, 'Mg': 2.6, 'B': 2.12}
+2026-05-31 13:11:29,766 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:11:29,766 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:11:29,766 [INFO] DataFrame vals : [138.0, 5.3, 444.0, 7.68, 0.6, 0.78, 9.7, 2.6, 2.12]
+2026-05-31 13:11:29,766 [INFO] No scaler applied (using raw values)
+2026-05-31 13:11:29,776 [INFO] Prediction raw : [2]
+2026-05-31 13:11:29,777 [INFO] Prediction int : 2
+2026-05-31 13:11:29,777 [INFO] Category       : Subur
+2026-05-31 13:11:29,788 [INFO] Probabilities  : {'Tidak Subur': 0.22, 'Kurang Subur': 0.08, 'Subur': 0.7}
+2026-05-31 13:11:29,789 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:11:29,790 [INFO] ============================================================
+2026-05-31 13:11:29,790 [INFO] 127.0.0.1 - - [31/May/2026 13:11:29] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:11:29,798 [INFO] [/predict] Request received: {'N': 200, 'P': 12, 'K': 200, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10, 'Mg': 120, 'B': 0.4}
+2026-05-31 13:11:29,799 [INFO] ============================================================
+2026-05-31 13:11:29,799 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:11:29,799 [INFO] Raw input dict : {'N': 200.0, 'P': 12.0, 'K': 200.0, 'pH': 7.5, 'EC': 1.9, 'OC': 2.1, 'S': 10.0, 'Mg': 120.0, 'B': 0.4}
+2026-05-31 13:11:29,800 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:11:29,800 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:11:29,800 [INFO] DataFrame vals : [200.0, 12.0, 200.0, 7.5, 1.9, 2.1, 10.0, 120.0, 0.4]
+2026-05-31 13:11:29,800 [INFO] No scaler applied (using raw values)
+2026-05-31 13:11:29,809 [INFO] Prediction raw : [0]
+2026-05-31 13:11:29,810 [INFO] Prediction int : 0
+2026-05-31 13:11:29,810 [INFO] Category       : Tidak Subur
+2026-05-31 13:11:29,821 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.33, 'Subur': 0.2}
+2026-05-31 13:11:29,821 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:11:29,821 [INFO] ============================================================
+2026-05-31 13:11:29,822 [INFO] 127.0.0.1 - - [31/May/2026 13:11:29] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:11:29,825 [INFO] [/predict] Request received: {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0, 'OC': 1.8, 'S': 0, 'Mg': 0.22, 'B': 0}
+2026-05-31 13:11:29,826 [INFO] ============================================================
+2026-05-31 13:11:29,826 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:11:29,827 [INFO] Raw input dict : {'N': 0.14, 'P': 18.5, 'K': 0.19, 'pH': 5.1, 'EC': 0.0, 'OC': 1.8, 'S': 0.0, 'Mg': 0.22, 'B': 0.0}
+2026-05-31 13:11:29,827 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:11:29,827 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:11:29,827 [INFO] DataFrame vals : [0.14, 18.5, 0.19, 5.1, 0.0, 1.8, 0.0, 0.22, 0.0]
+2026-05-31 13:11:29,828 [INFO] No scaler applied (using raw values)
+2026-05-31 13:11:29,845 [INFO] Prediction raw : [0]
+2026-05-31 13:11:29,845 [INFO] Prediction int : 0
+2026-05-31 13:11:29,845 [INFO] Category       : Tidak Subur
+2026-05-31 13:11:29,855 [INFO] Probabilities  : {'Tidak Subur': 0.53, 'Kurang Subur': 0.33, 'Subur': 0.14}
+2026-05-31 13:11:29,855 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:11:29,855 [INFO] ============================================================
+2026-05-31 13:11:29,856 [INFO] 127.0.0.1 - - [31/May/2026 13:11:29] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:11:29,860 [INFO] [/predict] Request received: {'N': 100, 'P': 0, 'K': 20, 'pH': 10, 'EC': 10, 'OC': 10, 'S': 10, 'Mg': 10, 'B': 10}
+2026-05-31 13:11:29,861 [INFO] ============================================================
+2026-05-31 13:11:29,861 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:11:29,862 [INFO] Raw input dict : {'N': 100.0, 'P': 0.0, 'K': 20.0, 'pH': 10.0, 'EC': 10.0, 'OC': 10.0, 'S': 10.0, 'Mg': 10.0, 'B': 10.0}
+2026-05-31 13:11:29,862 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:11:29,862 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:11:29,863 [INFO] DataFrame vals : [100.0, 0.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+2026-05-31 13:11:29,863 [INFO] No scaler applied (using raw values)
+2026-05-31 13:11:29,873 [INFO] Prediction raw : [0]
+2026-05-31 13:11:29,873 [INFO] Prediction int : 0
+2026-05-31 13:11:29,873 [INFO] Category       : Tidak Subur
+2026-05-31 13:11:29,884 [INFO] Probabilities  : {'Tidak Subur': 0.47, 'Kurang Subur': 0.27, 'Subur': 0.26}
+2026-05-31 13:11:29,885 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:11:29,885 [INFO] ============================================================
+2026-05-31 13:11:29,886 [INFO] 127.0.0.1 - - [31/May/2026 13:11:29] "POST /predict HTTP/1.1" 200 -
+2026-05-31 13:11:29,891 [INFO] [/predict] Request received: {'N': 270, 'P': 9.9, 'K': 444, 'pH': 7.63, 'EC': 0.4, 'OC': 0.86, 'S': 11.8, 'Mg': 2.55, 'B': 2.259}
+2026-05-31 13:11:29,891 [INFO] ============================================================
+2026-05-31 13:11:29,892 [INFO] PREDICTION PIPELINE START
+2026-05-31 13:11:29,892 [INFO] Raw input dict : {'N': 270.0, 'P': 9.9, 'K': 444.0, 'pH': 7.63, 'EC': 0.4, 'OC': 0.86, 'S': 11.8, 'Mg': 2.55, 'B': 2.259}
+2026-05-31 13:11:29,892 [INFO] DataFrame shape: (1, 9)
+2026-05-31 13:11:29,892 [INFO] DataFrame cols : ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-05-31 13:11:29,893 [INFO] DataFrame vals : [270.0, 9.9, 444.0, 7.63, 0.4, 0.86, 11.8, 2.55, 2.259]
+2026-05-31 13:11:29,893 [INFO] No scaler applied (using raw values)
+2026-05-31 13:11:29,903 [INFO] Prediction raw : [1]
+2026-05-31 13:11:29,903 [INFO] Prediction int : 1
+2026-05-31 13:11:29,903 [INFO] Category       : Kurang Subur
+2026-05-31 13:11:29,913 [INFO] Probabilities  : {'Tidak Subur': 0.02, 'Kurang Subur': 0.97, 'Subur': 0.01}
+2026-05-31 13:11:29,914 [INFO] PREDICTION PIPELINE END
+2026-05-31 13:11:29,915 [INFO] ============================================================
+2026-05-31 13:11:29,915 [INFO] 127.0.0.1 - - [31/May/2026 13:11:29] "POST /predict HTTP/1.1" 200 -
