@@ -100,10 +100,10 @@
                             </span>
                         </td>
                         <td class="px-4 py-3">
-                            <div class="flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                            <div class="flex items-center justify-center gap-2">
                                 <button wire:click="editBlock({{ $block['id'] }})"
                                     class="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-110"
-                                    style="background:rgba(129,140,248,.15);color:#818cf8" title="Edit">
+                                    style="background:rgba(245,158,11,.15);color:#d97706" title="Edit">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                     </svg>
@@ -418,7 +418,7 @@
                 {{-- Probabilities dari ML --}}
                 @if(!empty($selectedBlock['probabilities']))
                 <div class="rounded-2xl border border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-slate-800/50 p-4">
-                    <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide mb-3">Tingkat Kepercayaan ML</p>
+                    <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide mb-3">Probabilitas Hasil Prediksi</p>
                     <div class="space-y-2">
                         @foreach($selectedBlock['probabilities'] as $label => $prob)
                         <div class="flex items-center gap-3">
