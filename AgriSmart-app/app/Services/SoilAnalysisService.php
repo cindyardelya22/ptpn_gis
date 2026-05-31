@@ -12,13 +12,61 @@ class SoilAnalysisService
 
     public function __construct()
     {
-        // Set URL Flask di .env: FLASK_ML_URL=http://127.0.0.1:5000
-        $this->flaskUrl = config('services.flask_ml.url', 'http://127.0.0.1:5000');
+        // Set URL Flask di .env: ML_SERVICE_URL=http://127.0.0.1:5000
+        $this->flaskUrl = config('services.ml.url', 'http://127.0.0.1:5000');
     }
 
+    /**
+     * Prediksi status kesuburan via Flask ML lalu simpan ke database.
+     * Dipanggil saat tambah/edit data unsur hara.
+     */
+    public function predictAndSave(SoilNutrient $nutrient): array
+    {
+        $result = $this->callFlaskPredict($nutrient);
+
+        // Simpan ke database
+        $nutrient->fertility_status = $result['status'];
+        $nutrient->fertility_color  = $result['color'];
+        $nutrient->fertility_probabilities = $result['probabilities'];
+        $nutrient->save();
+
+        Log::info('[ML] Status kesuburan disimpan ke DB', [
+            'nutrient_id' => $nutrient->id,
+            'block_id'    => $nutrient->block_id,
+            'status'      => $result['status'],
+        ]);
+
+        return $result;
+    }
+
+    /**
+     * Ambil status kesuburan. Prioritas: DB → Flask → Fallback.
+     * Digunakan saat render halaman (read-only, tidak menyimpan).
+     */
     public function analyzeFertility(SoilNutrient $nutrient): array
     {
-        // Kirim ke Flask ML API
+        // 1. Baca dari DB jika sudah ada
+        if ($nutrient->fertility_status) {
+            return [
+                'status'        => $nutrient->fertility_status,
+                'color'         => $nutrient->fertility_color ?? $this->categoryToColor($nutrient->fertility_status),
+                'probabilities' => $nutrient->fertility_probabilities ?? [],
+                'source'        => 'database',
+            ];
+        }
+
+        // 2. Belum ada di DB → panggil Flask
+        $result = $this->callFlaskPredict($nutrient);
+        $result['source'] = $result['source'] ?? 'flask';
+
+        return $result;
+    }
+
+    /**
+     * Kirim data ke Flask ML API /predict.
+     */
+    private function callFlaskPredict(SoilNutrient $nutrient): array
+    {
         try {
             $payload = [
                 'N'  => (float) $nutrient->nitrogen,
@@ -43,6 +91,7 @@ class SoilAnalysisService
                     'status'        => $kategori,
                     'color'         => $this->categoryToColor($kategori),
                     'probabilities' => $probabilities,
+                    'source'        => 'flask',
                 ];
             }
 
@@ -79,11 +128,11 @@ class SoilAnalysisService
         if ($nutrient->organic_carbon > 1.0)               $score++;
 
         if ($score >= 4) {
-            return ['status' => 'Subur',        'color' => 'emerald', 'probabilities' => []];
+            return ['status' => 'Subur',        'color' => 'emerald', 'probabilities' => [], 'source' => 'fallback'];
         } elseif ($score >= 2) {
-            return ['status' => 'Kurang Subur', 'color' => 'amber',   'probabilities' => []];
+            return ['status' => 'Kurang Subur', 'color' => 'amber',   'probabilities' => [], 'source' => 'fallback'];
         }
 
-        return ['status' => 'Tidak Subur', 'color' => 'rose', 'probabilities' => []];
+        return ['status' => 'Tidak Subur', 'color' => 'rose', 'probabilities' => [], 'source' => 'fallback'];
     }
 }

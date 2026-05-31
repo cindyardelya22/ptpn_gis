@@ -13,8 +13,7 @@
                 <div>
                     <h1 class="text-3xl font-black text-slate-800 dark:text-white tracking-tight">Detail Analisis Blok
                     </h1>
-                    <p class="text-slate-500 text-sm mt-1">Review kesuburan hara, estimasi panen, dan rekomendasi
-                        agronomi.</p>
+                    <p class="text-slate-500 text-sm mt-1">Review detail unsur hara dan rekomendasi pemupukan lahan.</p>
                 </div>
             </div>
         </div>
@@ -53,64 +52,72 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 gap-4">
                 <div
                     class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-2xl border border-slate-100 dark:border-slate-700">
                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Luas Area</p>
                     <p class="text-lg font-bold text-slate-800 dark:text-white">{{ number_format($block->area_ha, 2) }}
                         Ha</p>
                 </div>
-                <div
-                    class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-2xl border border-slate-100 dark:border-slate-700">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Umur Tanaman</p>
-                    <p class="text-lg font-bold text-slate-800 dark:text-white">{{ $prediction['age_years'] ?? '-' }}
-                        Thn</p>
-                </div>
             </div>
         </div>
 
-        <!-- Yield Potential Card -->
+        <!-- Fertility Status Card with Probabilities -->
         <div
-            class="lg:col-span-2 bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-[2rem] shadow-xl text-white relative overflow-hidden">
-            @php
-                $baseYield = $prediction['base_max_yield'] ?? 0;
-                $actualYield = $prediction['total_annual_ton'] ?? 0;
-                $yieldLoss = $baseYield - $actualYield;
-                $lossPercentage = $baseYield > 0 ? ($yieldLoss / $baseYield) * 100 : 0;
-            @endphp
+            class="lg:col-span-2 p-8 rounded-[2rem] shadow-xl text-white relative overflow-hidden
+            @if (($analysis['color'] ?? 'slate') == 'emerald') bg-gradient-to-br from-emerald-600 to-emerald-900
+            @elseif(($analysis['color'] ?? 'slate') == 'amber') bg-gradient-to-br from-amber-600 to-amber-900
+            @else bg-gradient-to-br from-rose-600 to-rose-900 @endif
+            ">
             <div class="relative z-10 flex flex-col md:flex-row gap-8 justify-between">
-                <div>
-                    <p class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Estimasi Panen
-                        Berjalan</p>
+                <div class="flex-1">
+                    <p class="text-[11px] font-black text-white/70 uppercase tracking-[0.2em] mb-4">Hasil Klasifikasi AI</p>
                     <div class="flex items-end gap-3 mb-6">
-                        <h3 class="text-5xl font-black text-white">{{ number_format($actualYield) }}</h3>
-                        <span class="text-lg font-bold text-slate-400 mb-1">TON / Tahun</span>
+                        <h3 class="text-4xl font-black text-white">{{ $analysis['status'] ?? 'N/A' }}</h3>
                     </div>
 
-                    <div class="flex flex-col gap-1.5">
-                        <p class="text-sm font-bold text-slate-300">Target Potensi Maksimal: <span
-                                class="text-white">{{ number_format($baseYield) }} Ton</span></p>
-                        <p class="text-sm font-bold text-slate-300">Efisiensi Lahan Aktual: <span
-                                class="text-white">{{ number_format($prediction['ton_per_ha'] ?? 0, 1) }} Ton/Ha</span>
-                        </p>
+                    <div class="flex flex-col gap-2 mt-4">
+                        <p class="text-sm font-bold text-white/80">Probabilitas Machine Learning:</p>
+                        <div class="grid gap-3">
+                            @if(isset($analysis['probabilities']) && is_array($analysis['probabilities']) && count($analysis['probabilities']) > 0)
+                                @foreach($analysis['probabilities'] as $status => $prob)
+                                <div>
+                                    <div class="flex justify-between text-xs font-bold mb-1">
+                                        <span>{{ $status }}</span>
+                                        <span>{{ round($prob * 100, 1) }}%</span>
+                                    </div>
+                                    <div class="h-2 w-full bg-black/20 rounded-full overflow-hidden">
+                                        <div class="h-full bg-white rounded-full" style="width: {{ $prob * 100 }}%"></div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            @else
+                                <p class="text-xs text-white/60 italic">Data probabilitas belum tersedia (historis).</p>
+                            @endif
+                        </div>
                     </div>
                 </div>
 
                 <div
-                    class="md:w-64 p-6 bg-red-500/10 border border-red-500/20 rounded-2xl backdrop-blur-md self-center relative flex-shrink-0">
+                    class="md:w-64 p-6 bg-black/10 border border-white/20 rounded-2xl backdrop-blur-md self-center relative flex-shrink-0">
                     <p
-                        class="text-[10px] font-black text-red-300 uppercase tracking-widest mb-2 flex items-center gap-2">
+                        class="text-[10px] font-black text-white/80 uppercase tracking-widest mb-2 flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
                             </path>
                         </svg>
-                        Potensi Yield Loss
+                        Saran Utama
                     </p>
-                    <h4 class="text-3xl font-black text-red-400 mb-1">{{ number_format($yieldLoss) }} <span
-                            class="text-sm">TON</span></h4>
-                    <p class="text-xs font-bold text-red-300/80">Karena defisiensi hara
-                        ({{ number_format($lossPercentage, 1) }}%)</p>
+                    <p class="text-sm font-bold text-white mt-3">
+                        @if (($analysis['color'] ?? 'slate') == 'emerald')
+                            Pertahankan jadwal pemupukan rutin. Lahan subur.
+                        @elseif(($analysis['color'] ?? 'slate') == 'amber')
+                            Lakukan analisis daun untuk memastikan serapan hara. Perlu pupuk tambahan.
+                        @else
+                            Perhatian khusus diperlukan! Tanah tidak ideal untuk sawit saat ini.
+                        @endif
+                    </p>
                 </div>
             </div>
 
@@ -140,42 +147,36 @@
                             'value' => $latestNutrient->nitrogen ?? 0,
                             'unit' => '%',
                             'min' => 2.5,
-                            'score_key' => 'Nitrogen',
                         ],
                         [
                             'label' => 'Fosfor (P)',
                             'value' => $latestNutrient->phosphorus ?? 0,
                             'unit' => 'ppm',
                             'min' => 15,
-                            'score_key' => 'Fosfor',
                         ],
                         [
                             'label' => 'Kalium (K)',
                             'value' => $latestNutrient->potassium ?? 0,
                             'unit' => 'cmol',
                             'min' => 0.2,
-                            'score_key' => 'Kalium',
                         ],
                         [
                             'label' => 'pH Tanah',
                             'value' => $latestNutrient->ph ?? 0,
                             'unit' => '',
                             'min' => 5.5,
-                            'score_key' => 'pH',
                         ],
                         [
                             'label' => 'Magnesium (Mg)',
                             'value' => $latestNutrient->magnesium ?? 0,
                             'unit' => 'cmol',
                             'min' => 0.25,
-                            'score_key' => 'Magnesium',
                         ],
                         [
                             'label' => 'C-Organik',
                             'value' => $latestNutrient->organic_carbon ?? 0,
                             'unit' => '%',
                             'min' => 1.5,
-                            'score_key' => 'C-Org',
                         ],
                     ];
                 @endphp
@@ -183,7 +184,6 @@
                 @foreach ($nutrientsList as $nut)
                     @php
                         $isDeficit = $nut['value'] < $nut['min'];
-                        $score = $analysis['scores'][$nut['score_key']] ?? null;
                     @endphp
                     <div
                         class="p-4 rounded-2xl border transition-all {{ $isDeficit ? 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800' : 'bg-slate-50 dark:bg-slate-700/50 border-slate-100 dark:border-slate-700' }}">
@@ -213,33 +213,13 @@
 
         <!-- Analysis & Recommendation -->
         <div class="flex flex-col gap-6">
-
-            {{-- Diagnosis Card --}}
-            <div
-                class="bg-amber-50 dark:bg-amber-900/10 rounded-[2rem] p-8 border border-amber-200 dark:border-amber-800/50 shadow-sm flex-1">
-                <h3
-                    class="text-sm font-black text-amber-800 dark:text-amber-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    Diagnosis Kegagalan Hara
-                </h3>
-                <p class="text-sm font-medium text-amber-900 dark:text-amber-200/80 leading-relaxed">
-                    Berdasarkan sampel tanah terakhir, blok ini mengindikasikan defisiensi pada unsur
-                    <strong class="font-bold text-amber-700 dark:text-amber-400">Nitrogen (N), Kalium (K)</strong>.
-                    Kekurangan hara ini secara langsung menghambat pertumbuhan vegetatif dan mengganggu pembentukan
-                    tandan buah sawit (TBS), sehingga lahan tidak dapat mencapai potensi optimal sesuai umurnya
-                    (mengakibatkan penurunan tonase).
-                </p>
-            </div>
-
+            
             {{-- Rekomendasi Card dengan Checklist --}}
             <div x-data="{
                 items: [
-                    { id: 1, label: 'Pemberian pupuk tambahan untuk mengembalikan nilai standar <strong>Nitrogen (N)</strong>', done: false },
-                    { id: 2, label: 'Pemberian pupuk tambahan untuk mengembalikan nilai standar <strong>Kalium (K)</strong>', done: false },
-                    { id: 3, label: 'Tingkatkan pengawasan serangan hama sekunder pada kondisi tanah inferior', done: false }
+                    { id: 1, label: 'Lakukan pemupukan NPK sesuai dengan rekomendasi dosis defisit hara', done: false },
+                    { id: 2, label: 'Monitor tingkat keasaman (pH) jika berada di bawah 5.5 berikan dolomit', done: false },
+                    { id: 3, label: 'Catat aktivitas pemupukan ke dalam log untuk tracking historis', done: false }
                 ],
                 get completedCount() { return this.items.filter(i => i.done).length },
                 get totalCount() { return this.items.length },
@@ -255,7 +235,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        Rekomendasi Agronomi
+                        Rekomendasi Pemupukan
                     </h3>
                     {{-- Progress Badge --}}
                     <span x-text="`${completedCount}/${totalCount} selesai`"
@@ -317,7 +297,7 @@
                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <p class="text-xs font-semibold text-emerald-700 dark:text-emerald-400">
-                        Semua rekomendasi telah ditandai selesai. Pantau perkembangan lahan secara berkala.
+                        Rekomendasi telah diselesaikan. Tunggu pembaruan uji tanah berikutnya.
                     </p>
                 </div>
             </div>

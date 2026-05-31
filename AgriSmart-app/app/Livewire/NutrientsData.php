@@ -109,16 +109,31 @@ class NutrientsData extends Component
             'nutrients' => fn($q) => $q->latest('measured_at')
         ])->findOrFail($id);
 
-        $latest  = $block->nutrients->first();
-        $analysis = $latest ? $analysisService->analyzeFertility($latest) : null;
+        $latest = $block->nutrients->first();
+
+        // Baca dari DB, fallback ke Flask jika belum ada
+        if ($latest && $latest->fertility_status) {
+            $status = $latest->fertility_status;
+            $color  = $latest->fertility_color ?? 'slate';
+            $probabilities = $latest->fertility_probabilities ?? [];
+        } elseif ($latest) {
+            $analysis = $analysisService->analyzeFertility($latest);
+            $status = $analysis['status'] ?? 'N/A';
+            $color  = $analysis['color']  ?? 'slate';
+            $probabilities = $analysis['probabilities'] ?? [];
+        } else {
+            $status = 'N/A';
+            $color  = 'slate';
+            $probabilities = [];
+        }
 
         $this->selectedBlock = [
             'id'            => $block->id,
             'name'          => $block->name,
             'area_ha'       => $block->area_ha,
-            'status'        => $analysis['status']        ?? 'N/A',
-            'color'         => $analysis['color']         ?? 'slate',
-            'probabilities' => $analysis['probabilities'] ?? [],
+            'status'        => $status,
+            'color'         => $color,
+            'probabilities' => $probabilities,
             'nutrients'     => [
                 'nitrogen'       => $latest->nitrogen       ?? 0,
                 'phosphorus'     => $latest->phosphorus     ?? 0,
@@ -141,7 +156,7 @@ class NutrientsData extends Component
         $this->selectedBlock   = [];
     }
 
-    public function save()
+    public function save(SoilAnalysisService $analysisService)
     {
         $this->validate();
 
@@ -190,9 +205,21 @@ class NutrientsData extends Component
 
         if ($this->isEdit) {
             $latest = $block->nutrients()->latest('measured_at')->first();
-            $latest ? $latest->update($nutrientData) : $block->nutrients()->create($nutrientData);
+            if ($latest) {
+                $latest->update($nutrientData);
+                $nutrient = $latest;
+            } else {
+                $nutrient = $block->nutrients()->create($nutrientData);
+            }
         } else {
-            $block->nutrients()->create($nutrientData);
+            $nutrient = $block->nutrients()->create($nutrientData);
+        }
+
+        // Panggil Flask ML untuk prediksi status kesuburan & simpan ke DB
+        try {
+            $analysisService->predictAndSave($nutrient);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('[ML] Gagal prediksi saat save: ' . $e->getMessage());
         }
 
         $isEdit = $this->isEdit;
@@ -236,7 +263,7 @@ class NutrientsData extends Component
         $this->planted_at  = now()->format('Y-m-d');
     }
 
-    public function render(SoilAnalysisService $analysisService)
+    public function render()
     {
         $blocksQuery = Block::with([
             'nutrients' => fn($q) => $q->latest('measured_at')
@@ -248,16 +275,15 @@ class NutrientsData extends Component
 
         $blocks = $blocksQuery->paginate(10);
 
-        $blocks->getCollection()->transform(function ($block) use ($analysisService) {
-            $latest   = $block->nutrients->first();
-            $analysis = $latest ? $analysisService->analyzeFertility($latest) : null;
+        $blocks->getCollection()->transform(function ($block) {
+            $latest = $block->nutrients->first();
 
             return [
                 'id'      => $block->id,
                 'name'    => $block->name,
                 'area_ha' => $block->area_ha,
-                'status'  => $analysis['status'] ?? 'N/A',
-                'color'   => $analysis['color']  ?? 'slate',
+                'status'  => $latest->fertility_status ?? 'N/A',
+                'color'   => $latest->fertility_color  ?? 'slate',
                 'nutrients' => [
                     'nitrogen'       => $latest->nitrogen       ?? 0,
                     'phosphorus'     => $latest->phosphorus     ?? 0,

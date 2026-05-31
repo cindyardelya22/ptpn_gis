@@ -14,15 +14,27 @@ class BlockMap extends Component
             $q->latest('measured_at');
         }])->get()->map(function($block) use ($analysisService) {
             $latest = $block->nutrients->first();
-            $analysis = $latest ? $analysisService->analyzeFertility($latest) : null;
+
+            // Baca status dari DB, fallback ke Flask jika belum ada
+            if ($latest && $latest->fertility_status) {
+                $status = $latest->fertility_status;
+                $color  = $latest->fertility_color ?? 'slate';
+            } elseif ($latest) {
+                $analysis = $analysisService->analyzeFertility($latest);
+                $status = $analysis['status'] ?? 'No Data';
+                $color  = $analysis['color']  ?? 'slate';
+            } else {
+                $status = 'No Data';
+                $color  = 'slate';
+            }
             
             return [
                 'id' => $block->id,
                 'name' => $block->name,
                 'area_ha' => $block->area_ha,
                 'coords' => $block->polygon_coords,
-                'status' => $analysis['status'] ?? 'No Data',
-                'color' => $analysis['color'] ?? 'slate',
+                'status' => $status,
+                'color' => $color,
             ];
         });
 

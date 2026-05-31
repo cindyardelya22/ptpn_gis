@@ -22,12 +22,12 @@
                 'updated' => 'Update tersedia',
             ],
             [
-                'title' => 'Prediksi Panen Tahunan',
+                'title' => 'Laporan Rekomendasi Pemupukan',
                 'desc' =>
-                    'Estimasi produksi TBS (Tandan Buah Segar) per blok berdasarkan umur tanaman dan kondisi hara.',
+                    'Tindakan penanganan hara berdasarkan status kesuburan AI, probabilitas kegagalan hara, dan rekomendasi spesifik tiap blok.',
                 'icon' => 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6',
                 'formats' => ['PDF', 'XLSX'],
-                'badge' => 'Produksi',
+                'badge' => 'Pemupukan',
                 'color' => 'amber',
                 'updated' => 'Data real-time',
             ],

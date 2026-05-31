@@ -25,7 +25,12 @@ class SoilNutrient extends Model
         'magnesium',
         'boron',
 
-        'measured_at'
+        'measured_at',
+
+        // Status kesuburan dari ML
+        'fertility_status',
+        'fertility_color',
+        'fertility_probabilities',
     ];
 
     protected $casts = [
@@ -42,6 +47,8 @@ class SoilNutrient extends Model
         's' => 'decimal:3',
         'magnesium' => 'decimal:3',
         'boron' => 'decimal:3',
+
+        'fertility_probabilities' => 'array',
     ];
 
     public function block(): BelongsTo

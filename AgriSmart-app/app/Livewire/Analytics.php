@@ -5,86 +5,89 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Block;
 use App\Services\SoilAnalysisService;
-use App\Services\HarvestPredictionService;
 use Carbon\Carbon;
 
 class Analytics extends Component
 {
-    public $selectedYear;
-    public $selectedAgeRange = 'all';
     public $selectedFertility = 'all';
 
-    public function mount()
+    public function render(SoilAnalysisService $analysisService)
     {
-        $this->selectedYear = Carbon::now()->year;
-    }
-
-    public function render(SoilAnalysisService $analysisService, HarvestPredictionService $predictionService)
-    {
-        $allBlocks = Block::with(['nutrients' => function($q) {
+        $allBlocks = Block::with(['nutrients' => function ($q) {
             $q->latest('measured_at');
-        }])->get()->map(function(Block $block) use ($analysisService, $predictionService) {
+        }])->get()->map(function (Block $block) use ($analysisService) {
             $latest = $block->nutrients->first();
-            $analysis = $latest ? $analysisService->analyzeFertility($latest) : null;
-            $prediction = $analysis ? $predictionService->predict($block, $analysis) : null;
-            
+
+            // Baca status dari DB, fallback ke Flask jika belum ada
+            if ($latest && $latest->fertility_status) {
+                $analysis = [
+                    'status'        => $latest->fertility_status,
+                    'color'         => $latest->fertility_color ?? 'slate',
+                    'probabilities' => $latest->fertility_probabilities ?? [],
+                ];
+            } else {
+                $analysis = $latest ? $analysisService->analyzeFertility($latest) : null;
+            }
+
             return [
                 'id' => $block->id,
                 'name' => $block->name,
                 'area_ha' => $block->area_ha,
                 'status' => $analysis['status'] ?? 'N/A',
                 'color' => $analysis['color'] ?? 'slate',
-                'age' => $prediction['age_years'] ?? 0,
-                'age_label' => $prediction['status_label'] ?? 'Unknown',
-                'yield' => $prediction['total_annual_ton'] ?? 0,
-                'ton_per_ha' => $prediction['ton_per_ha'] ?? 0,
-                'nutrients' => $latest ? $latest->toArray() : null,
-                'scores' => $analysis['scores'] ?? []
+                'probabilities' => $analysis['probabilities'] ?? [],
+                'nutrients' => $latest ? [
+                    'nitrogen'       => (float) ($latest->nitrogen ?? 0),
+                    'phosphorus'     => (float) ($latest->phosphorus ?? 0),
+                    'potassium'      => (float) ($latest->potassium ?? 0),
+                    'ph'             => (float) ($latest->ph ?? 0),
+                    'ec'             => (float) ($latest->ec ?? 0),
+                    'organic_carbon' => (float) ($latest->organic_carbon ?? 0),
+                    's'              => (float) ($latest->s ?? 0),
+                    'magnesium'      => (float) ($latest->magnesium ?? 0),
+                    'boron'          => (float) ($latest->boron ?? 0),
+                    'measured_at'    => $latest->measured_at ? $latest->measured_at->format('d M Y') : '-',
+                ] : null,
             ];
         });
 
         // Apply Filters
-        $filteredBlocks = $allBlocks->filter(function($block) {
-            $matchAge = true;
-            if ($this->selectedAgeRange !== 'all') {
-                $age = $block['age'];
-                $matchAge = match($this->selectedAgeRange) {
-                    'muda' => ($age >= 3 && $age <= 7),
-                    'prima' => ($age > 7 && $age <= 18),
-                    'tua' => ($age > 18),
-                    'tbm' => ($age < 3),
-                    default => true
-                };
-            }
-
-            $matchFertility = ($this->selectedFertility === 'all' || $block['status'] === $this->selectedFertility);
-
-            return $matchAge && $matchFertility;
-        });
+        $filteredBlocks = $allBlocks;
+        if ($this->selectedFertility !== 'all') {
+            $filteredBlocks = $allBlocks->filter(
+                fn($b) => $b['status'] === $this->selectedFertility
+            );
+        }
 
         // Aggregations
         $summary = [
-            'total_yield' => $filteredBlocks->sum('yield'),
-            'avg_ton_ha' => $filteredBlocks->avg('ton_per_ha') ?? 0,
-            'best_block' => $filteredBlocks->sortByDesc('yield')->first(),
-            'needs_improvement' => $filteredBlocks->filter(fn($b) => $b['status'] === 'Kurang Subur')->values(),
+            'total_blocks' => $filteredBlocks->count(),
+            'fertile_pct'  => $filteredBlocks->count() > 0
+                ? round(($filteredBlocks->where('status', 'Subur')->count() / $filteredBlocks->count()) * 100)
+                : 0,
+            'needs_improvement' => $filteredBlocks
+                ->filter(fn($b) => $b['status'] === 'Kurang Subur' || $b['status'] === 'Tidak Subur')
+                ->values(),
+            'critical_count' => $filteredBlocks->where('status', 'Tidak Subur')->count(),
             'distribution' => [
                 'Subur' => $filteredBlocks->where('status', 'Subur')->count(),
                 'Kurang Subur' => $filteredBlocks->where('status', 'Kurang Subur')->count(),
                 'Tidak Subur' => $filteredBlocks->where('status', 'Tidak Subur')->count(),
-            ]
+            ],
         ];
 
-        // Yield by Block Chart Data
-        $yieldChartData = $filteredBlocks->sortByDesc('yield')->take(10)->map(fn($b) => [
-            'name' => $b['name'],
-            'yield' => $b['yield']
-        ])->values();
+        // Average nutrient values for comparison chart
+        $nutrientAvg = [];
+        $nutrientKeys = ['nitrogen', 'phosphorus', 'potassium', 'ph', 'organic_carbon', 'magnesium'];
+        foreach ($nutrientKeys as $key) {
+            $vals = $filteredBlocks->filter(fn($b) => $b['nutrients'] !== null)->pluck("nutrients.$key");
+            $nutrientAvg[$key] = $vals->count() > 0 ? round($vals->avg(), 2) : 0;
+        }
 
         return view('livewire.analytics', [
             'blocks' => $filteredBlocks,
             'summary' => $summary,
-            'yieldChartData' => $yieldChartData
+            'nutrientAvg' => $nutrientAvg,
         ])->layout('layouts.app');
     }
 }

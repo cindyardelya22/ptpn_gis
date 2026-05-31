@@ -16,8 +16,7 @@
 
                 <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">Dashboard
                 </h1>
-                <p class="text-slate-400 dark:text-slate-500 text-sm mt-0.5">Ringkasan kondisi hara dan prediksi panen
-                    estate saat ini.</p>
+                <p class="text-slate-400 dark:text-slate-500 text-sm mt-0.5">Ringkasan kondisi hara dan status kesuburan kebun.</p>
             </div>
 
         </div>
@@ -128,62 +127,61 @@
                     </div>
                 </div>
                 <h3 class="text-3xl font-black text-slate-800 dark:text-white">{{ $summary['total_blocks'] }}</h3>
-                <p class="text-[10px] text-slate-400 font-medium mt-1">128.5 Ha total area</p>
+                <p class="text-[10px] text-slate-400 font-medium mt-1">{{ number_format($summary['total_area'], 1) }} Ha total area</p>
             </div>
 
-            <!-- Avg Ton/Ha -->
+            <!-- Blok Subur -->
             <div
                 class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow border-t-2 border-t-emerald-500">
                 <div class="flex items-start justify-between mb-3">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Rata-rata Ton/Ha</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Blok Subur</p>
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#10b98115">
                         <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                d="M5 13l4 4L19 7" />
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-3xl font-black text-slate-800 dark:text-white">
-                    {{ number_format($summary['avg_ton_per_ha'], 1) }}
+                <h3 class="text-3xl font-black text-emerald-500">
+                    {{ $summary['fertile_count'] }}
                 </h3>
-                <p class="text-[10px] text-emerald-500 font-bold mt-1">+2.4% yield dari bulan lalu</p>
+                <p class="text-[10px] text-slate-400 font-medium mt-1">Kondisi Hara Optimal</p>
             </div>
 
-            <!-- Best Yield -->
+            <!-- Blok Kurang Subur -->
             <div
                 class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow border-t-2 border-t-amber-500">
                 <div class="flex items-start justify-between mb-3">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Blok Terbaik</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Blok Kurang Subur</p>
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#f59e0b15">
                         <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-3xl font-black text-slate-800 dark:text-white">{{ $summary['best_yield_block'] }}</h3>
-                <p class="text-[10px] text-amber-500 font-bold mt-1">{{ $summary['best_yield_val'] ?? 0 }} Ton produksi
-                </p>
+                <h3 class="text-3xl font-black text-amber-500">{{ $summary['less_fertile_count'] }}</h3>
+                <p class="text-[10px] text-slate-400 font-medium mt-1">Perlu Pemupukan Minor</p>
             </div>
 
-            <!-- Est. Total -->
+            <!-- Blok Tidak Subur -->
             <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-white/5 
-            shadow-sm hover:shadow-md transition-shadow border-t-2 border-t-blue-500">
+            shadow-sm hover:shadow-md transition-shadow border-t-2 border-t-rose-500">
                 <div class="flex items-start justify-between mb-3">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Perkiraan Panen</p>
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#3b82f615">
-                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Blok Tidak Subur</p>
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#f43f5e15">
+                        <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-3xl font-black text-slate-800 dark:text-white">
-                    {{ number_format($summary['estimated_total_yield']) }}
+                <h3 class="text-3xl font-black text-rose-500">
+                    {{ $summary['not_fertile_count'] }}
                 </h3>
-                <p class="text-[10px] text-blue-500 font-bold mt-1 uppercase tracking-wider">Ton tahun ini</p>
+                <p class="text-[10px] text-slate-400 font-medium mt-1">Butuh Tindakan Segera</p>
             </div>
         </div>
 
@@ -206,12 +204,12 @@
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                                    <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Cukup
+                                    <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Kurang
                                         Subur</span>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                                    <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Kurang
+                                    <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Tidak
                                         Subur</span>
                                 </div>
                             </div>
@@ -222,35 +220,47 @@
 
             <!-- Side Charts -->
             <div class="space-y-5">
-                <!-- Harvest Trend -->
-                <div
-                    class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm">
-                    <div class="mb-5">
-                        <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Tren Panen 12 Bulan</h4>
-                        <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Estimasi
-                            Produksi (Ton)</p>
-                    </div>
-                    <div class="h-44 w-full relative">
-                        <canvas id="harvestChart"></canvas>
-                    </div>
-                </div>
-
                 <!-- Fertility Distribution -->
                 <div
-                    class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm">
-                    <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200 mb-5">Distribusi Kesuburan</h4>
-                    <div class="space-y-4">
+                    class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm flex-1 flex flex-col justify-center h-[480px]">
+                    <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200 mb-8 text-center">Proporsi Status Kesuburan</h4>
+                    <div class="flex justify-center mb-10">
+                        @php
+                        $total = array_sum($summary['distribution']);
+                        $offset = 25;
+                        $circumference = 100.53;
+                        $colors = ['Subur' => '#10b981', 'Kurang Subur' => '#f59e0b', 'Tidak Subur' => '#f43f5e'];
+                        @endphp
+                        <div class="relative w-48 h-48">
+                            <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                                <circle cx="18" cy="18" r="16" fill="none" stroke="#f1f5f9"
+                                    stroke-width="3.5" />
+                                @foreach ($summary['distribution'] as $status => $count)
+                                @if ($count > 0)
+                                @php
+                                $pct = ($count / ($total ?: 1)) * $circumference;
+                                $gap = $circumference - $pct;
+                                @endphp
+                                <circle cx="18" cy="18" r="16" fill="none"
+                                    stroke="{{ $colors[$status] }}" stroke-width="3.5"
+                                    stroke-dasharray="{{ $pct }} {{ $gap }}"
+                                    stroke-dashoffset="-{{ $offset }}" stroke-linecap="round" />
+                                @php $offset += $pct; @endphp
+                                @endif
+                                @endforeach
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span class="text-3xl font-black text-slate-800 dark:text-white">{{ $summary['total_blocks'] }}</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Blok</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 px-2">
                         @foreach ($summary['distribution'] as $status => $count)
                         @php
-                        $color =
-                        $status === 'Subur' ? 'emerald' : ($status === 'Cukup Subur' ? 'amber' : 'rose');
-                        $hex =
-                        $status === 'Subur'
-                        ? '#10b981'
-                        : ($status === 'Cukup Subur'
-                        ? '#f59e0b'
-                        : '#f43f5e');
-                        $percentage = ($count / $summary['total_blocks']) * 100;
+                        $hex = $colors[$status] ?? '#94a3b8';
+                        $percentage = $total > 0 ? ($count / $total) * 100 : 0;
                         @endphp
                         <div class="space-y-1.5">
                             <div class="flex justify-between items-center">
@@ -258,9 +268,9 @@
                                     <span class="w-2 h-2 rounded-full"
                                         style="background:{{ $hex }}"></span>
                                     <span
-                                        class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">{{ $status }}</span>
+                                        class="text-[12px] font-semibold text-slate-600 dark:text-slate-300">{{ $status }}</span>
                                 </div>
-                                <span class="text-[10px] text-slate-400 font-bold">{{ $count }} Blok ·
+                                <span class="text-[11px] text-slate-400 font-bold">{{ $count }} Blok ·
                                     {{ round($percentage) }}%</span>
                             </div>
                             <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
@@ -281,9 +291,9 @@
             <div
                 class="px-6 py-5 border-b border-slate-100 dark:border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Status Operasional Per Blok</h4>
+                    <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Status Kesuburan Per Blok</h4>
                     <p class="text-[10px] text-slate-400 font-medium mt-0.5 uppercase tracking-wider">
-                        {{ count($blocks) }} blok terdaftar
+                        Berdasarkan hasil analisis terbaru
                     </p>
                 </div>
                 <div class="relative">
@@ -305,29 +315,26 @@
                             </th>
                             <th
                                 class="px-6 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">
-                                Umur</th>
+                                Luas Tanah</th>
                             <th
                                 class="px-6 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">
-                                Status</th>
+                                Waktu Pengukuran</th>
                             <th
-                                class="px-6 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">
-                                Ton/Ha</th>
-                            <th
-                                class="px-6 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">
-                                Est. Tahunan</th>
+                                class="px-6 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">
+                                Status Kesuburan</th>
                             <th class="px-6 py-3.5 w-12"></th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-50 dark:divide-white/5">
                         @foreach ($blocks as $block)
                         <tr class="group hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors cursor-pointer"
-                            @click="selectedBlock = {{ json_encode($block) }}; setTimeout(() => window.initDetailChart(selectedBlock), 100);">
+                            @click="selectedBlock = {{ json_encode($block) }};">
                             <!-- Blok Identity -->
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-3">
                                     <div
                                         class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black text-xs bg-{{ $block['color_name'] }}-500 shadow-sm">
-                                        {{ explode(' ', $block['name'])[1] }}
+                                        {{ explode(' ', $block['name'])[1] ?? substr($block['name'], 0, 2) }}
                                     </div>
                                     <div>
                                         <p class="text-sm font-bold text-slate-800 dark:text-slate-100">
@@ -338,10 +345,20 @@
                                     </div>
                                 </div>
                             </td>
-                            <!-- Umur -->
+                            <!-- Luas Tanah -->
                             <td class="px-6 py-4 text-center">
                                 <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">
-                                    {{ $block['prediction']['age_years'] }} Thn
+                                    {{ $block['area_ha'] }}
+                                </span>
+                            </td>
+                            <!-- Waktu Pengukuran -->
+                            <td class="px-6 py-4 text-center">
+                                <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                                    {{
+                                        isset($block['raw_nutrients']['measured_at']) 
+                                            ? \Carbon\Carbon::parse($block['raw_nutrients']['measured_at'])->translatedFormat('l, d F Y')
+                                            : '-' 
+                                    }}
                                 </span>
                             </td>
                             <!-- Status -->
@@ -352,18 +369,6 @@
                                         class="w-1.5 h-1.5 rounded-full bg-{{ $block['color_name'] }}-500"></span>
                                     {{ $block['status'] }}
                                 </span>
-                            </td>
-                            <!-- Ton/Ha -->
-                            <td class="px-6 py-4 text-right">
-                                <span
-                                    class="text-sm font-black text-slate-800 dark:text-slate-100">{{ $block['ton_per_ha'] }}</span>
-                            </td>
-                            <!-- Est. Yield -->
-                            <td class="px-6 py-4 text-right">
-                                <p class="text-sm font-black text-slate-800 dark:text-slate-100">
-                                    {{ number_format($block['yield']) }}
-                                </p>
-                                <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Ton</p>
                             </td>
                             <!-- Arrow -->
                             <td class="px-6 py-4">
@@ -399,7 +404,7 @@
                 class="w-full max-w-sm h-full bg-white dark:bg-slate-900 shadow-2xl flex flex-col relative border-l border-slate-200 dark:border-white/5">
 
                 <!-- Accent top bar -->
-                <div class="h-1 w-full shrink-0" style="background:linear-gradient(90deg,#10b981,#059669,#047857)">
+                <div class="h-1 w-full shrink-0" :class="'bg-' + selectedBlock.color_name + '-500'">
                 </div>
 
                 <!-- Close -->
@@ -414,15 +419,15 @@
                 <!-- Header -->
                 <div class="p-6 pb-5 border-b border-slate-100 dark:border-white/5 shrink-0">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white font-black text-sm"
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-sm"
                             :class="'bg-' + selectedBlock.color_name + '-500'">
-                            <span x-text="selectedBlock.name.split(' ')[1]"></span>
+                            <span x-text="selectedBlock.name.split(' ')[1] || selectedBlock.name.substring(0,2)"></span>
                         </div>
                         <div>
                             <h2 class="text-lg font-black text-slate-800 dark:text-slate-100"
                                 x-text="selectedBlock.name"></h2>
                             <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider"
-                                x-text="selectedBlock.prediction.age_years + ' Tahun · ' + selectedBlock.area_ha + ' Ha'">
+                                x-text="selectedBlock.area_ha + ' Ha'">
                             </p>
                         </div>
                     </div>
@@ -431,86 +436,107 @@
                 <!-- Scrollable Content -->
                 <div class="flex-1 overflow-y-auto p-6 space-y-5">
 
-                    <!-- Prediction Card -->
-                    <div class="p-5 rounded-2xl text-white relative overflow-hidden"
-                        style="background:linear-gradient(135deg,#0f172a,#1e293b)">
-                        <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2">Estimasi Panen
-                            Tahunan</p>
-                        <div class="flex items-end gap-2">
-                            <h4 class="text-3xl font-black" x-text="parseFloat(selectedBlock.yield).toLocaleString()">
-                            </h4>
-                            <span class="text-sm font-bold text-slate-400 mb-1">TON</span>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-white/10 grid grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-[9px] text-slate-500 uppercase font-black tracking-wider">Efisiensi</p>
-                                <p class="text-sm font-bold mt-0.5" x-text="selectedBlock.ton_per_ha + ' Ton/Ha'"></p>
-                            </div>
-                            <div>
-                                <p class="text-[9px] text-slate-500 uppercase font-black tracking-wider">Status Umur
-                                </p>
-                                <p class="text-sm font-bold text-emerald-400 mt-0.5"
-                                    x-text="selectedBlock.prediction.status_label"></p>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Fertility Status Card -->
+                    <div class="p-5 rounded-2xl relative overflow-hidden text-white shadow-lg"
+                        :class="
+                            selectedBlock.status === 'Subur' ? 'bg-gradient-to-br from-emerald-500 to-emerald-700' :
+                            (selectedBlock.status === 'Kurang Subur' ? 'bg-gradient-to-br from-amber-500 to-amber-700' :
+                            'bg-gradient-to-br from-rose-500 to-rose-700')
+                        ">
+                        <p class="text-[9px] font-black text-white/70 uppercase tracking-widest mb-1">Prediksi Status Kesuburan </p>
+                        <h4 class="text-3xl font-black mb-4" x-text="selectedBlock.status"></h4>
 
-                    <!-- Monthly Chart -->
-                    <div
-                        class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-4 border border-slate-100 dark:border-white/5">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Prediksi Panen
-                            Bulanan</p>
-                        <div class="h-28 w-full">
-                            <canvas id="detailHarvestChart"></canvas>
+                        <div class="mt-4 pt-4 border-t border-white/20">
+                            <p class="text-[9px] text-white/70 uppercase font-black tracking-wider mb-2">Probabilitas Prediksi</p>
+                            <div class="space-y-2">
+                                <template x-for="(prob, statusKey) in selectedBlock.analysis.probabilities" :key="statusKey">
+                                    <div>
+                                        <div class="flex justify-between text-[10px] font-bold mb-1">
+                                            <span x-text="statusKey" class="text-white"></span>
+                                            <span x-text="Math.round(prob * 100) + '%'" class="text-white"></span>
+                                        </div>
+                                        <div class="h-1.5 w-full bg-black/20 rounded-full overflow-hidden">
+                                            <div class="h-full bg-white rounded-full" :style="`width: ${prob * 100}%`"></div>
+                                        </div>
+                                    </div>
+                                </template>
+                                <div x-show="!selectedBlock.analysis.probabilities || Object.keys(selectedBlock.analysis.probabilities).length === 0" class="text-xs text-white/80 italic">
+                                    Probabilitas tidak tersedia untuk data historis ini.
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Nutrients -->
                     <div>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Kondisi Hara
-                            Terakhir</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Kondisi Hara Terakhir</p>
                         <div class="grid grid-cols-2 gap-2">
-                            <div
-                                class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-xl border border-slate-100 dark:border-white/5 hover:shadow-sm transition">
+                            <div class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-xl border border-slate-100 dark:border-white/5 hover:shadow-sm transition">
                                 <p class="text-[9px] font-bold text-slate-400 uppercase mb-1">Nitrogen (N)</p>
                                 <p class="text-base font-black text-slate-800 dark:text-slate-100"
-                                    x-text="selectedBlock.raw_nutrients.nitrogen + '%'"></p>
+                                    x-text="(selectedBlock.raw_nutrients?.nitrogen || 0) + '%'"></p>
                             </div>
-                            <div
-                                class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-xl border border-slate-100 dark:border-white/5 hover:shadow-sm transition">
+                            <div class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-xl border border-slate-100 dark:border-white/5 hover:shadow-sm transition">
                                 <p class="text-[9px] font-bold text-slate-400 uppercase mb-1">Fosfor (P)</p>
                                 <p class="text-base font-black text-slate-800 dark:text-slate-100"
-                                    x-text="selectedBlock.raw_nutrients.phosphorus + ' ppm'"></p>
+                                    x-text="(selectedBlock.raw_nutrients?.phosphorus || 0) + ' ppm'"></p>
+                            </div>
+                            <div class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-xl border border-slate-100 dark:border-white/5 hover:shadow-sm transition">
+                                <p class="text-[9px] font-bold text-slate-400 uppercase mb-1">Kalium (K)</p>
+                                <p class="text-base font-black text-slate-800 dark:text-slate-100"
+                                    x-text="(selectedBlock.raw_nutrients?.potassium || 0) + ' cmol'"></p>
+                            </div>
+                            <div class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-xl border border-slate-100 dark:border-white/5 hover:shadow-sm transition">
+                                <p class="text-[9px] font-bold text-slate-400 uppercase mb-1">pH Tanah</p>
+                                <p class="text-base font-black text-slate-800 dark:text-slate-100"
+                                    x-text="(selectedBlock.raw_nutrients?.ph || 0)"></p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Recommendation -->
                     <div
-                        class="p-4 bg-emerald-50 dark:bg-emerald-900/10 rounded-xl border border-emerald-100 dark:border-emerald-800/30">
+                        class="p-4 rounded-xl border"
+                        :class="
+                            selectedBlock.status === 'Subur' ? 'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-100 dark:border-emerald-800/30' :
+                            (selectedBlock.status === 'Kurang Subur' ? 'bg-amber-50 dark:bg-amber-900/10 border-amber-100 dark:border-amber-800/30' :
+                            'bg-rose-50 dark:bg-rose-900/10 border-rose-100 dark:border-rose-800/30')
+                        ">
                         <h5
-                            class="text-[10px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                            class="text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-1.5"
+                            :class="
+                                selectedBlock.status === 'Subur' ? 'text-emerald-700 dark:text-emerald-400' :
+                                (selectedBlock.status === 'Kurang Subur' ? 'text-amber-700 dark:text-amber-400' :
+                                'text-rose-700 dark:text-rose-400')
+                            ">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            Rekomendasi Agronomi
+                            Rekomendasi Pemupukan
                         </h5>
-                        <p class="text-xs text-emerald-700 dark:text-emerald-300/80 leading-relaxed"
-                            x-text="selectedBlock.status === 'Subur'
-                                ? 'Pertahankan pemupukan standar. Monitor serangan hama pada daun.'
-                                : 'Segera lakukan pemupukan tambahan Nitrogen dan Fosfor. Perbaiki drainase di area rendah.'">
+                        <p class="text-xs leading-relaxed"
+                            :class="
+                                selectedBlock.status === 'Subur' ? 'text-emerald-700 dark:text-emerald-300/80' :
+                                (selectedBlock.status === 'Kurang Subur' ? 'text-amber-700 dark:text-amber-300/80' :
+                                'text-rose-700 dark:text-rose-300/80')
+                            "
+                            x-text="
+                                selectedBlock.status === 'Subur' ? 'Pertahankan pemupukan standar. Tanah dalam kondisi optimal untuk kelapa sawit.' :
+                                (selectedBlock.status === 'Kurang Subur' ? 'Lakukan pemupukan tambahan berdasarkan defisit unsur hara minor. Periksa drainase.' :
+                                'Kritis. Segera lakukan pemupukan intensif untuk N, P, dan K. Evaluasi kondisi fisik tanah.')
+                            ">
                         </p>
                     </div>
                 </div>
 
                 <!-- Footer -->
                 <div class="p-5 border-t border-slate-100 dark:border-white/5 shrink-0">
-                    <button
-                        class="w-full py-3 rounded-xl text-white text-xs font-black uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-emerald-500/20"
+                    <a :href="'/block/' + selectedBlock.id" wire:navigate
+                        class="w-full flex items-center justify-center py-3 rounded-xl text-white text-xs font-black uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-emerald-500/20"
                         style="background:linear-gradient(135deg,#10b981,#059669)">
-                        Download Full Report
-                    </button>
+                        Lihat Analisis Lengkap
+                    </a>
                 </div>
             </div>
         </div>
@@ -518,82 +544,12 @@
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener("livewire:navigated", initApp);
     document.addEventListener("DOMContentLoaded", initApp);
 
     function initApp() {
         initMap();
-        initChart();
-    }
-
-    function initChart() {
-        const ctx = document.getElementById('harvestChart');
-        if (!ctx) return;
-        if (window.harvestChartInstance) window.harvestChartInstance.destroy();
-
-        const rawData = @json($harvestTrend);
-        const yields = rawData.map(item => item.yield);
-        const maxYield = Math.max(...yields, 1);
-
-        window.harvestChartInstance = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: rawData.map(item => item.month.substring(0, 3).toUpperCase()),
-                datasets: [{
-                    data: yields,
-                    backgroundColor: yields.map(val => `rgba(16,185,129,${0.2 + (val/maxYield)*0.75})`),
-                    hoverBackgroundColor: '#059669',
-                    borderRadius: 4,
-                    borderWidth: 0,
-                    barPercentage: 0.7,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: '#0f172a',
-                        titleFont: {
-                            size: 10
-                        },
-                        bodyFont: {
-                            size: 11,
-                            weight: 'bold'
-                        },
-                        padding: 10,
-                        cornerRadius: 8,
-                        displayColors: false,
-                        callbacks: {
-                            label: ctx => ctx.parsed.y + ' Ton'
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            font: {
-                                size: 9,
-                                weight: 'bold'
-                            },
-                            color: '#94a3b8'
-                        }
-                    },
-                    y: {
-                        display: false,
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
     }
 
     function initMap() {
@@ -680,79 +636,12 @@
                 } catch (e) {
                     if (component?.__x) component.__x.$data.selectedBlock = data;
                 }
-                setTimeout(() => window.initDetailChart(data), 100);
             }
         });
 
         const extent = vectorSource.getExtent();
         if (!ol.extent.isEmpty(extent)) map.getView().fit(extent, {
             padding: [80, 80, 80, 80]
-        });
-    }
-
-    window.initDetailChart = function(data) {
-        const ctx = document.getElementById('detailHarvestChart');
-        if (!ctx) return;
-        if (window.detailChartInstance) window.detailChartInstance.destroy();
-
-        const rawData = data.prediction.monthly_trend;
-        const yields = rawData.map(item => item.yield);
-        const maxYield = Math.max(...yields, 1);
-
-        window.detailChartInstance = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: rawData.map(item => item.month.substring(0, 3).toUpperCase()),
-                datasets: [{
-                    data: yields,
-                    backgroundColor: yields.map(val =>
-                        `rgba(16,185,129,${0.2 + (val/maxYield)*0.75})`),
-                    hoverBackgroundColor: '#059669',
-                    borderRadius: 3,
-                    borderWidth: 0,
-                    barPercentage: 0.8,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: '#0f172a',
-                        bodyFont: {
-                            size: 10,
-                            weight: 'bold'
-                        },
-                        padding: 8,
-                        cornerRadius: 6,
-                        displayColors: false,
-                        callbacks: {
-                            label: ctx => ctx.parsed.y + ' Ton'
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            font: {
-                                size: 8,
-                                weight: 'bold'
-                            },
-                            color: '#94a3b8'
-                        }
-                    },
-                    y: {
-                        display: false,
-                        beginAtZero: true
-                    }
-                }
-            }
         });
     }
 </script>
