@@ -70,8 +70,8 @@ class Analytics extends Component
             'needs_improvement' => $filteredBlocks->filter(fn($b) => $b['status'] === 'Kurang Subur')->values(),
             'distribution' => [
                 'Subur' => $filteredBlocks->where('status', 'Subur')->count(),
-                'Cukup Subur' => $filteredBlocks->where('status', 'Cukup Subur')->count(),
                 'Kurang Subur' => $filteredBlocks->where('status', 'Kurang Subur')->count(),
+                'Tidak Subur' => $filteredBlocks->where('status', 'Tidak Subur')->count(),
             ]
         ];
 

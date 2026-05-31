@@ -68,8 +68,8 @@ class HarvestPredictionService
     {
         return match ($status) {
             'Subur' => 1.2,
-            'Cukup Subur' => 1.0,
-            'Kurang Subur' => 0.7,
+            'Kurang Subur' => 1.0,
+            'Tidak Subur' => 0.7,
             default => 1.0,
         };
     }

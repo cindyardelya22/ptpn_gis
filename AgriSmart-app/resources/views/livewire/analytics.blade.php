@@ -12,7 +12,7 @@
             <div class="flex flex-wrap items-end gap-3">
                 <!-- Tahun -->
                 <div class="space-y-1.5">
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tahun</label>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tahun Tanam</label>
                     <div class="relative">
                         <select wire:model.live="selectedYear"
                             class="pl-4 pr-8 py-2.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-700/50 focus:outline-none focus:border-emerald-400 transition appearance-none w-28">
@@ -62,8 +62,8 @@
                             class="pl-4 pr-8 py-2.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-700/50 focus:outline-none focus:border-emerald-400 transition appearance-none w-44">
                             <option value="all">Semua Status</option>
                             <option value="Subur">Subur</option>
-                            <option value="Cukup Subur">Cukup Subur</option>
                             <option value="Kurang Subur">Kurang Subur</option>
+                            <option value="Tidak Subur">Tidak Subur</option>
                         </select>
                         <div class="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
                             <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor"
@@ -82,8 +82,7 @@
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
 
         <!-- Total Panen -->
-        <div class="rounded-2xl p-5 text-white relative overflow-hidden col-span-1"
-            style="background:linear-gradient(135deg,#0f172a,#1e293b)">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-white/5 shadow-sm border-t-2 border-t-blue-500">
             <div class="flex items-start justify-between mb-3">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Est. Panen</p>
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center"
@@ -209,7 +208,7 @@
                 $total = array_sum($summary['distribution']);
                 $offset = 25; // start from top (circumference/4)
                 $circumference = 100.53; // 2π×16 (r=16)
-                $colors = ['Subur' => '#10b981', 'Cukup Subur' => '#f59e0b', 'Kurang Subur' => '#f43f5e'];
+                $colors = ['Subur' => '#10b981', 'Kurang Subur' => '#f59e0b', 'Tidak Subur' => '#f43f5e'];
             @endphp
             <div class="flex justify-center mb-6">
                 <div class="relative w-40 h-40">
