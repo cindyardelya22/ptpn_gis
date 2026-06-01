@@ -91,6 +91,9 @@
             if (idx === -1) arr.push(action);
             else arr.splice(idx, 1);
             this.permissions = perms;
+            
+            // Auto-save langsung
+            this.savePermissions();
         },
 
         savePermissions() {
@@ -355,18 +358,37 @@
                 </div>
             </div>
 
-            {{-- Role legend --}}
-            <div class="flex items-center gap-3 mb-5">
-                <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Role:</span>
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
-                    <span class="w-2 h-2 rounded-full bg-violet-500"></span> Super Admin
-                </span>
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Admin
-                </span>
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-300">
-                    <span class="w-2 h-2 rounded-full bg-sky-500"></span> Viewer
-                </span>
+            {{-- Role legend & Auto-save indicator --}}
+            <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-3">
+                    <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Role:</span>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
+                        <span class="w-2 h-2 rounded-full bg-violet-500"></span> Super Admin
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Admin
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-300">
+                        <span class="w-2 h-2 rounded-full bg-sky-500"></span> Viewer
+                    </span>
+                </div>
+                
+                {{-- Status Indicator --}}
+                <div class="flex items-center gap-2">
+                    <span x-show="isSavingPerms" class="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                        </svg>
+                        Menyimpan...
+                    </span>
+                    <span x-show="permsSaved" x-transition class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Tersimpan!
+                    </span>
+                </div>
             </div>
 
             {{-- Permission Cards per page --}}
@@ -443,31 +465,6 @@
                 </template>
             </div>
 
-            {{-- Save Permissions Button --}}
-            <div class="flex items-center justify-end gap-3 mt-6">
-                <span x-show="permsSaved" x-transition class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Tersimpan!
-                </span>
-                <button @click="savePermissions()"
-                    :disabled="isSavingPerms"
-                    class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-violet-500/25 bg-gradient-to-br from-violet-500 to-violet-600 disabled:opacity-60 disabled:cursor-not-allowed">
-                    <template x-if="isSavingPerms">
-                        <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-                        </svg>
-                    </template>
-                    <template x-if="!isSavingPerms">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </template>
-                    <span x-text="isSavingPerms ? 'Menyimpan...' : 'Simpan Hak Akses'"></span>
-                </button>
-            </div>
         </div>
 
     </div>
