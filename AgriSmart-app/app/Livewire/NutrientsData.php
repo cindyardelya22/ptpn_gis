@@ -7,11 +7,15 @@ use App\Models\Block;
 use App\Models\SoilNutrient;
 use App\Services\SoilAnalysisService;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
+
+use Illuminate\Support\Facades\Auth;
 
 class NutrientsData extends Component
 {
     use WithPagination;
 
+    public array $userPermissions = [];
     public $search = '';
     public $statusFilter = '';
 
@@ -60,9 +64,38 @@ class NutrientsData extends Component
         'boron'          => 'nullable|numeric|min:0',
         'measured_at'    => 'required|date',
     ];
+    public function mount(): void
+    {
+        $this->loadUserPermissions();
+        $this->measured_at = now()->format('Y-m-d');
+        $this->planted_at  = now()->format('Y-m-d');
+    }
+
+    private function loadUserPermissions(): void
+    {
+        $user = Auth::user();
+
+        if (!$user || $user->role === 'superadmin') {
+            $this->userPermissions = ['view', 'create', 'edit', 'delete'];
+            return;
+        }
+
+        $stored = cache()->remember('role_permissions', now()->addMinutes(10), function () {
+            return DB::table('settings')->where('key', 'role_permissions')->value('value');
+        });
+
+        $allPermissions = $stored ? json_decode($stored, true) : [];
+        $this->userPermissions = $allPermissions[$user->role]['data-unsur-hara'] ?? ['view'];
+    }
+
+    private function can(string $action): bool
+    {
+        return in_array($action, $this->userPermissions);
+    }
 
     public function openAddModal()
     {
+        abort_unless($this->can('create'), 403);
         $this->resetForm();
         $this->isEdit = false;
         $this->showModal = true;
@@ -70,6 +103,7 @@ class NutrientsData extends Component
 
     public function editBlock($id)
     {
+        abort_unless($this->can('edit'), 403);
         $this->resetForm();
         $this->isEdit  = true;
         $this->blockId = $id;
@@ -158,6 +192,8 @@ class NutrientsData extends Component
 
     public function save(SoilAnalysisService $analysisService)
     {
+        $action = $this->isEdit ? 'edit' : 'create';
+        abort_unless($this->can($action), 403);
         $this->validate();
 
         // Parse koordinat
@@ -232,6 +268,7 @@ class NutrientsData extends Component
 
     public function deleteBlock($id)
     {
+        abort_unless($this->can('delete'), 403);
         $block = Block::findOrFail($id);
         $block->nutrients()->delete();
         $block->delete();
@@ -251,12 +288,24 @@ class NutrientsData extends Component
     private function resetForm()
     {
         $this->reset([
-            'isEdit', 'blockId',
-            'name', 'area_ha', 'planted_at',
-            'coord_1', 'coord_2', 'coord_3', 'coord_4',
-            'nitrogen', 'phosphorus', 'potassium',
-            'ph', 'ec', 'organic_carbon',
-            's', 'magnesium', 'boron',
+            'isEdit',
+            'blockId',
+            'name',
+            'area_ha',
+            'planted_at',
+            'coord_1',
+            'coord_2',
+            'coord_3',
+            'coord_4',
+            'nitrogen',
+            'phosphorus',
+            'potassium',
+            'ph',
+            'ec',
+            'organic_carbon',
+            's',
+            'magnesium',
+            'boron',
             'measured_at',
         ]);
         $this->measured_at = now()->format('Y-m-d');

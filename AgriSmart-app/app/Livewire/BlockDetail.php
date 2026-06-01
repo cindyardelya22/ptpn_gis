@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Block;
 use App\Services\SoilAnalysisService;
+use Illuminate\Support\Facades\Auth;
 
 class BlockDetail extends Component
 {
@@ -12,13 +13,16 @@ class BlockDetail extends Component
     // HAPUS: public $block;
     // HAPUS: public $analysis;  
     // HAPUS: public $latestNutrient;
+    public bool $canRekomendasi = false;
     public array $checkedItems = [];
 
     public function mount($id, SoilAnalysisService $analysisService)
     {
         $this->blockId = $id;
 
-        // Load checkedItems saja di mount
+        // Cek permission dari settings
+        $this->canRekomendasi = $this->checkRekomendasiPermission();
+
         $latestNutrient = Block::findOrFail($id)
             ->nutrients()
             ->latest('measured_at')
@@ -28,8 +32,28 @@ class BlockDetail extends Component
         $this->checkedItems = is_array($saved) ? $saved : json_decode($saved, true) ?? [];
     }
 
+    private function checkRekomendasiPermission(): bool
+    {
+        $user = Auth::user();
+        if (!$user) return false;
+
+        // Superadmin selalu bisa
+        if ($user->role === 'superadmin') return true;
+
+        $stored = \DB::table('settings')
+            ->where('key', 'role_permissions')
+            ->value('value');
+
+        $permissions = $stored
+            ? json_decode($stored, true)
+            : [];
+
+        return in_array('rekomendasi', $permissions[$user->role]['detail-blok'] ?? []);
+    }
+
     public function toggleItem(int $index): void
     {
+        if (!$this->canRekomendasi) return;
         if (in_array($index, $this->checkedItems)) {
             $this->checkedItems = array_values(array_filter(
                 $this->checkedItems,

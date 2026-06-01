@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     // Main Features
     Route::get('/unsur-hara',    NutrientsData::class)->name('unsur-hara');
     Route::get('/peta-blok',     BlockMap::class)->name('peta-blok');
-    Route::get('/prediksi-panen', Analytics::class)->name('analytics');
+    Route::get('/analisis-kesuburan', Analytics::class)->name('analytics');
     Route::get('/laporan',       Reports::class)->name('reports');
     Route::get('/blok/{id}',     BlockDetail::class)->name('block.detail');
 

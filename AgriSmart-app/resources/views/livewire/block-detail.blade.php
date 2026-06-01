@@ -301,9 +301,11 @@
                     @php $isDone = in_array($index, $checkedItems); @endphp
                     <li>
                         <button
-                            wire:click="toggleItem({{ $index }})"
-                            wire:loading.attr="disabled"
-                            class="w-full flex items-start gap-3 p-3 rounded-2xl text-left transition-all duration-200 group
+    @if($canRekomendasi) wire:click="toggleItem({{ $index }})" @endif
+    wire:loading.attr="disabled"
+    @disabled(!$canRekomendasi)
+    class="w-full flex items-start gap-3 p-3 rounded-2xl text-left transition-all duration-200 group
+    {{ !$canRekomendasi ? 'opacity-60 cursor-not-allowed' : '' }}
                         {{ $isDone
                             ? 'bg-emerald-100/80 dark:bg-emerald-900/30'
                             : 'hover:bg-emerald-100/60 dark:hover:bg-emerald-900/20 active:scale-[0.99]' }}">

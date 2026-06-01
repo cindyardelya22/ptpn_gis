@@ -6,6 +6,7 @@ use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
 
 class Setting extends Component
@@ -25,13 +26,13 @@ class Setting extends Component
     public int|string $deleteTargetId   = 0;
     public string     $deleteTargetName = '';
 
-    // ── Form fields ──────────────────────────────────────────────
+    // ── Form fields (sesuai model User: username, sap, is_active) ─
     public array $form = [
-        'name'     => '',
-        'email'    => '',
-        'no_sap'   => '',
-        'password' => '',
-        'role'     => '',
+        'username'  => '',
+        'sap'       => '',
+        'password'  => '',
+        'role'      => '',
+        'is_active' => '1',
     ];
 
     // ── Permissions matrix ───────────────────────────────────────
@@ -48,16 +49,18 @@ class Setting extends Component
             'dashboard'       => ['view'],
             'data-unsur-hara' => ['view', 'create', 'edit', 'delete'],
             'peta-blok'       => ['view'],
-            'peta-analisis'   => ['view', 'rekomendasi'],
-            'laporan'         => ['view', 'download_pdf', 'download_excel'],
+            'analisis-kesuburan'   => ['view'],
+            'laporan'         => ['view', 'rekap_kesuburan', 'rekomendasi_pemupukan', 'riwayat_pengukuran'],
+            'detail-blok'     => ['view', 'rekomendasi'],
             'settings'        => ['view', 'manage_users'],
         ],
         'viewer' => [
             'dashboard'       => ['view'],
             'data-unsur-hara' => ['view'],
             'peta-blok'       => ['view'],
-            'peta-analisis'   => ['view'],
+            'analisis-kesuburan'   => ['view'],
             'laporan'         => ['view'],
+            'detail-blok'     => ['view'],
             'settings'        => [],
         ],
     ];
@@ -75,16 +78,24 @@ class Setting extends Component
         $this->refreshStats();
     }
 
-    public function updatingSearch(): void   { $this->resetPage(); }
-    public function updatingFilterRole(): void   { $this->resetPage(); }
-    public function updatingFilterStatus(): void { $this->resetPage(); }
+    public function updatingSearch(): void
+    {
+        $this->resetPage();
+    }
+    public function updatingFilterRole(): void
+    {
+        $this->resetPage();
+    }
+    public function updatingFilterStatus(): void
+    {
+        $this->resetPage();
+    }
 
     // ── Permissions ──────────────────────────────────────────────
 
     protected function loadPermissions(): void
     {
-        // Load from DB / config / cache — here we use a simple settings table
-        // fallback to defaults if not set yet
+        // Load from settings table, fallback to defaults
         $stored = \DB::table('settings')
             ->where('key', 'role_permissions')
             ->value('value');
@@ -96,13 +107,14 @@ class Setting extends Component
 
     public function savePermissions(array $permissions): void
     {
-        // Superadmin is always full access — we don't store it
         unset($permissions['superadmin']);
 
-        \DB::table('settings')->updateOrInsert(
+        DB::table('settings')->updateOrInsert(
             ['key' => 'role_permissions'],
             ['value' => json_encode($permissions), 'updated_at' => now()]
         );
+
+        cache()->forget('role_permissions'); // ← tambahkan ini
 
         $this->permissions = $permissions;
 
@@ -123,15 +135,18 @@ class Setting extends Component
     public function render()
     {
         $users = User::query()
-            ->when($this->search, fn($q) =>
-                $q->where(fn($q) =>
-                    $q->where('name', 'like', "%{$this->search}%")
-                      ->orWhere('email', 'like', "%{$this->search}%")
-                      ->orWhere('no_sap', 'like', "%{$this->search}%")
-                      ->orWhere('role', 'like', "%{$this->search}%")
+            ->when(
+                $this->search,
+                fn($q) =>
+                $q->where(
+                    fn($q) =>
+                    $q->where('username', 'like', "%{$this->search}%")
+                        ->orWhere('sap', 'like', "%{$this->search}%")
+                        ->orWhere('role', 'like', "%{$this->search}%")
                 )
             )
             ->when($this->filterRole,   fn($q) => $q->where('role', $this->filterRole))
+            ->when($this->filterStatus !== '', fn($q) => $q->where('is_active', (bool) $this->filterStatus))
             ->latest()
             ->paginate(10);
 
@@ -152,11 +167,11 @@ class Setting extends Component
     {
         $user = User::findOrFail($userId);
         $this->form = [
-            'name'     => $user->name,
-            'email'    => $user->email,
-            'no_sap'   => $user->no_sap ?? '',
-            'password' => '',
-            'role'     => $user->role,
+            'username'  => $user->username,
+            'sap'       => $user->sap ?? '',
+            'password'  => '',
+            'role'      => $user->role,
+            'is_active' => $user->is_active ? '1' : '0',
         ];
         $this->editingUserId = $userId;
         $this->isEdit        = true;
@@ -180,10 +195,10 @@ class Setting extends Component
     public function save(): void
     {
         $rules = [
-            'form.name'   => 'required|string|max:255',
-            'form.email'  => 'required|email|unique:users,email' . ($this->isEdit ? ",{$this->editingUserId}" : ''),
-            'form.no_sap' => 'nullable|string|max:50',
-            'form.role'   => 'required|in:superadmin,admin,viewer',
+            'form.username'  => 'required|string|max:255',
+            'form.sap'       => 'required|string|max:50|unique:users,sap' . ($this->isEdit ? ",{$this->editingUserId}" : ''),
+            'form.role'      => 'required|in:superadmin,admin,viewer',
+            'form.is_active' => 'required|in:0,1',
         ];
 
         if (! $this->isEdit) {
@@ -195,10 +210,10 @@ class Setting extends Component
         $this->validate($rules);
 
         $data = [
-            'name'   => $this->form['name'],
-            'email'  => $this->form['email'],
-            'no_sap' => $this->form['no_sap'] ?: null,
-            'role'   => $this->form['role'],
+            'username'  => $this->form['username'],
+            'sap'       => $this->form['sap'],
+            'role'      => $this->form['role'],
+            'is_active' => (bool) $this->form['is_active'],
         ];
 
         if ($this->form['password']) {
@@ -227,10 +242,24 @@ class Setting extends Component
         session()->flash('toast', ['type' => 'success', 'message' => 'User berhasil dihapus.']);
     }
 
+    public function toggleActive(int $userId): void
+    {
+        $user = User::findOrFail($userId);
+        $user->update([
+            'is_active'      => ! $user->is_active,
+            'deactivated_at' => $user->is_active ? now() : null,
+        ]);
+        $this->refreshStats();
+        session()->flash('toast', [
+            'type'    => 'success',
+            'message' => $user->fresh()->is_active ? 'User berhasil diaktifkan.' : 'User berhasil dinonaktifkan.',
+        ]);
+    }
+
     // ── Helpers ───────────────────────────────────────────────────
     protected function resetForm(): void
     {
-        $this->form          = ['name' => '', 'email' => '', 'no_sap' => '', 'password' => '', 'role' => ''];
+        $this->form          = ['username' => '', 'sap' => '', 'password' => '', 'role' => '', 'is_active' => '1'];
         $this->isEdit        = false;
         $this->editingUserId = null;
         $this->resetErrorBag();

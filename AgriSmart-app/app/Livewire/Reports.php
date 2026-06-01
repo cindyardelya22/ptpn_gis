@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Block;
 use App\Models\SoilNutrient;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\FertilityReportExport;
 use App\Exports\RecommendationExport;
@@ -21,25 +22,72 @@ class Reports extends Component
     public $activeTab = 'fertility'; // fertility, recommendation, history
 
     protected $queryString = [
-        'filterBlock' => ['except' => ''], 
-        'filterStatus' => ['except' => ''], 
-        'filterDateFrom' => ['except' => ''], 
-        'filterDateTo' => ['except' => ''], 
+        'filterBlock' => ['except' => ''],
+        'filterStatus' => ['except' => ''],
+        'filterDateFrom' => ['except' => ''],
+        'filterDateTo' => ['except' => ''],
         'activeTab'
     ];
+
+    public array $allowedTabs = [];
+
+    public function mount(): void
+    {
+        $this->allowedTabs = $this->resolveAllowedTabs();
+
+        // Kalau activeTab dari querystring tidak diizinkan, fallback ke tab pertama yang boleh
+        if (!in_array($this->activeTab, $this->allowedTabs)) {
+            $this->activeTab = $this->allowedTabs[0] ?? 'fertility';
+        }
+    }
+
+    private function resolveAllowedTabs(): array
+    {
+        $user = Auth::user();
+        if (!$user) return [];
+
+        if ($user->role === 'superadmin') {
+            return ['fertility', 'recommendation', 'history'];
+        }
+
+        $stored = \DB::table('settings')
+            ->where('key', 'role_permissions')
+            ->value('value');
+
+        $permissions = $stored ? json_decode($stored, true) : [];
+        $laporan = $permissions[$user->role]['laporan'] ?? [];
+
+        $map = [
+            'rekap_kesuburan'       => 'fertility',
+            'rekomendasi_pemupukan' => 'recommendation',
+            'riwayat_pengukuran'    => 'history',
+        ];
+
+        $allowed = [];
+        foreach ($map as $perm => $tab) {
+            if (in_array($perm, $laporan)) {
+                $allowed[] = $tab;
+            }
+        }
+
+        return $allowed;
+    }
 
     public function resetFilters()
     {
         $this->reset(['filterBlock', 'filterStatus', 'filterDateFrom', 'filterDateTo']);
     }
 
-    public function setTab($tab)
+    public function setTab($tab): void
     {
+        if (!in_array($tab, $this->allowedTabs)) return;
         $this->activeTab = $tab;
     }
 
-    public function exportExcel($type)
+    public function exportExcel($type): mixed
     {
+        $tabMap = ['fertility', 'recommendation', 'history'];
+        if (!in_array($type, $tabMap) || !in_array($type, $this->allowedTabs)) return null;
         $filters = [
             'block_id' => $this->filterBlock,
             'status' => $this->filterStatus,
@@ -56,8 +104,10 @@ class Reports extends Component
         }
     }
 
-    public function exportPdf($type)
+    public function exportPdf($type): mixed
     {
+        $tabMap = ['fertility', 'recommendation', 'history'];
+        if (!in_array($type, $tabMap) || !in_array($type, $this->allowedTabs)) return null;
         $filters = [
             'block_id' => $this->filterBlock,
             'status' => $this->filterStatus,
@@ -69,17 +119,23 @@ class Reports extends Component
             $export = new FertilityReportExport($filters);
             $data = $export->collection();
             $pdf = Pdf::loadView('pdf.fertility-report', ['data' => $data])->setPaper('a4', 'landscape');
-            return response()->streamDownload(function () use ($pdf) { echo $pdf->output(); }, 'Rekap_Kesuburan_Tanah_' . date('Ymd_His') . '.pdf');
+            return response()->streamDownload(function () use ($pdf) {
+                echo $pdf->output();
+            }, 'Rekap_Kesuburan_Tanah_' . date('Ymd_His') . '.pdf');
         } elseif ($type === 'recommendation') {
             $export = new RecommendationExport($filters);
             $data = $export->collection();
             $pdf = Pdf::loadView('pdf.recommendation-report', ['data' => $data])->setPaper('a4', 'landscape');
-            return response()->streamDownload(function () use ($pdf) { echo $pdf->output(); }, 'Rekomendasi_Pemupukan_' . date('Ymd_His') . '.pdf');
+            return response()->streamDownload(function () use ($pdf) {
+                echo $pdf->output();
+            }, 'Rekomendasi_Pemupukan_' . date('Ymd_His') . '.pdf');
         } elseif ($type === 'history') {
             $export = new NutrientHistoryExport($filters);
             $data = $export->query()->get();
             $pdf = Pdf::loadView('pdf.nutrient-history', ['data' => $data])->setPaper('a4', 'landscape');
-            return response()->streamDownload(function () use ($pdf) { echo $pdf->output(); }, 'Riwayat_Pengukuran_Hara_' . date('Ymd_His') . '.pdf');
+            return response()->streamDownload(function () use ($pdf) {
+                echo $pdf->output();
+            }, 'Riwayat_Pengukuran_Hara_' . date('Ymd_His') . '.pdf');
         }
     }
 
@@ -105,7 +161,8 @@ class Reports extends Component
 
         return view('livewire.reports', [
             'blocks' => $blocks,
-            'previewData' => $previewData
+            'previewData' => $previewData,
+            'allowedTabs' => $this->allowedTabs,
         ])->layout('layouts.app');
     }
 }

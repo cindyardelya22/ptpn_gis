@@ -6,6 +6,7 @@
             <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">Data Unsur Hara</h1>
             <p class="text-slate-400 dark:text-slate-500 text-sm mt-0.5">Manajemen dan pemantauan data laboratorium unsur hara per blok kebun.</p>
         </div>
+        @if(in_array('create', $userPermissions))
         <button wire:click="openAddModal"
             class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:scale-105 active:scale-95 shadow-md shadow-emerald-500/20 self-start md:self-auto"
             style="background:linear-gradient(135deg,#10b981,#059669)">
@@ -14,6 +15,7 @@
             </svg>
             Tambah Data
         </button>
+        @endif
     </div>
 
     <!-- ══ FILTER BAR ══ -->
@@ -58,7 +60,9 @@
                         <th class="px-4 py-3 text-xs font-semibold text-slate-400 uppercase">Ha</th>
                         <th class="px-4 py-3 text-xs font-semibold text-slate-400 uppercase">Detail</th>
                         <th class="px-4 py-3 text-xs font-semibold text-slate-400 uppercase">Status</th>
+                        @if(in_array('edit', $userPermissions) || in_array('delete', $userPermissions))
                         <th class="px-4 py-3 text-xs font-semibold text-slate-400 uppercase">Aksi</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-50 dark:divide-white/5">
@@ -99,8 +103,10 @@
                                 {{ $block['status'] }}
                             </span>
                         </td>
+                        @if(in_array('edit', $userPermissions) || in_array('delete', $userPermissions))
                         <td class="px-4 py-3">
                             <div class="flex items-center justify-center gap-2">
+                                @if(in_array('edit', $userPermissions))
                                 <button wire:click="editBlock({{ $block['id'] }})"
                                     class="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-110"
                                     style="background:rgba(245,158,11,.15);color:#d97706" title="Edit">
@@ -108,6 +114,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                     </svg>
                                 </button>
+                                @endif
+                                @if(in_array('delete', $userPermissions))
                                 <button wire:click="deleteBlock({{ $block['id'] }})"
                                     wire:confirm="Yakin ingin menghapus data blok ini dan semua data haranya?"
                                     class="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-110"
@@ -116,12 +124,14 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                     </svg>
                                 </button>
+                                @endif
                             </div>
                         </td>
+                        @endif
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="px-6 py-16 text-center">
+                        <<td colspan="{{ 4 + (in_array('edit', $userPermissions) || in_array('delete', $userPermissions) ? 1 : 0) }}" class="px-6 py-16 text-center">
                             <div class="flex flex-col items-center gap-3">
                                 <div class="w-14 h-14 rounded-2xl flex items-center justify-center" style="background:#10b98112">
                                     <svg class="w-7 h-7 text-emerald-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,7 +141,7 @@
                                 <p class="text-slate-400 font-medium text-sm">Tidak ada data ditemukan.</p>
                                 <button wire:click="openAddModal" class="text-emerald-600 text-xs font-semibold hover:underline">+ Tambah data pertama</button>
                             </div>
-                        </td>
+                            </td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -451,15 +461,15 @@
                     </div>
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                         @foreach([
-                            ['nitrogen',     'N – Nitrogen',    'mg/kg'],
-                            ['phosphorus',   'P – Fosfor',      'ppm'  ],
-                            ['potassium',    'K – Kalium',      'mg/kg'],
-                            ['ph',           'pH Tanah',        ''     ],
-                            ['ec',           'EC',              'dS/m' ],
-                            ['organic_carbon','OC – C.Organik', '%'    ],
-                            ['s',            'S – Sulfur',      'ppm'  ],
-                            ['magnesium',    'Mg – Magnesium',  'cmol' ],
-                            ['boron',        'B – Boron',       'ppm'  ],
+                        ['nitrogen', 'N – Nitrogen', 'mg/kg'],
+                        ['phosphorus', 'P – Fosfor', 'ppm' ],
+                        ['potassium', 'K – Kalium', 'mg/kg'],
+                        ['ph', 'pH Tanah', '' ],
+                        ['ec', 'EC', 'dS/m' ],
+                        ['organic_carbon','OC – C.Organik', '%' ],
+                        ['s', 'S – Sulfur', 'ppm' ],
+                        ['magnesium', 'Mg – Magnesium', 'cmol' ],
+                        ['boron', 'B – Boron', 'ppm' ],
                         ] as [$field, $label, $unit])
                         <div class="rounded-2xl border border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-slate-800/50 p-4">
                             <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide mb-1">{{ $label }}</p>

@@ -10,87 +10,118 @@ use Illuminate\Validation\Rules\Password;
 class Profile extends Component
 {
     // Profile fields
-    public string $username = '';
-    public string $displayName = '';  // ← tambahkan ini
-    public string $sap = '';
-    public string $role = '';
+    public string $username    = '';
+    public string $displayName = '';
+    public string $sap         = '';
+    public string $role        = '';
 
     // Password change
-    public string $current_password = '';
-    public string $new_password = '';
+    public string $current_password          = '';
+    public string $new_password              = '';
     public string $new_password_confirmation = '';
-    public bool $showPasswordForm = false;
-    public bool $passwordSuccess = false;
-    public bool $nameSuccess = false;  // ← tambahkan ini
+    public bool $accountSuccess = false;
 
     // Tabs
     public string $activeTab = 'overview';
 
     public function mount(): void
     {
-        $user = Auth::user();
+        $user              = Auth::user();
         $this->username    = $user->username ?? '';
-        $this->displayName = $user->username ?? 'Administrator';  // ← isi displayName
+        $this->displayName = $user->username ?? '';
         $this->sap         = $user->sap ?? '-';
         $this->role        = $user->role ?? '-';
     }
 
-    // ← tambahkan method ini (dipanggil blade via wire:click="updateName")
-    public function updateName(): void
+    public function updateAccount(): void
     {
-        $this->validate([
+        $rules = [
             'displayName' => ['required', 'string', 'min:3', 'max:50'],
-        ]);
+        ];
 
-        Auth::user()->update(['username' => $this->displayName]);
+        // Validasi password hanya jika user mengisi password baru
+        if ($this->new_password !== '') {
+            $rules['current_password'] = ['required'];
 
-        $this->nameSuccess = true;
-    }
+            $rules['new_password'] = [
+                'required',
+                'confirmed',
+                Password::min(8)
+                    ->mixedCase()
+                    ->numbers(),
+            ];
 
-    public function changePassword(): void
-    {
-        $this->validate([
-            'current_password'          => ['required'],
-            'new_password'              => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()],
-            'new_password_confirmation' => ['required'],
-        ], [
-            'new_password.confirmed' => 'Konfirmasi password tidak cocok.',
-            'new_password.min'       => 'Password minimal 8 karakter.',
+            $rules['new_password_confirmation'] = ['required'];
+        }
+
+        $this->validate($rules, [
+            'displayName.required' => 'Username wajib diisi.',
+            'displayName.min'      => 'Username minimal 3 karakter.',
+            'displayName.max'      => 'Username maksimal 50 karakter.',
+
+            'current_password.required' => 'Password saat ini wajib diisi.',
+            'new_password.required'     => 'Password baru wajib diisi.',
+            'new_password.confirmed'    => 'Konfirmasi password tidak cocok.',
         ]);
 
         $user = Auth::user();
 
-        if (! Hash::check($this->current_password, $user->password)) {
-            $this->addError('current_password', 'Password saat ini tidak benar.');
-            return;
+        // Update Username
+        if ($user->username !== $this->displayName) {
+            $user->update([
+                'username' => $this->displayName,
+            ]);
+
+            $this->username = $this->displayName;
         }
 
-        $user->update(['password' => Hash::make($this->new_password)]);  // ← jangan lupa Hash::make
+        // Update Password jika diisi
+        if ($this->new_password !== '') {
 
-        $this->reset(['current_password', 'new_password', 'new_password_confirmation', 'showPasswordForm']);
-        $this->passwordSuccess = true;
+            if (! Hash::check($this->current_password, $user->password)) {
+                $this->addError(
+                    'current_password',
+                    'Password saat ini tidak benar.'
+                );
+
+                return;
+            }
+
+            $user->update([
+                'password' => $this->new_password,
+            ]);
+        }
+
+        $this->reset([
+            'current_password',
+            'new_password',
+            'new_password_confirmation',
+        ]);
+        $this->accountSuccess = true;
     }
 
-    // ← nama method disesuaikan dengan yang dipanggil blade
+    // ── Device Management ──────────────────────────────────────────
     public function removeDevice(int $deviceId): void
     {
-        $device = Auth::user()->devices()->where('id', $deviceId)->first();
-
-        if ($device && ! $device->is_current) {
-            $device->delete();
-        }
+        Auth::user()
+            ->devices()
+            ->where('id', $deviceId)
+            ->where('is_current', false) // tidak bisa hapus device aktif
+            ->delete();
     }
 
-    // ← nama method disesuaikan dengan yang dipanggil blade
     public function terminateAllDevices(): void
     {
-        Auth::user()->devices()->where('is_current', false)->delete();
+        Auth::user()
+            ->devices()
+            ->where('is_current', false)
+            ->delete();
     }
 
     public function render()
     {
         return view('livewire.profile', [
-            'devices' => Auth::user()->devices()->latest('last_activity_at')->get()
+            'devices' => Auth::user()->devices()->latest('last_activity_at')->get(),
         ])->layout('layouts.app');
     }
 }

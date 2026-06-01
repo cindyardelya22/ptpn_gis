@@ -124,15 +124,20 @@ class Login extends Component
         // Set semua device lama menjadi bukan current
         $user->devices()->update(['is_current' => false]);
 
-        $user->devices()->create([
-            'device_name'      => $platform . ' - ' . $browser,
-            'browser'          => $browser,
-            'platform'         => $platform,
-            'ip_address'       => request()->ip(),
-            'user_agent'       => $userAgent,
-            'last_activity_at' => now(),
-            'is_current'       => true,
-        ]);
+        // Update jika kombinasi user_agent + ip sudah ada, buat baru jika belum
+        $user->devices()->updateOrCreate(
+            [
+                'user_agent' => $userAgent,
+                'ip_address' => request()->ip(),
+            ],
+            [
+                'device_name'      => $platform . ' - ' . $browser,
+                'browser'          => $browser,
+                'platform'         => $platform,
+                'last_activity_at' => now(),
+                'is_current'       => true,
+            ]
+        );
     }
 
     private function parseBrowser(string $userAgent): string

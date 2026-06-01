@@ -1,7 +1,7 @@
 {{-- ============================================================
      USER MANAGEMENT — dengan Role Permission per Halaman
      Roles: superadmin, admin, viewer
-     Pages: dashboard, data-unsur-hara, peta-blok, peta-analisis, laporan, settings
+     Pages: dashboard, data-unsur-hara, peta-blok, analisis-kesuburan, laporan, settings
      ============================================================ --}}
 
 <div x-data="{
@@ -13,14 +13,15 @@
             { key: 'dashboard',       label: 'Dashboard',              icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
             { key: 'data-unsur-hara', label: 'Data Unsur Hara',        icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
             { key: 'peta-blok',       label: 'Peta Blok Kebun',        icon: 'M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7' },
-            { key: 'peta-analisis',   label: 'Peta Analisis Kesuburan',icon: 'M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z' },
+            { key: 'analisis-kesuburan',   label: 'Analisis Kesuburan',     icon: 'M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z' },
+            { key: 'detail-blok',     label: 'Detail Blok',            icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01' },
             { key: 'laporan',         label: 'Laporan',                icon: 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
             { key: 'settings',        label: 'Setting',                icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z' },
         ],
 
-        {{-- Permissions matrix: role -> page -> list of allowed actions --}}
-        permissions: @entangle('permissions'),
+        permissions: @js($permissions),
         isSavingPerms: false,
+        permsSaved: false,
 
         roleLabel(role) {
             return { superadmin: 'Super Admin', admin: 'Admin', viewer: 'Viewer' }[role] ?? role;
@@ -33,14 +34,14 @@
             }[role] ?? 'bg-slate-100 text-slate-600';
         },
 
-        {{-- Actions per page --}}
         pageActions(pageKey) {
             const map = {
                 'dashboard':       ['view'],
                 'data-unsur-hara': ['view', 'create', 'edit', 'delete'],
                 'peta-blok':       ['view'],
-                'peta-analisis':   ['view', 'rekomendasi'],
-                'laporan':         ['view', 'download_pdf', 'download_excel'],
+                'analisis-kesuburan':   ['view'],
+                'detail-blok':     ['rekomendasi'],
+                'laporan':         ['view', 'rekap_kesuburan', 'rekomendasi_pemupukan', 'riwayat_pengukuran'],
                 'settings':        ['view', 'manage_users'],
             };
             return map[pageKey] ?? ['view'];
@@ -48,24 +49,30 @@
 
         actionLabel(action) {
             const map = {
-                view: 'Lihat', create: 'Tambah', edit: 'Edit', delete: 'Hapus',
-                rekomendasi: 'Checkbox Rekomendasi',
-                download_pdf: 'Download PDF', download_excel: 'Download Excel',
-                manage_users: 'Kelola User',
+                view:                    'Lihat',
+                create:                  'Tambah',
+                edit:                    'Edit',
+                delete:                  'Hapus',
+                rekomendasi:             'Centang Rekomendasi',
+                rekap_kesuburan:         'Rekap Kesuburan Tanah',
+                rekomendasi_pemupukan:   'Rekomendasi Pemupukan',
+                riwayat_pengukuran:      'Riwayat Pengukuran',
+                manage_users:            'Kelola User',
             };
             return map[action] ?? action;
         },
 
         actionIcon(action) {
             const map = {
-                view: 'M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z',
-                create: 'M12 4v16m8-8H4',
-                edit: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z',
-                delete: 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16',
-                rekomendasi: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4',
-                download_pdf: 'M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
-                download_excel: 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
-                manage_users: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z',
+                view:                  'M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z',
+                create:                'M12 4v16m8-8H4',
+                edit:                  'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z',
+                delete:                'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16',
+                rekomendasi:           'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4',
+                rekap_kesuburan:       'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
+                rekomendasi_pemupukan: 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z',
+                riwayat_pengukuran:    'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
+                manage_users:          'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z',
             };
             return map[action] ?? map.view;
         },
@@ -75,18 +82,24 @@
         },
 
         togglePermission(role, pageKey, action) {
-            if (!this.permissions[role]) this.permissions[role] = {};
-            if (!this.permissions[role][pageKey]) this.permissions[role][pageKey] = [];
-            const arr = this.permissions[role][pageKey];
+            // Deep clone to force Alpine reactivity
+            let perms = JSON.parse(JSON.stringify(this.permissions));
+            if (!perms[role]) perms[role] = {};
+            if (!perms[role][pageKey]) perms[role][pageKey] = [];
+            const arr = perms[role][pageKey];
             const idx = arr.indexOf(action);
             if (idx === -1) arr.push(action);
             else arr.splice(idx, 1);
+            this.permissions = perms;
         },
 
         savePermissions() {
             this.isSavingPerms = true;
+            this.permsSaved = false;
             $wire.savePermissions(this.permissions).then(() => {
                 this.isSavingPerms = false;
+                this.permsSaved = true;
+                setTimeout(() => this.permsSaved = false, 3000);
             });
         }
     }"
@@ -162,7 +175,7 @@
             <div class="flex flex-col sm:flex-row gap-3 mb-5">
                 <div class="relative flex-1">
                     <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    <input type="text" placeholder="Cari nama, email, atau role..."
+                    <input type="text" placeholder="Cari username, SAP, atau role..."
                         class="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm text-slate-800 dark:text-white placeholder-slate-400 outline-none border border-slate-200 dark:border-white/10 focus:border-emerald-400 transition bg-white dark:bg-slate-800/60"
                         wire:model.live.debounce.300ms="search" />
                 </div>
@@ -215,11 +228,10 @@
                         <div class="col-span-3 flex items-center gap-3 min-w-0">
                             <div class="w-8 h-8 rounded-xl flex items-center justify-center text-white font-bold text-xs flex-shrink-0
                                 {{ $user->role === 'superadmin' ? 'bg-gradient-to-br from-violet-500 to-violet-600' : ($user->role === 'admin' ? 'bg-gradient-to-br from-emerald-500 to-emerald-600' : 'bg-gradient-to-br from-sky-500 to-sky-600') }}">
-                                {{ strtoupper(substr($user->name, 0, 2)) }}
+                                {{ strtoupper(substr($user->username, 0, 2)) }}
                             </div>
                             <div class="min-w-0">
-                                <p class="text-slate-800 dark:text-white text-sm font-semibold truncate">{{ $user->name }}</p>
-                                <p class="text-slate-400 text-xs truncate">{{ $user->email }}</p>
+                                <p class="text-slate-800 dark:text-white text-sm font-semibold truncate">{{ $user->username }}</p>
                             </div>
                         </div>
                         <div class="col-span-2 flex items-center">
@@ -229,13 +241,14 @@
                             </span>
                         </div>
                         <div class="col-span-2 flex items-center">
-                            <span class="text-slate-500 dark:text-slate-400 text-sm font-mono">{{ $user->no_sap ?? '—' }}</span>
+                            <span class="text-slate-500 dark:text-slate-400 text-sm font-mono">{{ $user->sap ?? '—' }}</span>
                         </div>
                         <div class="col-span-2 flex items-center">
-                            <span class="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-lg
-                                {{ $user->status ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-400' : 'bg-orange-50 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400' }}">
-                                <span class="w-1.5 h-1.5 rounded-full {{ $user->status ? 'bg-emerald-400' : 'bg-orange-400' }}"></span>
-                                {{ $user->status ? 'Aktif' : 'Non-aktif' }}
+                            <span class="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition"
+                                wire:click="toggleActive({{ $user->id }})"
+                                title="Klik untuk {{ $user->is_active ? 'nonaktifkan' : 'aktifkan' }}">
+                                <span class="w-1.5 h-1.5 rounded-full {{ $user->is_active ? 'bg-emerald-400' : 'bg-orange-400' }}"></span>
+                                <span class="{{ $user->is_active ? 'text-emerald-600 dark:text-emerald-400' : 'text-orange-600 dark:text-orange-400' }}">{{ $user->is_active ? 'Aktif' : 'Non-aktif' }}</span>
                             </span>
                         </div>
                         <div class="col-span-1 flex items-center">
@@ -246,7 +259,7 @@
                                 class="w-7 h-7 rounded-lg flex items-center justify-center hover:scale-110 transition bg-violet-50 dark:bg-violet-900/20 text-violet-500">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                             </button>
-                            <button onclick="Livewire.dispatch('openDeleteModal', { userId: {{ $user->id }}, userName: '{{ addslashes($user->name) }}' })"
+                            <button onclick="Livewire.dispatch('openDeleteModal', { userId: {{ $user->id }}, userName: '{{ addslashes($user->username) }}' })"
                                 class="w-7 h-7 rounded-lg flex items-center justify-center hover:scale-110 transition bg-rose-50 dark:bg-rose-900/20 text-rose-400">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                             </button>
@@ -376,6 +389,25 @@
                     </div>
                 </template>
             </div>
+
+            {{-- Save Permissions Button --}}
+            <div class="flex items-center justify-end gap-3 mt-6">
+                <span x-show="permsSaved" x-transition class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Tersimpan!
+                </span>
+                <button @click="savePermissions()"
+                    :disabled="isSavingPerms"
+                    class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-violet-500/25 bg-gradient-to-br from-violet-500 to-violet-600 disabled:opacity-60 disabled:cursor-not-allowed">
+                    <template x-if="isSavingPerms">
+                        <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/></svg>
+                    </template>
+                    <template x-if="!isSavingPerms">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    </template>
+                    <span x-text="isSavingPerms ? 'Menyimpan...' : 'Simpan Hak Akses'"></span>
+                </button>
+            </div>
         </div>
 
     </div>
@@ -410,25 +442,18 @@
                 </div>
                 <div class="px-6 py-5 space-y-4">
                     <div>
-                        <label class="block text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1.5">Nama Lengkap</label>
-                        <input wire:model="form.name" type="text" placeholder="Masukkan nama lengkap"
+                        <label class="block text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1.5">Username</label>
+                        <input wire:model="form.username" type="text" placeholder="Masukkan username"
                             class="w-full px-4 py-2.5 rounded-xl text-slate-800 dark:text-white text-sm placeholder-slate-300 outline-none border transition bg-white dark:bg-slate-800/60
-                            {{ $errors->has('form.name') ? 'border-red-400' : 'border-slate-200 dark:border-white/10 focus:border-emerald-400' }}"/>
-                        @error('form.name')<p class="text-red-400 text-xs mt-1.5">{{ $message }}</p>@enderror
-                    </div>
-                    <div>
-                        <label class="block text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1.5">Email</label>
-                        <input wire:model="form.email" type="email" placeholder="email@domain.com"
-                            class="w-full px-4 py-2.5 rounded-xl text-slate-800 dark:text-white text-sm placeholder-slate-300 outline-none border transition bg-white dark:bg-slate-800/60
-                            {{ $errors->has('form.email') ? 'border-red-400' : 'border-slate-200 dark:border-white/10 focus:border-emerald-400' }}"/>
-                        @error('form.email')<p class="text-red-400 text-xs mt-1.5">{{ $message }}</p>@enderror
+                            {{ $errors->has('form.username') ? 'border-red-400' : 'border-slate-200 dark:border-white/10 focus:border-emerald-400' }}"/>
+                        @error('form.username')<p class="text-red-400 text-xs mt-1.5">{{ $message }}</p>@enderror
                     </div>
                     <div>
                         <label class="block text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1.5">No SAP</label>
-                        <input wire:model="form.no_sap" type="text" placeholder="Nomor SAP"
+                        <input wire:model="form.sap" type="text" placeholder="Nomor SAP"
                             class="w-full px-4 py-2.5 rounded-xl text-slate-800 dark:text-white text-sm placeholder-slate-300 outline-none border transition bg-white dark:bg-slate-800/60
-                            {{ $errors->has('form.no_sap') ? 'border-red-400' : 'border-slate-200 dark:border-white/10 focus:border-emerald-400' }}"/>
-                        @error('form.no_sap')<p class="text-red-400 text-xs mt-1.5">{{ $message }}</p>@enderror
+                            {{ $errors->has('form.sap') ? 'border-red-400' : 'border-slate-200 dark:border-white/10 focus:border-emerald-400' }}"/>
+                        @error('form.sap')<p class="text-red-400 text-xs mt-1.5">{{ $message }}</p>@enderror
                     </div>
                     <div>
                         <label class="block text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1.5">
@@ -454,7 +479,7 @@
                         </div>
                         <div>
                             <label class="block text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1.5">Status</label>
-                            <select wire:model="form.status"
+                            <select wire:model="form.is_active"
                                 class="w-full px-4 py-2.5 rounded-xl text-slate-700 dark:text-slate-300 text-sm outline-none border border-slate-200 dark:border-white/10 focus:border-emerald-400 transition bg-white dark:bg-slate-800/60">
                                 <option value="1">Aktif</option>
                                 <option value="0">Non-aktif</option>
