@@ -20,7 +20,15 @@ Route::get('/peta-blok', BlockMap::class)->name('peta-blok');
 Route::get('/prediksi-panen', Analytics::class)->name('analytics');
 Route::get('/laporan', Reports::class)->name('reports');
 Route::get('/blok/{id}', BlockDetail::class)->name('block.detail');
-
+Route::patch('/nutrients/{nutrient}/recommendation-progress', function (
+    \Illuminate\Http\Request $request,
+    \App\Models\SoilNutrient $nutrient
+) {
+    $nutrient->update([
+        'recommendation_progress' => $request->input('progress', []),
+    ]);
+    return response()->json(['ok' => true]);
+})->middleware('auth');
 Route::get('/tes', function () {
     return view('welcome');
 });

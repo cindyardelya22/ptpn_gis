@@ -31,6 +31,9 @@ class SoilNutrient extends Model
         'fertility_status',
         'fertility_color',
         'fertility_probabilities',
+
+        // rekomendasi pemupukan (array of index yang sudah dicentang)
+        'recommendation_progress',
     ];
 
     protected $casts = [
@@ -49,6 +52,7 @@ class SoilNutrient extends Model
         'boron' => 'decimal:3',
 
         'fertility_probabilities' => 'array',
+        'recommendation_progress' => 'array',
     ];
 
     public function block(): BelongsTo

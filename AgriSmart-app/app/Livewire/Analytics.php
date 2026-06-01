@@ -78,7 +78,7 @@ class Analytics extends Component
 
         // Average nutrient values for comparison chart
         $nutrientAvg = [];
-        $nutrientKeys = ['nitrogen', 'phosphorus', 'potassium', 'ph', 'organic_carbon', 'magnesium'];
+        $nutrientKeys = ['nitrogen', 'phosphorus', 'potassium', 'ph', 'organic_carbon', 'magnesium', 'ec', 's', 'boron'];
         foreach ($nutrientKeys as $key) {
             $vals = $filteredBlocks->filter(fn($b) => $b['nutrients'] !== null)->pluck("nutrients.$key");
             $nutrientAvg[$key] = $vals->count() > 0 ? round($vals->avg(), 2) : 0;

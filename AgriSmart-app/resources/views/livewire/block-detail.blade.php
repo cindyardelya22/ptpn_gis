@@ -3,13 +3,7 @@
     <div class="flex items-center justify-between mb-8">
         <div>
             <div class="flex items-center gap-3">
-                <a href="{{ url()->previous() }}" wire:navigate
-                    class="p-2 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white transition bg-white dark:bg-slate-800">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                    </svg>
-                </a>
+                
                 <div>
                     <h1 class="text-3xl font-black text-slate-800 dark:text-white tracking-tight">Detail Analisis Blok
                     </h1>
@@ -48,7 +42,8 @@
                 <div>
                     <h2 class="text-2xl font-black text-slate-800 dark:text-white">{{ $block->name }}</h2>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-1">Tahun Tanam:
-                        {{ $block->planted_at ? $block->planted_at->format('Y') : '-' }}</p>
+                        {{ $block->planted_at ? $block->planted_at->format('Y') : '-' }}
+                    </p>
                 </div>
             </div>
 
@@ -80,19 +75,27 @@
                         <p class="text-sm font-bold text-white/80">Probabilitas Machine Learning:</p>
                         <div class="grid gap-3">
                             @if(isset($analysis['probabilities']) && is_array($analysis['probabilities']) && count($analysis['probabilities']) > 0)
-                                @foreach($analysis['probabilities'] as $status => $prob)
-                                <div>
-                                    <div class="flex justify-between text-xs font-bold mb-1">
-                                        <span>{{ $status }}</span>
-                                        <span>{{ round($prob * 100, 1) }}%</span>
-                                    </div>
-                                    <div class="h-2 w-full bg-black/20 rounded-full overflow-hidden">
-                                        <div class="h-full bg-white rounded-full" style="width: {{ $prob * 100 }}%"></div>
-                                    </div>
+                            @php
+                                $orderedProbs = collect($analysis['probabilities'])
+                                    ->sortKeysUsing(function($a, $b) {
+                                        $order = ['Subur' => 0, 'Kurang Subur' => 1, 'Tidak Subur' => 2];
+                                        return ($order[$a] ?? 99) <=> ($order[$b] ?? 99);
+                                    });
+                            @endphp
+
+                            @foreach($orderedProbs as $status => $prob)
+                            <div>
+                                <div class="flex justify-between text-xs font-bold mb-1">
+                                    <span>{{ $status }}</span>
+                                    <span>{{ round($prob * 100, 1) }}%</span>
                                 </div>
-                                @endforeach
+                                <div class="h-2 w-full bg-black/20 rounded-full overflow-hidden">
+                                    <div class="h-full bg-white rounded-full" style="width: {{ $prob * 100 }}%"></div>
+                                </div>
+                            </div>
+                            @endforeach
                             @else
-                                <p class="text-xs text-white/60 italic">Data probabilitas belum tersedia (historis).</p>
+                            <p class="text-xs text-white/60 italic">Data probabilitas belum tersedia (historis).</p>
                             @endif
                         </div>
                     </div>
@@ -110,13 +113,7 @@
                         Saran Utama
                     </p>
                     <p class="text-sm font-bold text-white mt-3">
-                        @if (($analysis['color'] ?? 'slate') == 'emerald')
-                            Pertahankan jadwal pemupukan rutin. Lahan subur.
-                        @elseif(($analysis['color'] ?? 'slate') == 'amber')
-                            Lakukan analisis daun untuk memastikan serapan hara. Perlu pupuk tambahan.
-                        @else
-                            Perhatian khusus diperlukan! Tanah tidak ideal untuk sawit saat ini.
-                        @endif
+                        {{ $mainAdvice }}
                     </p>
                 </div>
             </div>
@@ -136,170 +133,224 @@
                 <h3 class="text-lg font-black text-slate-800 dark:text-white tracking-tight">Kadar Unsur Hara Terbaru
                 </h3>
                 <p class="text-[10px] text-slate-400 uppercase tracking-widest mt-1 font-bold">Diukur pada:
-                    {{ $latestNutrient ? $latestNutrient->measured_at->format('d M Y') : '-' }}</p>
+                    {{ $latestNutrient ? $latestNutrient->measured_at->format('d M Y') : '-' }}
+                </p>
             </div>
 
             <div class="p-6 grid grid-cols-2 md:grid-cols-3 gap-4">
                 @php
-                    $nutrientsList = [
-                        [
-                            'label' => 'Nitrogen (N)',
-                            'value' => $latestNutrient->nitrogen ?? 0,
-                            'unit' => '%',
-                            'min' => 2.5,
-                        ],
-                        [
-                            'label' => 'Fosfor (P)',
-                            'value' => $latestNutrient->phosphorus ?? 0,
-                            'unit' => 'ppm',
-                            'min' => 15,
-                        ],
-                        [
-                            'label' => 'Kalium (K)',
-                            'value' => $latestNutrient->potassium ?? 0,
-                            'unit' => 'cmol',
-                            'min' => 0.2,
-                        ],
-                        [
-                            'label' => 'pH Tanah',
-                            'value' => $latestNutrient->ph ?? 0,
-                            'unit' => '',
-                            'min' => 5.5,
-                        ],
-                        [
-                            'label' => 'Magnesium (Mg)',
-                            'value' => $latestNutrient->magnesium ?? 0,
-                            'unit' => 'cmol',
-                            'min' => 0.25,
-                        ],
-                        [
-                            'label' => 'C-Organik',
-                            'value' => $latestNutrient->organic_carbon ?? 0,
-                            'unit' => '%',
-                            'min' => 1.5,
-                        ],
-                    ];
+                $nutrientsList = [
+                [
+                'label' => 'Nitrogen (N)',
+                'value' => $latestNutrient->nitrogen ?? 0,
+                'unit' => 'mg/kg',
+                'min' => 320.00,
+                'max' => 354.50,
+                ],
+                [
+                'label' => 'Fosfor (P)',
+                'value' => $latestNutrient->phosphorus ?? 0,
+                'unit' => 'mg/kg',
+                'min' => 12.15,
+                'max' => 20.60,
+                ],
+                [
+                'label' => 'Kalium (K)',
+                'value' => $latestNutrient->potassium ?? 0,
+                'unit' => 'mg/kg',
+                'min' => 422.00,
+                'max' => 602.00,
+                ],
+                [
+                'label' => 'pH Tanah',
+                'value' => $latestNutrient->ph ?? 0,
+                'unit' => '',
+                'min' => 7.38,
+                'max' => 7.81,
+                ],
+                [
+                'label' => 'EC',
+                'value' => $latestNutrient->ec ?? 0,
+                'unit' => 'dS/m',
+                'min' => 0.42,
+                'max' => 0.62,
+                ],
+                [
+                'label' => 'C-Organik (OC)',
+                'value' => $latestNutrient->organic_carbon ?? 0,
+                'unit' => '%',
+                'min' => 0.47,
+                'max' => 0.88,
+                ],
+                [
+                'label' => 'Sulfur (S)',
+                'value' => $latestNutrient->s ?? 0,
+                'unit' => 'mg/kg',
+                'min' => 4.22,
+                'max' => 7.54,
+                ],
+                [
+                'label' => 'Magnesium (Mg)',
+                'value' => $latestNutrient->magnesium ?? 0,
+                'unit' => 'cmol',
+                'min' => 1.90,
+                'max' => 2.61,
+                ],
+                [
+                'label' => 'Boron (B)',
+                'value' => $latestNutrient->boron ?? 0,
+                'unit' => 'mg/kg',
+                'min' => 0.32,
+                'max' => 0.66,
+                ],
+                ];
                 @endphp
 
                 @foreach ($nutrientsList as $nut)
-                    @php
-                        $isDeficit = $nut['value'] < $nut['min'];
+                @php
+                $isDeficit = $nut['value'] < $nut['min'];
+                    $isExcess=$nut['value']> $nut['max'];
+                    $isAbnormal = $isDeficit || $isExcess;
                     @endphp
-                    <div
-                        class="p-4 rounded-2xl border transition-all {{ $isDeficit ? 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800' : 'bg-slate-50 dark:bg-slate-700/50 border-slate-100 dark:border-slate-700' }}">
+                    <div class="p-4 rounded-2xl border transition-all
+                        {{ $isDeficit  ? 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800' :
+                        ($isExcess  ? 'bg-amber-50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-800' :
+                                        'bg-slate-50 dark:bg-slate-700/50 border-slate-100 dark:border-slate-700') }}">
+
                         <div class="flex justify-between items-start mb-2">
-                            <p
-                                class="text-[10px] font-black {{ $isDeficit ? 'text-red-500 dark:text-red-400' : 'text-slate-500 dark:text-slate-400' }} uppercase tracking-widest">
-                                {{ $nut['label'] }}</p>
-                            @if ($isDeficit)
-                                <div class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></div>
+                            <p class="text-[10px] font-black uppercase tracking-widest
+                                {{ $isDeficit ? 'text-red-500 dark:text-red-400' :
+                                ($isExcess ? 'text-amber-500 dark:text-amber-400' :
+                                                'text-slate-500 dark:text-slate-400') }}">
+                                {{ $nut['label'] }}
+                            </p>
+                            @if ($isAbnormal)
+                            <div class="w-1.5 h-1.5 rounded-full animate-pulse
+                                    {{ $isDeficit ? 'bg-red-500' : 'bg-amber-500' }}">
+                            </div>
                             @endif
                         </div>
+
                         <div class="flex items-end gap-1">
-                            <p
-                                class="text-xl font-black {{ $isDeficit ? 'text-red-600 dark:text-red-400' : 'text-slate-800 dark:text-white' }}">
-                                {{ number_format($nut['value'], 2) }}</p>
+                            <p class="text-xl font-black
+                                {{ $isDeficit ? 'text-red-600 dark:text-red-400' :
+                                ($isExcess  ? 'text-amber-600 dark:text-amber-400' :
+                                                'text-slate-800 dark:text-white') }}">
+                                {{ number_format($nut['value'], 2) }}
+                            </p>
                             <span class="text-[10px] font-bold text-slate-400 mb-1">{{ $nut['unit'] }}</span>
                         </div>
+
+                        <p class="text-[9px] font-semibold text-slate-400 mt-1">
+                            Zona aman: {{ $nut['min'] }} – {{ $nut['max'] }}
+                        </p>
+
                         @if ($isDeficit)
-                            <p class="text-[9px] font-bold text-red-500 dark:text-red-400 mt-2">Di bawah standar
-                                ({{ $nut['min'] }})
-                            </p>
+                        <p class="text-[9px] font-bold text-red-500 dark:text-red-400 mt-1">
+                            ↓ Di bawah standar (min: {{ $nut['min'] }})
+                        </p>
+                        @elseif ($isExcess)
+                        <p class="text-[9px] font-bold text-amber-500 dark:text-amber-400 mt-1">
+                            ↑ Di atas standar (max: {{ $nut['max'] }})
+                        </p>
                         @endif
                     </div>
-                @endforeach
+                    @endforeach
             </div>
         </div>
 
         <!-- Analysis & Recommendation -->
         <div class="flex flex-col gap-6">
-            
+
             {{-- Rekomendasi Card dengan Checklist --}}
-            <div x-data="{
-                items: [
-                    { id: 1, label: 'Lakukan pemupukan NPK sesuai dengan rekomendasi dosis defisit hara', done: false },
-                    { id: 2, label: 'Monitor tingkat keasaman (pH) jika berada di bawah 5.5 berikan dolomit', done: false },
-                    { id: 3, label: 'Catat aktivitas pemupukan ke dalam log untuk tracking historis', done: false }
-                ],
-                get completedCount() { return this.items.filter(i => i.done).length },
-                get totalCount() { return this.items.length },
-                get progressPercent() { return this.totalCount ? Math.round((this.completedCount / this.totalCount) * 100) : 0 },
-                get allDone() { return this.completedCount === this.totalCount }
-            }"
-                class="bg-emerald-50 dark:bg-emerald-900/10 rounded-[2rem] p-8 border border-emerald-200 dark:border-emerald-800/50 shadow-sm flex-1">
+            @php
+            $totalItems = count($recommendations);
+            $completedCount = count($checkedItems);
+            $progressPct = $totalItems > 0 ? round(($completedCount / $totalItems) * 100) : 0;
+            $allDone = $completedCount === $totalItems;
+            @endphp
+
+            <div class="bg-emerald-50 dark:bg-emerald-900/10 rounded-[2rem] p-8 border border-emerald-200 dark:border-emerald-800/50 shadow-sm flex-1">
+
                 {{-- Header --}}
                 <div class="flex items-center justify-between mb-5">
-                    <h3
-                        class="text-sm font-black text-emerald-800 dark:text-emerald-500 uppercase tracking-widest flex items-center gap-2">
+                    <h3 class="text-sm font-black text-emerald-800 dark:text-emerald-500 uppercase tracking-widest flex items-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         Rekomendasi Pemupukan
                     </h3>
-                    {{-- Progress Badge --}}
-                    <span x-text="`${completedCount}/${totalCount} selesai`"
-                        class="text-xs font-semibold px-3 py-1 rounded-full transition-colors duration-300"
-                        :class="allDone
-                            ?
-                            'bg-emerald-200 dark:bg-emerald-800 text-emerald-800 dark:text-emerald-200' :
-                            'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400'"></span>
+                    <span class="text-xs font-semibold px-3 py-1 rounded-full transition-colors duration-300
+                        {{ $allDone
+                        ? 'bg-emerald-200 dark:bg-emerald-800 text-emerald-800 dark:text-emerald-200'
+                        : 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400' }}">
+                                {{ $completedCount }}/{{ $totalItems }} selesai
+                    </span>
                 </div>
 
                 {{-- Progress Bar --}}
                 <div class="mb-5 h-1.5 w-full bg-emerald-100 dark:bg-emerald-900/40 rounded-full overflow-hidden">
                     <div class="h-full bg-emerald-500 dark:bg-emerald-400 rounded-full transition-all duration-500 ease-out"
-                        :style="`width: ${progressPercent}%`"></div>
+                        style="width: {{ $progressPct }}%"></div>
                 </div>
 
                 {{-- Checklist Items --}}
                 <ul class="space-y-2">
-                    <template x-for="item in items" :key="item.id">
-                        <li>
-                            <button type="button" @click="item.done = !item.done"
-                                class="w-full flex items-start gap-3 p-3 rounded-2xl text-left transition-all duration-200 group"
-                                :class="item.done ?
-                                    'bg-emerald-100/80 dark:bg-emerald-900/30' :
-                                    'hover:bg-emerald-100/60 dark:hover:bg-emerald-900/20 active:scale-[0.99]'">
-                                {{-- Custom Checkbox --}}
-                                <span
-                                    class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200"
-                                    :class="item.done ?
-                                        'bg-emerald-500 dark:bg-emerald-400 border-emerald-500 dark:border-emerald-400' :
-                                        'border-emerald-300 dark:border-emerald-700 group-hover:border-emerald-400 dark:group-hover:border-emerald-500'">
-                                    <svg class="w-3 h-3 text-white transition-all duration-200"
-                                        :class="item.done ? 'opacity-100 scale-100' : 'opacity-0 scale-50'"
-                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                            d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
+                    @foreach ($recommendations as $index => $rec)
+                    @php $isDone = in_array($index, $checkedItems); @endphp
+                    <li>
+                        <button
+                            wire:click="toggleItem({{ $index }})"
+                            wire:loading.attr="disabled"
+                            class="w-full flex items-start gap-3 p-3 rounded-2xl text-left transition-all duration-200 group
+                        {{ $isDone
+                            ? 'bg-emerald-100/80 dark:bg-emerald-900/30'
+                            : 'hover:bg-emerald-100/60 dark:hover:bg-emerald-900/20 active:scale-[0.99]' }}">
 
-                                {{-- Label --}}
-                                <span class="text-sm font-medium leading-relaxed transition-all duration-200"
-                                    :class="item.done ?
-                                        'text-emerald-400 dark:text-emerald-600 line-through' :
-                                        'text-emerald-900 dark:text-emerald-200/80'"
-                                    x-html="item.label"></span>
-                            </button>
-                        </li>
-                    </template>
+                            {{-- Checkbox --}}
+                            <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200
+                        {{ $isDone
+                            ? 'bg-emerald-500 border-emerald-500 dark:bg-emerald-400 dark:border-emerald-400'
+                            : ($rec['type'] === 'deficit' ? 'border-red-300 dark:border-red-700'
+                              : ($rec['type'] === 'excess' ? 'border-amber-300 dark:border-amber-700'
+                              : 'border-emerald-300 dark:border-emerald-700')) }}">
+                                <svg class="w-3 h-3 text-white transition-all duration-200 {{ $isDone ? 'opacity-100 scale-100' : 'opacity-0 scale-50' }}"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </span>
+
+                            {{-- Label --}}
+                            <span class="text-sm font-medium leading-relaxed transition-all duration-200
+                        {{ $isDone
+                            ? 'text-emerald-400 dark:text-emerald-600 line-through'
+                            : ($rec['type'] === 'deficit' ? 'text-red-700 dark:text-red-300'
+                              : ($rec['type'] === 'excess' ? 'text-amber-700 dark:text-amber-300'
+                              : 'text-emerald-900 dark:text-emerald-200/80')) }}">
+                                {!! $rec['label'] !!}
+                            </span>
+
+                            {{-- Loading spinner --}}
+                            <span wire:loading wire:target="toggleItem({{ $index }})"
+                                class="ml-auto shrink-0 w-3.5 h-3.5 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin mt-1">
+                            </span>
+                        </button>
+                    </li>
+                    @endforeach
                 </ul>
 
                 {{-- All Done State --}}
-                <div x-show="allDone" x-transition:enter="transition ease-out duration-300"
-                    x-transition:enter-start="opacity-0 translate-y-2"
-                    x-transition:enter-end="opacity-100 translate-y-0"
-                    class="mt-4 flex items-center gap-2 p-3 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800/50">
-                    <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                @if ($allDone)
+                <div class="mt-4 flex items-center gap-2 p-3 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800/50">
+                    <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <p class="text-xs font-semibold text-emerald-700 dark:text-emerald-400">
-                        Rekomendasi telah diselesaikan. Tunggu pembaruan uji tanah berikutnya.
+                        Semua rekomendasi telah diselesaikan. Tunggu pembaruan uji tanah berikutnya.
                     </p>
                 </div>
+                @endif
             </div>
 
         </div>

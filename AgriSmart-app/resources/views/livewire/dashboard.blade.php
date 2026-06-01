@@ -180,7 +180,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Map -->
             <div class="lg:col-span-2">
-                <a href="/peta-blok" wire:navigate>
+                <a href="{{ route('peta-blok') }}" wire:navigate>
                     <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm overflow-hidden relative"
                         style="height:480px">
                         <div id="map" class="w-full h-full" wire:ignore></div>
@@ -425,7 +425,7 @@
                 </div>
 
                 <!-- Scrollable Content -->
-                <div class="flex-1 overflow-y-auto p-6 space-y-5">
+                <div class="flex-1 overflow-y-auto p-4 space-y-6">
 
                     <!-- Fertility Status Card -->
                     <div class="p-5 rounded-2xl relative overflow-hidden text-white shadow-lg"
@@ -458,72 +458,160 @@
                         </div>
                     </div>
 
-                    <!-- Nutrients -->
-                    <div>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Kondisi Hara Terakhir</p>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-xl border border-slate-100 dark:border-white/5 hover:shadow-sm transition">
-                                <p class="text-[9px] font-bold text-slate-400 uppercase mb-1">Nitrogen (N)</p>
-                                <p class="text-base font-black text-slate-800 dark:text-slate-100"
-                                    x-text="(selectedBlock.raw_nutrients?.nitrogen || 0) + '%'"></p>
-                            </div>
-                            <div class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-xl border border-slate-100 dark:border-white/5 hover:shadow-sm transition">
-                                <p class="text-[9px] font-bold text-slate-400 uppercase mb-1">Fosfor (P)</p>
-                                <p class="text-base font-black text-slate-800 dark:text-slate-100"
-                                    x-text="(selectedBlock.raw_nutrients?.phosphorus || 0) + ' ppm'"></p>
-                            </div>
-                            <div class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-xl border border-slate-100 dark:border-white/5 hover:shadow-sm transition">
-                                <p class="text-[9px] font-bold text-slate-400 uppercase mb-1">Kalium (K)</p>
-                                <p class="text-base font-black text-slate-800 dark:text-slate-100"
-                                    x-text="(selectedBlock.raw_nutrients?.potassium || 0) + ' cmol'"></p>
-                            </div>
-                            <div class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-xl border border-slate-100 dark:border-white/5 hover:shadow-sm transition">
-                                <p class="text-[9px] font-bold text-slate-400 uppercase mb-1">pH Tanah</p>
-                                <p class="text-base font-black text-slate-800 dark:text-slate-100"
-                                    x-text="(selectedBlock.raw_nutrients?.ph || 0)"></p>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Recommendation -->
-                    <div
-                        class="p-4 rounded-xl border"
+                    <div class="rounded-xl border overflow-hidden"
                         :class="
                             selectedBlock.status === 'Subur' ? 'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-100 dark:border-emerald-800/30' :
                             (selectedBlock.status === 'Kurang Subur' ? 'bg-amber-50 dark:bg-amber-900/10 border-amber-100 dark:border-amber-800/30' :
                             'bg-rose-50 dark:bg-rose-900/10 border-rose-100 dark:border-rose-800/30')
-                        ">
-                        <h5
-                            class="text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-1.5"
+                        "
+                        x-data="{
+                            thresholds: {
+                                nitrogen:       { label: 'Nitrogen (N)',    unit: 'mg/kg', min: 320.00, max: 354.50, fertilizer: 'Urea atau ZA', icon: 'N' },
+                                phosphorus:     { label: 'Fosfor (P)',      unit: 'mg/kg', min: 12.15,  max: 20.60,  fertilizer: 'SP-36 atau TSP', icon: 'P' },
+                                potassium:      { label: 'Kalium (K)',      unit: 'mg/kg', min: 422.00, max: 602.00, fertilizer: 'KCl atau MOP', icon: 'K' },
+                                ph:             { label: 'pH Tanah',        unit: '',      min: 7.38,   max: 7.81,   fertilizer: 'Dolomit / Belerang', icon: 'pH' },
+                                ec:             { label: 'EC',              unit: 'dS/m',  min: 0.42,   max: 0.62,   fertilizer: 'Perbaiki drainase & irigasi', icon: 'EC' },
+                                organic_carbon: { label: 'C-Organik',      unit: '%',     min: 0.47,   max: 0.88,   fertilizer: 'Kompos atau pupuk kandang', icon: 'CO' },
+                                s:              { label: 'Sulfur (S)',      unit: 'mg/kg', min: 4.22,   max: 7.54,   fertilizer: 'ZA atau Kieserit', icon: 'S' },
+                                magnesium:      { label: 'Magnesium (Mg)', unit: 'cmol',  min: 1.90,   max: 2.61,   fertilizer: 'Kieserit atau Dolomit', icon: 'Mg' },
+                                boron:          { label: 'Boron (B)',       unit: 'mg/kg', min: 0.32,   max: 0.66,   fertilizer: 'Borax atau Solubor', icon: 'B' },
+                            },
+                            get nutrients() { return selectedBlock?.raw_nutrients ?? {}; },
+                            get issues() {
+                                const items = [];
+                                const n = this.nutrients;
+                                for (const [key, t] of Object.entries(this.thresholds)) {
+                                    const val = parseFloat(n[key] ?? 0);
+                                    if (val < t.min) {
+                                        items.push({
+                                            icon: t.icon,
+                                            label: t.label,
+                                            fertilizer: t.fertilizer,
+                                            type: 'kurang',
+                                            diff: (t.min - val).toFixed(2),
+                                            unit: t.unit
+                                        });
+                                    } else if (val > t.max) {
+                                        items.push({
+                                            icon: t.icon,
+                                            label: t.label,
+                                            fertilizer: t.fertilizer,
+                                            type: 'lebih',
+                                            diff: (val - t.max).toFixed(2),
+                                            unit: t.unit
+                                        });
+                                    }
+                                }
+                                return items;
+                            }
+                        }">
+
+                        {{-- Header --}}
+                        <div class="p-3 flex items-center gap-2 border-b"
                             :class="
-                                selectedBlock.status === 'Subur' ? 'text-emerald-700 dark:text-emerald-400' :
-                                (selectedBlock.status === 'Kurang Subur' ? 'text-amber-700 dark:text-amber-400' :
-                                'text-rose-700 dark:text-rose-400')
-                            ">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Rekomendasi Pemupukan
-                        </h5>
-                        <p class="text-xs leading-relaxed"
-                            :class="
-                                selectedBlock.status === 'Subur' ? 'text-emerald-700 dark:text-emerald-300/80' :
-                                (selectedBlock.status === 'Kurang Subur' ? 'text-amber-700 dark:text-amber-300/80' :
-                                'text-rose-700 dark:text-rose-300/80')
-                            "
-                            x-text="
-                                selectedBlock.status === 'Subur' ? 'Pertahankan pemupukan standar. Tanah dalam kondisi optimal untuk kelapa sawit.' :
-                                (selectedBlock.status === 'Kurang Subur' ? 'Lakukan pemupukan tambahan berdasarkan defisit unsur hara minor. Periksa drainase.' :
-                                'Kritis. Segera lakukan pemupukan intensif untuk N, P, dan K. Evaluasi kondisi fisik tanah.')
-                            ">
-                        </p>
+                                selectedBlock.status === 'Subur' ? 'border-emerald-100 dark:border-emerald-800/30' :
+                                (selectedBlock.status === 'Kurang Subur' ? 'border-amber-100 dark:border-amber-800/30' :
+                                'border-rose-100 dark:border-rose-800/30')">
+                            <div class="w-6 h-6 rounded-lg flex items-center justify-center"
+                                :class="
+                                    selectedBlock.status === 'Subur' ? 'bg-emerald-100 dark:bg-emerald-900/30' :
+                                    (selectedBlock.status === 'Kurang Subur' ? 'bg-amber-100 dark:bg-amber-900/30' :
+                                    'bg-rose-100 dark:bg-rose-900/30')">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    :class="
+                                        selectedBlock.status === 'Subur' ? 'text-emerald-600 dark:text-emerald-400' :
+                                        (selectedBlock.status === 'Kurang Subur' ? 'text-amber-600 dark:text-amber-400' :
+                                        'text-rose-600 dark:text-rose-400')">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                </svg>
+                            </div>
+                            <h5 class="text-[10px] font-black uppercase tracking-widest"
+                                :class="
+                                    selectedBlock.status === 'Subur' ? 'text-emerald-700 dark:text-emerald-400' :
+                                    (selectedBlock.status === 'Kurang Subur' ? 'text-amber-700 dark:text-amber-400' :
+                                    'text-rose-700 dark:text-rose-400')">
+                                Rekomendasi Pemupukan
+                            </h5>
+                            {{-- Badge jumlah masalah --}}
+                            <span x-show="issues.length > 0"
+                                class="ml-auto text-[9px] font-black px-2 py-0.5 rounded-full text-white"
+                                :class="
+                                    selectedBlock.status === 'Subur' ? 'bg-emerald-500' :
+                                    (selectedBlock.status === 'Kurang Subur' ? 'bg-amber-500' : 'bg-rose-500')"
+                                x-text="issues.length + ' item'">
+                            </span>
+                        </div>
+
+                        {{-- Kondisi Optimal --}}
+                        <div x-show="issues.length === 0" class="p-3">
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center shrink-0 mt-0.5">
+                                    <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-emerald-700 dark:text-emerald-400 mb-1">Semua Hara Optimal</p>
+                                    <p class="text-[11px] text-emerald-600/80 dark:text-emerald-300/70 leading-relaxed">
+                                        Pertahankan jadwal pemupukan rutin setiap 3 bulan dan lakukan uji tanah berkala.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Daftar Item Masalah --}}
+                        <div x-show="issues.length > 0" class="px-3 py-3 space-y-2">
+                            <template x-for="(item, idx) in issues" :key="idx">
+                                <div class="flex items-start gap-3 p-3 rounded-xl"
+                                    :class="
+                                        selectedBlock.status === 'Subur' ? 'bg-white dark:bg-emerald-900/20' :
+                                        (selectedBlock.status === 'Kurang Subur' ? 'bg-white dark:bg-amber-900/20' :
+                                        'bg-white dark:bg-rose-900/20')">
+
+                                    {{-- Icon Unsur --}}
+                                    <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black text-[10px] shrink-0 shadow-sm"
+                                        :class="
+                                            selectedBlock.status === 'Subur' ? 'bg-emerald-500' :
+                                            (selectedBlock.status === 'Kurang Subur' ? 'bg-amber-500' : 'bg-rose-500')"
+                                        x-text="item.icon">
+                                    </div>
+
+                                    <div class="flex-1 min-w-0">
+                                        {{-- Nama unsur + arah --}}
+                                        <div class="flex items-center gap-1.5 mb-1 flex-wrap">
+                                            <span class="text-[11px] font-bold text-slate-700 dark:text-slate-200" x-text="item.label"></span>
+                                            <span class="text-[9px] font-black px-1.5 py-0.5 rounded-md"
+                                                :class="item.type === 'kurang'
+                                                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                                                    : 'bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400'"
+                                                x-text="item.type === 'kurang' ? '▼ KURANG' : '▲ BERLEBIH'">
+                                            </span>
+                                        </div>
+
+                                        {{-- Pupuk yang direkomendasikan --}}
+                                        <p class="text-[11px] font-semibold text-slate-600 dark:text-slate-300" x-text="item.fertilizer"></p>
+
+                                        {{-- Selisih --}}
+                                        <p class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
+                                            <span x-text="item.type === 'kurang' ? 'Kurang ' : 'Lebih '"></span>
+                                            <span class="font-bold"
+                                                :class="item.type === 'kurang' ? 'text-blue-500' : 'text-orange-500'"
+                                                x-text="item.diff + (item.unit ? ' ' + item.unit : '')">
+                                            </span>
+                                            <span x-text="item.type === 'kurang' ? ' dari minimum' : ' dari batas aman'"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Footer -->
                 <div class="p-5 border-t border-slate-100 dark:border-white/5 shrink-0">
-                    <a :href="'/block/' + selectedBlock.id" wire:navigate
+                    <a :href="`{{ route('block.detail', ['id' => '__ID__']) }}`.replace('__ID__', selectedBlock.id)" wire:navigate
                         class="w-full flex items-center justify-center py-3 rounded-xl text-white text-xs font-black uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-emerald-500/20"
                         style="background:linear-gradient(135deg,#10b981,#059669)">
                         Lihat Analisis Lengkap
