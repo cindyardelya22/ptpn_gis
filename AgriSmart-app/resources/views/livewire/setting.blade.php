@@ -378,17 +378,6 @@
                     </div>
                 </template>
             </div>
-
-            {{-- Save button --}}
-            <div class="mt-6 flex justify-end">
-                <button @click="savePermissions()"
-                    :disabled="isSavingPerms"
-                    class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-violet-500/25 bg-gradient-to-br from-violet-500 to-violet-600 disabled:opacity-70 disabled:hover:scale-100">
-                    <svg x-show="isSavingPerms" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/></svg>
-                    <svg x-show="!isSavingPerms" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
-                    <span x-text="isSavingPerms ? 'Menyimpan...' : 'Simpan Hak Akses'"></span>
-                </button>
-            </div>
         </div>
 
     </div>
