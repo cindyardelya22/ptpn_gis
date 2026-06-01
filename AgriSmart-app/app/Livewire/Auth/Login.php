@@ -121,8 +121,8 @@ class Login extends Component
         $browser   = $this->parseBrowser($userAgent);
         $platform  = $this->parsePlatform($userAgent);
 
-        // Set semua device lama menjadi bukan current
-        $user->devices()->update(['is_current' => false]);
+        // Set semua device lama menjadi bukan current (Hanya secara visual di DB, penentuan asli dinamis)
+        // $user->devices()->update(['is_current' => false]);
 
         // Update jika kombinasi user_agent + ip sudah ada, buat baru jika belum
         $user->devices()->updateOrCreate(

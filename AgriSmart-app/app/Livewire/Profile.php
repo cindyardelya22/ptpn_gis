@@ -103,25 +103,49 @@ class Profile extends Component
     // ── Device Management ──────────────────────────────────────────
     public function removeDevice(int $deviceId): void
     {
-        Auth::user()
-            ->devices()
-            ->where('id', $deviceId)
-            ->where('is_current', false) // tidak bisa hapus device aktif
-            ->delete();
+        $device = Auth::user()->devices()->find($deviceId);
+        if ($device) {
+            $isCurrent = ($device->ip_address === request()->ip() && $device->user_agent === request()->userAgent());
+            if (!$isCurrent) {
+                $device->delete();
+            }
+        }
     }
 
     public function terminateAllDevices(): void
     {
+        $currentIp = request()->ip();
+        $currentUserAgent = request()->userAgent() ?? '';
+
         Auth::user()
             ->devices()
-            ->where('is_current', false)
+            ->where(function ($query) use ($currentIp, $currentUserAgent) {
+                $query->where('ip_address', '!=', $currentIp)
+                      ->orWhere('user_agent', '!=', $currentUserAgent);
+            })
             ->delete();
     }
 
     public function render()
     {
+        $currentIp = request()->ip();
+        $currentUserAgent = request()->userAgent() ?? '';
+
+        $devices = Auth::user()->devices()->latest('last_activity_at')->get();
+
+        $devices->transform(function ($device) use ($currentIp, $currentUserAgent) {
+            // Override the DB is_current with dynamic check
+            $device->is_current = ($device->ip_address === $currentIp && $device->user_agent === $currentUserAgent);
+            return $device;
+        });
+
+        // Ensure at least one device is current visually if there's a mismatch
+        if ($devices->where('is_current', true)->count() === 0 && $devices->count() > 0) {
+            $devices->first()->is_current = true;
+        }
+
         return view('livewire.profile', [
-            'devices' => Auth::user()->devices()->latest('last_activity_at')->get(),
+            'devices' => $devices,
         ])->layout('layouts.app');
     }
 }
