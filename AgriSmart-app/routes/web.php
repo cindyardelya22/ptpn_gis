@@ -11,6 +11,26 @@ use App\Livewire\BlockMap;
 use App\Livewire\Reports;
 use App\Livewire\BlockDetail;
 use App\Http\Controllers\MLDebugController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+
+Route::post('/logout', function (Request $request) {
+    // Mark device as not current sebelum logout
+    if (Auth::check()) {
+        $user = Auth::user();
+        if (method_exists($user, 'devices')) {
+            $user->devices()
+                ->where('is_current', true)
+                ->update(['is_current' => false]);
+        }
+    }
+
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('login');
+})->name('logout')->middleware('auth');
 
 Route::get('/login', Login::class)->name('login');
 Route::get('/setting', setting::class)->name('setting');
@@ -34,7 +54,7 @@ Route::get('/tes', function () {
     return view('welcome');
 });
 
-    Route::get('/profile', Profile::class)->name('profile');
+Route::get('/profile', Profile::class)->name('profile');
 
 
 // ─── ML Debug Routes (only available in debug mode) ─────────────────

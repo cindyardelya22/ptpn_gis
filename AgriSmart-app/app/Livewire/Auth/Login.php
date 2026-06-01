@@ -5,8 +5,8 @@ namespace App\Livewire\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use App\Models\UserDevice;
 
 class Login extends Component
 {
@@ -38,7 +38,7 @@ class Login extends Component
     }
 
     // -------------------------------------------------------
-    // Real-time validation saat user mengetik
+    // Real-time validation
     // -------------------------------------------------------
     public function updated(string $field): void
     {
@@ -61,62 +61,126 @@ class Login extends Component
             return;
         }
 
-        $credentials = [
-            'sap'      => $this->nomor_sap,
-            'password' => $this->password,
-        ];
+        // Cari user berdasarkan field 'sap' di database
+        $user = User::where('sap', $this->nomor_sap)->first();
 
-        if (Auth::attempt($credentials, $this->remember)) {
-            RateLimiter::clear($throttleKey);
-            session()->regenerate();
-            
-            $user = Auth::user();
-            
-            // 1. Update last login status
-            $user->update([
-                'last_login_at' => now(),
-                'last_login_ip' => request()->ip(),
-                'failed_login_attempts' => 0,
-            ]);
+        // Validasi user tidak ditemukan atau password salah
+        if (! $user || ! Hash::check($this->password, $user->password)) {
+            RateLimiter::hit($throttleKey, decay: 60);
 
-            // 2. Track Device Session
-            // Install jenssegers/agent on demand, or use basic headers if not available
-            $userAgent = request()->header('User-Agent');
-            $browser = 'Unknown Browser';
-            $platform = 'Unknown OS';
-            
-            if (preg_match('/(Edg|Edge|Chrome|Safari|Firefox|Opera)\/?\s*(\d+)/i', $userAgent, $matches)) {
-                $browser = $matches[1] . ' ' . $matches[2];
-            }
-            if (preg_match('/(Windows NT 10.0|Windows NT 6.3|Windows NT 6.2|Windows NT 6.1|Mac OS X|Linux|Android|iOS)/i', $userAgent, $matches)) {
-                $platform = $matches[1];
+            // Increment failed attempts jika user ditemukan
+            if ($user) {
+                $user->increment('failed_login_attempts');
             }
 
-            // Set all other devices to not current
-            $user->devices()->update(['is_current' => false]);
-
-            $user->devices()->create([
-                'device_name' => $platform . ' - ' . $browser,
-                'browser' => $browser,
-                'platform' => $platform,
-                'ip_address' => request()->ip(),
-                'user_agent' => $userAgent,
-                'last_activity_at' => now(),
-                'is_current' => true,
-            ]);
-
-            $this->redirect(route('dashboard'), navigate: true);
+            $this->addError('nomor_sap', 'Nomor SAP atau password tidak sesuai.');
+            $this->reset('password');
             return;
         }
 
-        RateLimiter::hit($throttleKey, decay: 60);
+        // Cek akun aktif
+        if (! $user->is_active) {
+            $this->addError('nomor_sap', 'Akun Anda telah dinonaktifkan. Hubungi administrator.');
+            $this->reset('password');
+            return;
+        }
 
-        $this->addError('nomor_sap', 'Nomor SAP atau password tidak sesuai.');
-        $this->reset('password');
+        // Cek account lock
+        if ($user->locked_until && $user->locked_until->isFuture()) {
+            $menit = now()->diffInMinutes($user->locked_until) + 1;
+            $this->addError('nomor_sap', "Akun terkunci. Coba lagi dalam {$menit} menit.");
+            $this->reset('password');
+            return;
+        }
+
+        // Login manual — Auth::attempt() pakai field 'sap' sebagai username
+        Auth::login($user, $this->remember);
+        RateLimiter::clear($throttleKey);
+        session()->regenerate();
+
+        // Update last login & reset failed attempts
+        $user->update([
+            'last_login_at'         => now(),
+            'last_login_ip'         => request()->ip(),
+            'failed_login_attempts' => 0,
+            'locked_until'          => null,
+        ]);
+
+        // Track device session
+        $this->trackDevice($user);
+
+        $this->redirect(route('dashboard'), navigate: true);
     }
 
     // -------------------------------------------------------
-    // Render — pakai ->layout() langsung di sini
+    // Track device helper
+    // -------------------------------------------------------
+    private function trackDevice(User $user): void
+    {
+        $userAgent = request()->userAgent() ?? '';
+        $browser   = $this->parseBrowser($userAgent);
+        $platform  = $this->parsePlatform($userAgent);
+
+        // Set semua device lama menjadi bukan current
+        $user->devices()->update(['is_current' => false]);
+
+        $user->devices()->create([
+            'device_name'      => $platform . ' - ' . $browser,
+            'browser'          => $browser,
+            'platform'         => $platform,
+            'ip_address'       => request()->ip(),
+            'user_agent'       => $userAgent,
+            'last_activity_at' => now(),
+            'is_current'       => true,
+        ]);
+    }
+
+    private function parseBrowser(string $userAgent): string
+    {
+        $browsers = [
+            'Edg'     => 'Edge',
+            'Chrome'  => 'Chrome',
+            'Firefox' => 'Firefox',
+            'Safari'  => 'Safari',
+            'Opera'   => 'Opera',
+        ];
+
+        foreach ($browsers as $key => $name) {
+            if (str_contains($userAgent, $key)) {
+                if (preg_match('/' . $key . '[\/\s](\d+)/i', $userAgent, $m)) {
+                    return $name . ' ' . $m[1];
+                }
+                return $name;
+            }
+        }
+
+        return 'Unknown Browser';
+    }
+
+    private function parsePlatform(string $userAgent): string
+    {
+        $platforms = [
+            'Windows NT 10.0' => 'Windows 10/11',
+            'Windows NT 6.3'  => 'Windows 8.1',
+            'Windows NT 6.1'  => 'Windows 7',
+            'Mac OS X'        => 'macOS',
+            'Android'         => 'Android',
+            'iPhone'          => 'iOS',
+            'iPad'            => 'iPadOS',
+            'Linux'           => 'Linux',
+        ];
+
+        foreach ($platforms as $key => $name) {
+            if (str_contains($userAgent, $key)) {
+                return $name;
+            }
+        }
+
+        return 'Unknown OS';
+    }
+
+    // -------------------------------------------------------
+    // Render
     // -------------------------------------------------------
     public function render()
     {

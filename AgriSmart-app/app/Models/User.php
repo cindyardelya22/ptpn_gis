@@ -40,7 +40,11 @@ class User extends Authenticatable
     {
         return $this->password;
     }
-    
+
+    public function getAuthIdentifierName(): string
+    {
+        return 'sap'; 
+    }
 
     public function devices(): HasMany
     {
