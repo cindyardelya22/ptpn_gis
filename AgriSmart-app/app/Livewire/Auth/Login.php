@@ -5,11 +5,14 @@ namespace App\Livewire\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
+use App\Models\User;
+use App\Models\UserDevice;
 
 class Login extends Component
 {
     public string $nomor_sap = '';
     public string $password  = '';
+    public bool   $remember  = false;
 
     // -------------------------------------------------------
     // Validation rules
@@ -59,13 +62,48 @@ class Login extends Component
         }
 
         $credentials = [
-            'nomor_sap' => $this->nomor_sap,
-            'password'  => $this->password,
+            'sap'      => $this->nomor_sap,
+            'password' => $this->password,
         ];
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $this->remember)) {
             RateLimiter::clear($throttleKey);
             session()->regenerate();
+            
+            $user = Auth::user();
+            
+            // 1. Update last login status
+            $user->update([
+                'last_login_at' => now(),
+                'last_login_ip' => request()->ip(),
+                'failed_login_attempts' => 0,
+            ]);
+
+            // 2. Track Device Session
+            // Install jenssegers/agent on demand, or use basic headers if not available
+            $userAgent = request()->header('User-Agent');
+            $browser = 'Unknown Browser';
+            $platform = 'Unknown OS';
+            
+            if (preg_match('/(Edg|Edge|Chrome|Safari|Firefox|Opera)\/?\s*(\d+)/i', $userAgent, $matches)) {
+                $browser = $matches[1] . ' ' . $matches[2];
+            }
+            if (preg_match('/(Windows NT 10.0|Windows NT 6.3|Windows NT 6.2|Windows NT 6.1|Mac OS X|Linux|Android|iOS)/i', $userAgent, $matches)) {
+                $platform = $matches[1];
+            }
+
+            // Set all other devices to not current
+            $user->devices()->update(['is_current' => false]);
+
+            $user->devices()->create([
+                'device_name' => $platform . ' - ' . $browser,
+                'browser' => $browser,
+                'platform' => $platform,
+                'ip_address' => request()->ip(),
+                'user_agent' => $userAgent,
+                'last_activity_at' => now(),
+                'is_current' => true,
+            ]);
 
             $this->redirect(route('dashboard'), navigate: true);
             return;

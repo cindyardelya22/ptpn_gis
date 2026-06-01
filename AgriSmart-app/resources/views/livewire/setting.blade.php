@@ -356,19 +356,17 @@
                                     <template x-if="role !== 'superadmin'">
                                         <div class="flex flex-wrap gap-2">
                                             <template x-for="action in pageActions(page.key)" :key="action">
-                                                <label class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border cursor-pointer transition-all select-none text-xs font-medium"
+                                                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border cursor-pointer transition-all select-none text-xs font-medium"
                                                     :class="hasPermission(role, page.key, action)
                                                         ? (role === 'admin' ? 'bg-emerald-50 border-emerald-300 text-emerald-700 dark:bg-emerald-900/20 dark:border-emerald-500/40 dark:text-emerald-300' : 'bg-sky-50 border-sky-300 text-sky-700 dark:bg-sky-900/20 dark:border-sky-500/40 dark:text-sky-300')
-                                                        : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-white/10 text-slate-400'">
-                                                    <input type="checkbox" class="sr-only"
-                                                        :checked="hasPermission(role, page.key, action)"
-                                                        @change="togglePermission(role, page.key, action)">
+                                                        : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-white/10 text-slate-400'"
+                                                    @click.prevent="togglePermission(role, page.key, action)">
                                                     <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="actionIcon(action)"/>
                                                     </svg>
                                                     <span x-text="actionLabel(action)"></span>
                                                     <svg x-show="hasPermission(role, page.key, action)" class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                                </label>
+                                                </div>
                                             </template>
                                         </div>
                                     </template>

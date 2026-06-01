@@ -5,6 +5,7 @@ use App\Livewire\Analytics;
 use App\Livewire\Dashboard;
 use App\Livewire\Auth\Login;
 use App\Livewire\setting;
+use App\Livewire\profile;
 use App\Livewire\NutrientsData;
 use App\Livewire\BlockMap;
 use App\Livewire\Reports;
@@ -32,6 +33,9 @@ Route::patch('/nutrients/{nutrient}/recommendation-progress', function (
 Route::get('/tes', function () {
     return view('welcome');
 });
+
+    Route::get('/profile', Profile::class)->name('profile');
+
 
 // ─── ML Debug Routes (only available in debug mode) ─────────────────
 if (config('app.debug')) {

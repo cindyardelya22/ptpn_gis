@@ -32,7 +32,6 @@ class Setting extends Component
         'no_sap'   => '',
         'password' => '',
         'role'     => '',
-        'status'   => '1',
     ];
 
     // ── Permissions matrix ───────────────────────────────────────
@@ -116,8 +115,8 @@ class Setting extends Component
     // ── Stats ─────────────────────────────────────────────────────
     protected function refreshStats(): void
     {
-        $this->activeCount   = User::where('status', 1)->count();
-        $this->inactiveCount = User::where('status', 0)->count();
+        $this->activeCount   = User::where('is_active', true)->count();
+        $this->inactiveCount = User::where('is_active', false)->count();
     }
 
     // ── Query ─────────────────────────────────────────────────────
@@ -133,7 +132,6 @@ class Setting extends Component
                 )
             )
             ->when($this->filterRole,   fn($q) => $q->where('role', $this->filterRole))
-            ->when($this->filterStatus !== '', fn($q) => $q->where('status', $this->filterStatus))
             ->latest()
             ->paginate(10);
 
@@ -159,7 +157,6 @@ class Setting extends Component
             'no_sap'   => $user->no_sap ?? '',
             'password' => '',
             'role'     => $user->role,
-            'status'   => (string) $user->status,
         ];
         $this->editingUserId = $userId;
         $this->isEdit        = true;
@@ -187,7 +184,6 @@ class Setting extends Component
             'form.email'  => 'required|email|unique:users,email' . ($this->isEdit ? ",{$this->editingUserId}" : ''),
             'form.no_sap' => 'nullable|string|max:50',
             'form.role'   => 'required|in:superadmin,admin,viewer',
-            'form.status' => 'required|in:0,1',
         ];
 
         if (! $this->isEdit) {
@@ -203,7 +199,6 @@ class Setting extends Component
             'email'  => $this->form['email'],
             'no_sap' => $this->form['no_sap'] ?: null,
             'role'   => $this->form['role'],
-            'status' => (int) $this->form['status'],
         ];
 
         if ($this->form['password']) {
@@ -235,7 +230,7 @@ class Setting extends Component
     // ── Helpers ───────────────────────────────────────────────────
     protected function resetForm(): void
     {
-        $this->form          = ['name' => '', 'email' => '', 'no_sap' => '', 'password' => '', 'role' => '', 'status' => '1'];
+        $this->form          = ['name' => '', 'email' => '', 'no_sap' => '', 'password' => '', 'role' => ''];
         $this->isEdit        = false;
         $this->editingUserId = null;
         $this->resetErrorBag();
