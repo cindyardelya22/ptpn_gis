@@ -14,7 +14,27 @@ use App\Livewire\Setting;
 use App\Livewire\Profile;
 use App\Http\Controllers\MLDebugController;
 use App\Models\SoilNutrient;
+use Illuminate\Support\Facades\Http;
+Route::get('/gemini-test', function () {
 
+    $response = Http::timeout(60)
+        ->post(
+            'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' . env('GEMINI_API_KEY'),
+            [
+                'contents' => [
+                    [
+                        'parts' => [
+                            [
+                                'text' => 'Halo'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        );
+
+    return $response->json();
+});
 // ─── Guest Only ──────────────────────────────────────────────────────
 Route::middleware('guest')->group(function () {
     Route::get('/login', Login::class)->name('login');
@@ -36,6 +56,9 @@ Route::middleware('auth')->group(function () {
     // User
     Route::get('/profile', Profile::class)->name('profile');
     Route::get('/setting', Setting::class)->name('setting');
+
+    // Chatbot AI
+    Route::post('/chatbot', [\App\Http\Controllers\ChatbotController::class, 'chat'])->name('chatbot.chat');
 
     // Nutrient Recommendation Progress
     Route::patch('/nutrients/{nutrient}/recommendation-progress', function (
