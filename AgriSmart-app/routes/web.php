@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Analytics;
 use App\Livewire\Dashboard;
 use App\Livewire\Auth\Login;
-use App\Livewire\Users;
+use App\Livewire\setting;
 use App\Livewire\NutrientsData;
 use App\Livewire\BlockMap;
 use App\Livewire\Reports;
@@ -12,7 +12,7 @@ use App\Livewire\BlockDetail;
 use App\Http\Controllers\MLDebugController;
 
 Route::get('/login', Login::class)->name('login');
-Route::get('/users', Users::class)->name('user');
+Route::get('/setting', setting::class)->name('setting');
 
 Route::get('/', Dashboard::class)->name('dashboard');
 Route::get('/unsur-hara', NutrientsData::class)->name('unsur-hara');
