@@ -16,12 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            BlockSeeder::class,
+            AgriSmartSeeder::class,
         ]);
-
-        // User::factory()->create([
-        //     'name' => 'Admin User',
-        //     'email' => 'admin@ptpn.co.id',
-        // ]);
     }
 }
