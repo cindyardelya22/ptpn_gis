@@ -25,6 +25,9 @@ class Setting extends Component
     public ?int  $editingUserId   = null;
     public int|string $deleteTargetId   = 0;
     public string     $deleteTargetName = '';
+    public bool $showResetModal = false;
+    public int|string $resetTargetId = 0;
+    public string $resetTargetName = '';
 
     // ── Form fields (sesuai model User: username, sap, is_active) ─
     public array $form = [
@@ -69,6 +72,7 @@ class Setting extends Component
     protected $listeners = [
         'openEditModal'   => 'openEdit',
         'openDeleteModal' => 'openDelete',
+        'openResetModal'  => 'openReset',
     ];
 
     // ── Lifecycle ────────────────────────────────────────────────
@@ -89,6 +93,24 @@ class Setting extends Component
     public function updatingFilterStatus(): void
     {
         $this->resetPage();
+    }
+    public function openReset(int $userId, string $userName): void
+    {
+        $this->resetTargetId   = $userId;
+        $this->resetTargetName = $userName;
+        $this->showResetModal  = true;
+    }
+
+    public function resetPassword(): void
+    {
+        User::findOrFail($this->resetTargetId)->update([
+            'password' => Hash::make('Password123'),
+        ]);
+        $this->closeModal();
+        session()->flash('toast', [
+            'type'    => 'success',
+            'message' => "Password {$this->resetTargetName} berhasil direset ke Password123.",
+        ]);
     }
 
     // ── Permissions ──────────────────────────────────────────────
@@ -189,6 +211,9 @@ class Setting extends Component
     {
         $this->showModal       = false;
         $this->showDeleteModal = false;
+        $this->showResetModal  = false; 
+        $this->resetTargetId   = 0;     
+        $this->resetTargetName = '';
         $this->resetForm();
     }
 
