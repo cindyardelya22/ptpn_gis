@@ -109,7 +109,7 @@ class Login extends Component
         // Track device session
         $this->trackDevice($user);
 
-        $this->redirect(route('dashboard'), navigate: true);
+        $this->redirect(route('dashboard'));
     }
 
     // -------------------------------------------------------
