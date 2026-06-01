@@ -52,53 +52,60 @@ class Login extends Component
     {
         $this->validate();
 
-        // Rate limiting — maks 5 percobaan per menit per IP
         $throttleKey = 'login.' . request()->ip();
 
-        if (RateLimiter::tooManyAttempts($throttleKey, maxAttempts: 5)) {
+        if (RateLimiter::tooManyAttempts($throttleKey, 10)) {
             $seconds = RateLimiter::availableIn($throttleKey);
             $this->addError('nomor_sap', "Terlalu banyak percobaan. Coba lagi dalam {$seconds} detik.");
             return;
         }
 
-        // Cari user berdasarkan field 'sap' di database
         $user = User::where('sap', $this->nomor_sap)->first();
 
-        // Validasi user tidak ditemukan atau password salah
         if (! $user || ! Hash::check($this->password, $user->password)) {
-            RateLimiter::hit($throttleKey, decay: 60);
+            // Positional argument, bukan named parameter
+            RateLimiter::hit($throttleKey, 60);
 
-            // Increment failed attempts jika user ditemukan
             if ($user) {
-                $user->increment('failed_login_attempts');
+                $attempts = $user->failed_login_attempts + 1;
+
+                if ($attempts >= 10) {
+                    // Kunci akun selama 15 menit
+                    $user->update([
+                        'failed_login_attempts' => $attempts,
+                        'locked_until'          => now()->addMinutes(10),
+                    ]);
+                    $this->addError('nomor_sap', 'Akun terkunci selama 10 menit karena terlalu banyak percobaan gagal.');
+                } else {
+                    $user->update(['failed_login_attempts' => $attempts]);
+                    $sisa = 10 - $attempts;
+                    $this->addError('nomor_sap', "Nomor SAP atau password tidak sesuai. Sisa percobaan: {$sisa}.");
+                }
+            } else {
+                $this->addError('nomor_sap', 'Nomor SAP atau password tidak sesuai.');
             }
 
-            $this->addError('nomor_sap', 'Nomor SAP atau password tidak sesuai.');
             $this->reset('password');
             return;
         }
 
-        // Cek akun aktif
         if (! $user->is_active) {
             $this->addError('nomor_sap', 'Akun Anda telah dinonaktifkan. Hubungi administrator.');
             $this->reset('password');
             return;
         }
 
-        // Cek account lock
         if ($user->locked_until && $user->locked_until->isFuture()) {
-            $menit = now()->diffInMinutes($user->locked_until) + 1;
+            $menit = (int) now()->diffInMinutes($user->locked_until) + 1;
             $this->addError('nomor_sap', "Akun terkunci. Coba lagi dalam {$menit} menit.");
             $this->reset('password');
             return;
         }
 
-        // Login manual — Auth::attempt() pakai field 'sap' sebagai username
         Auth::login($user, $this->remember);
         RateLimiter::clear($throttleKey);
         session()->regenerate();
 
-        // Update last login & reset failed attempts
         $user->update([
             'last_login_at'         => now(),
             'last_login_ip'         => request()->ip(),
@@ -106,9 +113,7 @@ class Login extends Component
             'locked_until'          => null,
         ]);
 
-        // Track device session
         $this->trackDevice($user);
-
         $this->redirect(route('dashboard'));
     }
 

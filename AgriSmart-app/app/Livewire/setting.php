@@ -211,10 +211,23 @@ class Setting extends Component
     {
         $this->showModal       = false;
         $this->showDeleteModal = false;
-        $this->showResetModal  = false; 
-        $this->resetTargetId   = 0;     
+        $this->showResetModal  = false;
+        $this->resetTargetId   = 0;
         $this->resetTargetName = '';
         $this->resetForm();
+    }
+
+    public function unlockUser(int $userId): void
+    {
+        User::findOrFail($userId)->update([
+            'locked_until'          => null,
+            'failed_login_attempts' => 0,
+        ]);
+        $this->refreshStats();
+        session()->flash('toast', [
+            'type'    => 'success',
+            'message' => 'Kunci akun berhasil dibuka.',
+        ]);
     }
 
     public function save(): void

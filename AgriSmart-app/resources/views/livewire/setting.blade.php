@@ -255,13 +255,33 @@
                     <div class="col-span-2 flex items-center">
                         <span class="text-slate-500 dark:text-slate-400 text-sm font-mono">{{ $user->sap ?? '—' }}</span>
                     </div>
-                    <div class="col-span-2 flex items-center">
+                    <div class="col-span-2 flex items-center gap-1.5 flex-wrap">
+                        {{-- Badge terkunci (jika locked_until masih di masa depan) --}}
+                        @if ($user->locked_until && $user->locked_until->isFuture())
+                        <span
+                            wire:click="unlockUser({{ $user->id }})"
+                            title="Terkunci hingga {{ $user->locked_until->format('H:i') }} — klik untuk buka kunci"
+                            class="flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-lg cursor-pointer
+                                    bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400
+                                    border border-red-200 dark:border-red-500/30
+                                    hover:bg-red-100 dark:hover:bg-red-900/40 transition">
+                            <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                            Terkunci
+                        </span>
+                        @else
+                        {{-- Toggle aktif/nonaktif --}}
                         <span class="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-lg cursor-pointer hover:opacity-80 transition"
                             wire:click="toggleActive({{ $user->id }})"
                             title="Klik untuk {{ $user->is_active ? 'nonaktifkan' : 'aktifkan' }}">
                             <span class="w-1.5 h-1.5 rounded-full {{ $user->is_active ? 'bg-emerald-400' : 'bg-orange-400' }}"></span>
-                            <span class="{{ $user->is_active ? 'text-emerald-600 dark:text-emerald-400' : 'text-orange-600 dark:text-orange-400' }}">{{ $user->is_active ? 'Aktif' : 'Non-aktif' }}</span>
+                            <span class="{{ $user->is_active ? 'text-emerald-600 dark:text-emerald-400' : 'text-orange-600 dark:text-orange-400' }}">
+                                {{ $user->is_active ? 'Aktif' : 'Non-aktif' }}
+                            </span>
                         </span>
+                        @endif
                     </div>
                     <div class="col-span-1 flex items-center">
                         <span class="text-slate-400 text-xs">{{ $user->created_at->format('d M Y') }}</span>
