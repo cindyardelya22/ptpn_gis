@@ -25303,3 +25303,23 @@
 2026-06-01 15:52:25,464 [INFO] PREDICTION PIPELINE END
 2026-06-01 15:52:25,464 [INFO] ============================================================
 2026-06-01 15:52:25,465 [INFO] 127.0.0.1 - - [01/Jun/2026 15:52:25] "POST /predict HTTP/1.1" 200 -
+2026-06-03 08:41:37,658 [INFO] Loading model from: model_kesuburan.pkl
+2026-06-03 08:41:48,246 [INFO] Model loaded successfully: RandomForestClassifier
+2026-06-03 08:41:48,247 [INFO] Model feature names: ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-06-03 08:41:48,247 [INFO] Model expects 9 features
+2026-06-03 08:41:48,247 [INFO] No scaler.pkl found — raw data will be used directly (OK for tree-based models)
+2026-06-03 08:41:48,250 [INFO] Starting AgriSmart ML API...
+2026-06-03 08:41:48,316 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.234.214.234:5000
+2026-06-03 08:41:48,316 [INFO] [33mPress CTRL+C to quit[0m
+2026-06-03 08:41:48,318 [INFO]  * Restarting with stat
+2026-06-03 08:41:49,298 [INFO] Loading model from: model_kesuburan.pkl
+2026-06-03 08:41:50,366 [INFO] Model loaded successfully: RandomForestClassifier
+2026-06-03 08:41:50,366 [INFO] Model feature names: ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Mg', 'B']
+2026-06-03 08:41:50,368 [INFO] Model expects 9 features
+2026-06-03 08:41:50,368 [INFO] No scaler.pkl found — raw data will be used directly (OK for tree-based models)
+2026-06-03 08:41:50,370 [INFO] Starting AgriSmart ML API...
+2026-06-03 08:41:50,381 [WARNING]  * Debugger is active!
+2026-06-03 08:41:50,385 [INFO]  * Debugger PIN: 111-311-081
