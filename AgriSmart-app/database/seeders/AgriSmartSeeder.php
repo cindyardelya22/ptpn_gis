@@ -128,7 +128,7 @@ class AgriSmartSeeder extends Seeder
                 'id' => 1,
                 'username' => 'Udin',
                 'sap' => '12345',
-                'password' => '$2y$12$tJ6iDVNas0QpM3nBNWtzpOUTXyUlmwJIE7HB33e/yuCTzAjFXCRm6',
+                'password' => '$2y$12$tJ6iDVNas0QpM3nBNWtzpOUTXyUlmwJIE7HB33e/yuCTzAjFXCRm6', ## password: Angka12345
                 'role' => 'superadmin',
                 'is_active' => 1,
                 'failed_login_attempts' => 0,
@@ -139,7 +139,7 @@ class AgriSmartSeeder extends Seeder
                 'id' => 2,
                 'username' => 'Siregar',
                 'sap' => '123456',
-                'password' => '$2y$12$CpSC9x3PKiwp9g6LUfe2zee4yXFKdWvaCu8R5Dqud0z.BUBY2MXc2',
+                'password' => '$2y$12$CpSC9x3PKiwp9g6LUfe2zee4yXFKdWvaCu8R5Dqud0z.BUBY2MXc2', ## password: Password123
                 'role' => 'admin',
                 'is_active' => 1,
                 'failed_login_attempts' => 0,
