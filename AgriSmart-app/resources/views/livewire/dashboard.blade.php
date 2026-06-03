@@ -19,88 +19,88 @@
         </div>
 
         <!-- ══ FILTER BAR ══ -->
-<div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm p-4">
-    <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-        <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500 shrink-0">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z" />
-            </svg>
-            <span class="text-xs font-semibold uppercase tracking-wider">Filter</span>
-        </div>
-
-        <div class="flex flex-col sm:flex-row gap-3 flex-1 w-full">
-            <!-- Block Dropdown — pakai allBlocks & wire:model -->
-            <div class="relative flex-1">
-                <div class="absolute left-3 top-1/2 -translate-y-1/2">
-                    <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
-                    </svg>
-                </div>
-                <select wire:model="filterBlock"
-                    class="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-700/50 focus:outline-none focus:border-emerald-400 dark:focus:border-emerald-500/50 transition appearance-none font-medium">
-                    <option value="">Semua Blok Kebun</option>
-                    @foreach ($allBlocks as $b)
-                        <option value="{{ $b->name }}">{{ $b->name }}</option>
-                    @endforeach
-                </select>
-                <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </div>
-            </div>
-
-            <!-- Date From -->
-            <div class="relative">
-                <div class="absolute left-3 top-1/2 -translate-y-1/2">
-                    <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm p-4">
+            <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+                <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500 shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z" />
                     </svg>
+                    <span class="text-xs font-semibold uppercase tracking-wider">Filter</span>
                 </div>
-                <input wire:model="filterDateFrom" type="date"
-                    class="pl-9 pr-4 py-2.5 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-700/50 focus:outline-none focus:border-emerald-400 dark:focus:border-emerald-500/50 transition font-medium w-full sm:w-auto" />
-            </div>
 
-            <span class="hidden sm:flex items-center text-slate-300 dark:text-slate-600 text-sm font-medium">—</span>
+                <div class="flex flex-col sm:flex-row gap-3 flex-1 w-full">
+                    <!-- Block Dropdown — pakai allBlocks & wire:model -->
+                    <div class="relative flex-1">
+                        <div class="absolute left-3 top-1/2 -translate-y-1/2">
+                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+                            </svg>
+                        </div>
+                        <select wire:model="filterBlock"
+                            class="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-700/50 focus:outline-none focus:border-emerald-400 dark:focus:border-emerald-500/50 transition appearance-none font-medium">
+                            <option value="">Semua Blok Kebun</option>
+                            @foreach ($allBlocks as $b)
+                            <option value="{{ $b->name }}">{{ $b->name }}</option>
+                            @endforeach
+                        </select>
+                        <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </div>
 
-            <!-- Date To -->
-            <div class="relative">
-                <div class="absolute left-3 top-1/2 -translate-y-1/2">
-                    <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
+                    <!-- Date From -->
+                    <div class="relative">
+                        <div class="absolute left-3 top-1/2 -translate-y-1/2">
+                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <input wire:model="filterDateFrom" type="date"
+                            class="pl-9 pr-4 py-2.5 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-700/50 focus:outline-none focus:border-emerald-400 dark:focus:border-emerald-500/50 transition font-medium w-full sm:w-auto" />
+                    </div>
+
+                    <span class="hidden sm:flex items-center text-slate-300 dark:text-slate-600 text-sm font-medium">—</span>
+
+                    <!-- Date To -->
+                    <div class="relative">
+                        <div class="absolute left-3 top-1/2 -translate-y-1/2">
+                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <input wire:model="filterDateTo" type="date"
+                            class="pl-9 pr-4 py-2.5 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-700/50 focus:outline-none focus:border-emerald-400 dark:focus:border-emerald-500/50 transition font-medium w-full sm:w-auto" />
+                    </div>
+
+                    <!-- Apply Button -->
+                    <button wire:click="applyFilter"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:scale-105 active:scale-95 shadow-sm shadow-emerald-500/20 shrink-0"
+                        style="background:linear-gradient(135deg,#10b981,#059669)">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <span wire:loading.remove wire:target="applyFilter">Terapkan</span>
+                        <span wire:loading wire:target="applyFilter">...</span>
+                    </button>
+
+                    <!-- Reset -->
+                    <button wire:click="resetFilter"
+                        class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-slate-500 dark:text-slate-400 text-sm font-medium border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition shrink-0">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Reset
+                    </button>
                 </div>
-                <input wire:model="filterDateTo" type="date"
-                    class="pl-9 pr-4 py-2.5 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-700/50 focus:outline-none focus:border-emerald-400 dark:focus:border-emerald-500/50 transition font-medium w-full sm:w-auto" />
             </div>
-
-            <!-- Apply Button -->
-            <button wire:click="applyFilter"
-                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:scale-105 active:scale-95 shadow-sm shadow-emerald-500/20 shrink-0"
-                style="background:linear-gradient(135deg,#10b981,#059669)">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <span wire:loading.remove wire:target="applyFilter">Terapkan</span>
-                <span wire:loading wire:target="applyFilter">...</span>
-            </button>
-
-            <!-- Reset -->
-            <button wire:click="resetFilter"
-                class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-slate-500 dark:text-slate-400 text-sm font-medium border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition shrink-0">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                Reset
-            </button>
         </div>
-    </div>
-</div>
 
         <!-- ══ SUMMARY CARDS ══ -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -376,6 +376,18 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                {{-- Pagination --}}
+                @if ($blocks->hasPages())
+                <div class="px-6 py-4 border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
+                    <p class="text-xs text-slate-400">
+                        Menampilkan {{ $blocks->firstItem() }}–{{ $blocks->lastItem() }} dari {{ $blocks->total() }} blok
+                    </p>
+                    <div>
+                        {{ $blocks->links() }}
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
 

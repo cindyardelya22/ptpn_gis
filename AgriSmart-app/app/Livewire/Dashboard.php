@@ -55,7 +55,7 @@ class Dashboard extends Component
             });
         }
 
-        $blocks = $query->get()->map(function (Block $block) use ($analysisService) {
+        $blocks = $query->paginate(5)->through(function (Block $block) use ($analysisService) {
             $latest = $block->nutrients->first();
 
             if ($latest && $latest->fertility_status) {
@@ -69,14 +69,14 @@ class Dashboard extends Component
             }
 
             return [
-                'id'           => $block->id,
-                'name'         => $block->name,
-                'area_ha'      => $block->area_ha,
-                'planted_at'   => $block->planted_at?->format('Y-m-d'),
-                'coords'       => $block->polygon_coords,
-                'status'       => $analysis['status'] ?? 'N/A',
-                'color_name'   => $analysis['color'] ?? 'slate',
-                'analysis'     => $analysis,
+                'id'            => $block->id,
+                'name'          => $block->name,
+                'area_ha'       => $block->area_ha,
+                'planted_at'    => $block->planted_at?->format('Y-m-d'),
+                'coords'        => $block->polygon_coords,
+                'status'        => $analysis['status'] ?? 'N/A',
+                'color_name'    => $analysis['color'] ?? 'slate',
+                'analysis'      => $analysis,
                 'raw_nutrients' => $latest ? $latest->toArray() : null,
             ];
         });
